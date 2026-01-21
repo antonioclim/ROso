@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 7-8: Text Processing - grep, sed, awk</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%);
+        }
+        
+        .slide.active {
+            display: flex;
+        }
+        
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+        
+        .slide-subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+        
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+        
+        .code-block .prompt {
+            color: var(--success);
+        }
+        
+        .code-block .command {
+            color: #f8fafc;
+        }
+        
+        .code-block .output {
+            color: #94a3b8;
+        }
+        
+        .code-block .highlight {
+            background: rgba(37, 99, 235, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .box-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 16px;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        li {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        
+        li::before {
+            content: "→";
+            position: absolute;
+            left: -24px;
+            color: var(--primary);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.2));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .warning-box {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 4px solid var(--danger);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        .success-box {
+            background: rgba(16, 185, 129, 0.15);
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        
+        th {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            bottom: 25px;
+            left: 20px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .emoji {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        /* Title slide special */
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .title-slide .slide-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .title-slide .slide-subtitle {
+            font-size: 1.5rem;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide.active .slide-content > * {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .slide.active .slide-content > *:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .slide-content > *:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .slide-content > *:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .slide-content > *:nth-child(4) { animation-delay: 0.4s; }
+        .slide.active .slide-content > *:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        
+        <!-- SLIDE 1: Title -->
+        <div class="slide title-slide active" data-slide="1">
+            <div class="emoji">🔧</div>
+            <h1 class="slide-title">Text Processing în Linux</h1>
+            <p class="slide-subtitle">Seminar 7-8: grep, sed, awk + Expresii Regulate</p>
+            <p style="margin-top: 40px; color: #64748b;">
+                Sisteme de Operare | ASE București - CSIE<br>
+                <span style="font-size: 0.9rem;">Apasă → sau Space pentru a naviga</span>
+            </p>
+        </div>
+        
+        <!-- SLIDE 2: Agenda -->
+        <div class="slide" data-slide="2">
+            <h2 class="slide-title">Agenda de Astăzi</h2>
+            <div class="slide-content">
+                <div class="two-columns">
+                    <div class="box">
+                        <div class="box-title">Partea I (50 min)</div>
+                        <ul>
+                            <li>Expresii Regulate (Regex)</li>
+                            <li>Comanda grep în detaliu</li>
+                            <li>Exerciții practice grep</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Partea II (50 min)</div>
+                        <ul>
+                            <li>Stream Editor (sed)</li>
+                            <li>AWK - procesare structurată</li>
+                            <li>Pipeline-uri combinate</li>
+                            <li>Editor nano (bonus)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>💡 Cel mai dens seminar din curs!</strong> Țineți pasul și întrebați dacă ceva nu e clar.
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 3: De ce text processing? -->
+        <div class="slide" data-slide="3">
+            <h2 class="slide-title">De Ce Text Processing?</h2>
+            <div class="slide-content">
+                <p>În Linux, <strong>totul este un fișier</strong> și majoritatea fișierelor sunt <strong>text</strong>:</p>
+                <ul>
+                    <li>Fișiere de configurare (/etc/*)</li>
+                    <li>Log-uri de sistem și aplicații</li>
+                    <li>Cod sursă</li>
+                    <li>Date CSV, JSON, XML</li>
+                    <li>Output-ul comenzilor</li>
+                </ul>
+                <div class="success-box">
+                    <strong>Superputere:</strong> Cu grep, sed și awk poți procesa în secunde ce altora le-ar lua ore!
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 4: Regex Intro -->
+        <div class="slide" data-slide="4">
+            <h2 class="slide-title">Expresii Regulate - Fundament</h2>
+            <div class="slide-content">
+                <p><strong>Regex</strong> = limbaj pentru descrierea pattern-urilor în text</p>
+                <div class="code-block">
+                    <span class="prompt"># </span><span class="command">Pattern simplu - caută textul "error"</span><br>
+                    error<br><br>
+                    <span class="prompt"># </span><span class="command">Pattern cu metacaractere - orice linie care începe cu #</span><br>
+                    ^#.*
+                </div>
+                <div class="highlight-box">
+                    <strong>⚠️ Regex ≠ Globbing!</strong><br>
+                    • Globbing (shell): <code>*.txt</code> = fișiere cu extensia .txt<br>
+                    • Regex: <code>.*\.txt</code> = text care se termină cu .txt
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 5: Metacaractere -->
+        <div class="slide" data-slide="5">
+            <h2 class="slide-title">Metacaractere de Bază</h2>
+            <div class="slide-content">
+                <table>
+                    <tr>
+                        <th>Simbol</th>
+                        <th>Semnificație</th>
+                        <th>Exemplu</th>
+                    </tr>
+                    <tr>
+                        <td><code>.</code></td>
+                        <td>Orice caracter (exact 1)</td>
+                        <td><code>a.c</code> → abc, a1c, aXc</td>
+                    </tr>
+                    <tr>
+                        <td><code>^</code></td>
+                        <td>Început de linie</td>
+                        <td><code>^Hello</code> → linii care încep cu Hello</td>
+                    </tr>
+                    <tr>
+                        <td><code>$</code></td>
+                        <td>Sfârșit de linie</td>
+                        <td><code>end$</code> → linii care se termină cu end</td>
+                    </tr>
+                    <tr>
+                        <td><code>*</code></td>
+                        <td>0 sau mai multe (precedent)</td>
+                        <td><code>ab*c</code> → ac, abc, abbc</td>
+                    </tr>
+                    <tr>
+                        <td><code>\</code></td>
+                        <td>Escape caracter special</td>
+                        <td><code>\.</code> → punct literal</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- SLIDE 6: BRE vs ERE -->
+        <div class="slide" data-slide="6">
+            <h2 class="slide-title">BRE vs ERE - Diferența CRITICĂ</h2>
+            <div class="slide-content">
+                <div class="two-columns">
+                    <div class="box">
+                        <div class="box-title">BRE (grep implicit)</div>
+                        <ul>
+                            <li><code>\+</code> = 1 sau mai multe</li>
+                            <li><code>\?</code> = 0 sau 1</li>
+                            <li><code>\{n,m\}</code> = interval</li>
+                            <li><code>\( \)</code> = grupare</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">ERE (grep -E)</div>
+                        <ul>
+                            <li><code>+</code> = 1 sau mai multe</li>
+                            <li><code>?</code> = 0 sau 1</li>
+                            <li><code>{n,m}</code> = interval</li>
+                            <li><code>( )</code> = grupare</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <strong>🚨 Greșeală comună:</strong> <code>grep 'ab+c'</code> caută literalmente "ab+c"!<br>
+                    <strong>Corect:</strong> <code>grep -E 'ab+c'</code> sau <code>grep 'ab\+c'</code>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 7: GREP Intro -->
+        <div class="slide" data-slide="7">
+            <h2 class="slide-title">GREP - Global Regular Expression Print</h2>
+            <div class="slide-content">
+                <p>Caută pattern-uri în fișiere și afișează liniile care potrivesc.</p>
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">grep 'pattern' fisier.txt</span><br>
+                    <span class="output">linia care conține pattern</span>
+                </div>
+                <div class="two-columns">
+                    <div>
+                        <strong>Variante:</strong>
+                        <ul>
+                            <li><code>grep</code> - BRE (basic)</li>
+                            <li><code>grep -E</code> / <code>egrep</code> - ERE</li>
+                            <li><code>grep -F</code> / <code>fgrep</code> - fixed string</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>Format:</strong>
+                        <ul>
+                            <li><code>grep [opțiuni] pattern fișier</code></li>
+                            <li><code>comanda | grep pattern</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 8: GREP Opțiuni -->
+        <div class="slide" data-slide="8">
+            <h2 class="slide-title">GREP - Opțiuni Esențiale</h2>
+            <div class="slide-content">
+                <table>
+                    <tr><th>Opțiune</th><th>Descriere</th></tr>
+                    <tr><td><code>-i</code></td><td>Case insensitive</td></tr>
+                    <tr><td><code>-v</code></td><td>Inversează (linii care NU potrivesc)</td></tr>
+                    <tr><td><code>-n</code></td><td>Afișează numărul liniei</td></tr>
+                    <tr><td><code>-c</code></td><td>Numără liniile potrivite</td></tr>
+                    <tr><td><code>-o</code></td><td>Afișează DOAR partea potrivită</td></tr>
+                    <tr><td><code>-r</code></td><td>Recursiv în directoare</td></tr>
+                    <tr><td><code>-l</code></td><td>Afișează doar numele fișierelor</td></tr>
+                    <tr><td><code>-A n</code>, <code>-B n</code>, <code>-C n</code></td><td>Context: After, Before, Combined</td></tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- SLIDE 9: GREP -c warning -->
+        <div class="slide" data-slide="9">
+            <h2 class="slide-title">GREP -c: Atenție!</h2>
+            <div class="slide-content">
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">echo "error error error" | grep -c 'error'</span><br>
+                    <span class="output">1</span>  <span class="highlight">← Numără LINII, nu aparițiile!</span>
+                </div>
+                <div class="warning-box">
+                    <strong>-c numără LINII care conțin pattern-ul, nu numărul total de apariții!</strong>
+                </div>
+                <p>Pentru a număra TOATE aparițiile:</p>
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">echo "error error error" | grep -o 'error' | wc -l</span><br>
+                    <span class="output">3</span>  <span class="highlight">← Corect!</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 10: SED Intro -->
+        <div class="slide" data-slide="10">
+            <h2 class="slide-title">SED - Stream Editor</h2>
+            <div class="slide-content">
+                <p>Editează text în flux - procesează linie cu linie fără a încărca tot fișierul.</p>
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">sed 's/vechi/nou/' fisier.txt</span><br>
+                    <span class="output">... text cu "nou" în loc de "vechi" ...</span>
+                </div>
+                <div class="highlight-box">
+                    <strong>💡 Key insight:</strong> sed implicit scrie pe <code>stdout</code>, NU modifică fișierul original!
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 11: SED Substituție -->
+        <div class="slide" data-slide="11">
+            <h2 class="slide-title">SED - Comanda de Substituție</h2>
+            <div class="slide-content">
+                <div class="code-block">
+                    s/PATTERN/REPLACEMENT/FLAGS
+                </div>
+                <table>
+                    <tr><th>Flag</th><th>Efect</th></tr>
+                    <tr><td><code>g</code></td><td>Global - toate aparițiile pe linie</td></tr>
+                    <tr><td><code>i</code></td><td>Case insensitive</td></tr>
+                    <tr><td><code>n</code></td><td>A n-a apariție</td></tr>
+                </table>
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">echo "cat cat cat" | sed 's/cat/dog/'</span><br>
+                    <span class="output">dog cat cat</span>  <span class="highlight">← Doar prima!</span><br><br>
+                    <span class="prompt">$ </span><span class="command">echo "cat cat cat" | sed 's/cat/dog/g'</span><br>
+                    <span class="output">dog dog dog</span>  <span class="highlight">← Toate!</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 12: SED In-Place -->
+        <div class="slide" data-slide="12">
+            <h2 class="slide-title">SED - Edit In-Place</h2>
+            <div class="slide-content">
+                <div class="warning-box">
+                    <strong>🚨 PERICOL:</strong> <code>sed 's/x/y/' file > file</code><br>
+                    Shell-ul golește fișierul ÎNAINTE ca sed să-l citească!
+                </div>
+                <p><strong>Soluții corecte:</strong></p>
+                <div class="code-block">
+                    <span class="prompt"># </span><span class="command">Cu backup (RECOMANDAT)</span><br>
+                    <span class="prompt">$ </span><span class="command">sed -i.bak 's/old/new/g' file.txt</span><br><br>
+                    <span class="prompt"># </span><span class="command">Fără backup (PERICULOS!)</span><br>
+                    <span class="prompt">$ </span><span class="command">sed -i 's/old/new/g' file.txt</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 13: AWK Intro -->
+        <div class="slide" data-slide="13">
+            <h2 class="slide-title">AWK - Procesare Structurată</h2>
+            <div class="slide-content">
+                <p>AWK tratează fiecare linie ca un <strong>record</strong> cu <strong>câmpuri</strong> separate.</p>
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">echo "John Smith 30" | awk '{print $1}'</span><br>
+                    <span class="output">John</span><br><br>
+                    <span class="prompt">$ </span><span class="command">echo "John Smith 30" | awk '{print $3}'</span><br>
+                    <span class="output">30</span>
+                </div>
+                <div class="two-columns">
+                    <div class="box">
+                        <div class="box-title">Variabile</div>
+                        <code>$0</code> = linia întreagă<br>
+                        <code>$1, $2...</code> = câmpuri<br>
+                        <code>$NF</code> = ultimul câmp<br>
+                        <code>NR</code> = număr linie
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Structură</div>
+                        <code>BEGIN { }</code> - înainte<br>
+                        <code>{ acțiuni }</code> - per linie<br>
+                        <code>END { }</code> - după
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 14: AWK Print -->
+        <div class="slide" data-slide="14">
+            <h2 class="slide-title">AWK - Print cu și fără virgulă</h2>
+            <div class="slide-content">
+                <div class="code-block">
+                    <span class="prompt">$ </span><span class="command">echo "a b" | awk '{print $1 $2}'</span><br>
+                    <span class="output">ab</span>  <span class="highlight">← Concatenare directă!</span><br><br>
+                    <span class="prompt">$ </span><span class="command">echo "a b" | awk '{print $1, $2}'</span><br>
+                    <span class="output">a b</span>  <span class="highlight">← Cu spațiu (OFS)!</span>
+                </div>
+                <div class="warning-box">
+                    <strong>⚠️ Greșeală foarte comună!</strong><br>
+                    Virgula în print inserează Output Field Separator (default: spațiu).<br>
+                    Fără virgulă = lipire directă fără separator.
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 15: AWK CSV -->
+        <div class="slide" data-slide="15">
+            <h2 class="slide-title">AWK - Procesare CSV</h2>
+            <div class="slide-content">
+                <div class="code-block">
+                    <span class="prompt"># </span><span class="command">Setează separator la virgulă</span><br>
+                    <span class="prompt">$ </span><span class="command">awk -F',' '{print $2}' employees.csv</span><br><br>
+                    <span class="prompt"># </span><span class="command">Skip header (NR > 1)</span><br>
+                    <span class="prompt">$ </span><span class="command">awk -F',' 'NR > 1 {print $2}' employees.csv</span><br><br>
+                    <span class="prompt"># </span><span class="command">Suma salariilor</span><br>
+                    <span class="prompt">$ </span><span class="command">awk -F',' 'NR > 1 {sum += $4} END {print sum}' employees.csv</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 16: Pipeline Magic -->
+        <div class="slide" data-slide="16">
+            <h2 class="slide-title">Pipeline Magic</h2>
+            <div class="slide-content">
+                <p>Combinarea grep, sed și awk creează soluții puternice:</p>
+                <div class="code-block">
+                    <span class="prompt"># </span><span class="command">Top 5 IP-uri din log</span><br>
+                    <span class="prompt">$ </span><span class="command">awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -5</span><br><br>
+                    <span class="prompt"># </span><span class="command">Cleanup config</span><br>
+                    <span class="prompt">$ </span><span class="command">sed '/^#/d; /^$/d' config.txt | sort</span><br><br>
+                    <span class="prompt"># </span><span class="command">Erori unice cu frecvență</span><br>
+                    <span class="prompt">$ </span><span class="command">grep -i error log.txt | awk '{print $NF}' | sort | uniq -c | sort -rn</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 17: NANO -->
+        <div class="slide" data-slide="17">
+            <h2 class="slide-title">NANO - Editor Simplu</h2>
+            <div class="slide-content">
+                <p>Comenzi esențiale (^ = CTRL):</p>
+                <table>
+                    <tr><th>Comandă</th><th>Acțiune</th></tr>
+                    <tr><td><code>^O</code></td><td>Save (Write Out)</td></tr>
+                    <tr><td><code>^X</code></td><td>Exit</td></tr>
+                    <tr><td><code>^W</code></td><td>Search (Where is)</td></tr>
+                    <tr><td><code>^K</code></td><td>Cut line</td></tr>
+                    <tr><td><code>^U</code></td><td>Paste (Uncut)</td></tr>
+                    <tr><td><code>^G</code></td><td>Help</td></tr>
+                </table>
+                <div class="success-box">
+                    <strong>💡 Avantaj:</strong> Toate comenzile sunt afișate în bara de jos!
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 18: Summary -->
+        <div class="slide" data-slide="18">
+            <h2 class="slide-title">Rezumat</h2>
+            <div class="slide-content">
+                <div class="two-columns">
+                    <div class="box">
+                        <div class="box-title">Când folosești ce?</div>
+                        <ul>
+                            <li><strong>grep</strong> = caută/filtrează</li>
+                            <li><strong>sed</strong> = înlocuiește/transformă</li>
+                            <li><strong>awk</strong> = procesează structurat</li>
+                        </ul>
+                    </div>
+                    <div class="box">
+                        <div class="box-title">Greșeli de evitat</div>
+                        <ul>
+                            <li>grep fără -E pentru +, ?</li>
+                            <li>sed fără /g</li>
+                            <li>awk print fără virgulă</li>
+                            <li>-c numără linii, nu matches</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <strong>🎯 Practică!</strong> Cel mai bun mod de a învăța e să faci. Folosește exercițiile din materialul seminarului.
+                </div>
+            </div>
+        </div>
+        
+        <!-- SLIDE 19: Final -->
+        <div class="slide title-slide" data-slide="19">
+            <div class="emoji">🎉</div>
+            <h1 class="slide-title">Întrebări?</h1>
+            <p class="slide-subtitle">Succes la exerciții!</p>
+            <p style="margin-top: 40px; color: #64748b; font-size: 1rem;">
+                Resurse: regex101.com | explainshell.com<br>
+                <code>man grep</code> | <code>man sed</code> | <code>man awk</code>
+            </p>
+        </div>
+        
+    </div>
+    
+    <!-- Navigation -->
+    <div class="navigation">
+        <button class="nav-btn" onclick="prevSlide()">← Înapoi</button>
+        <button class="nav-btn" onclick="nextSlide()">Înainte →</button>
+    </div>
+    
+    <div class="progress" id="progress"></div>
+    <div class="slide-counter" id="counter">1 / 19</div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide - 1].classList.add('active');
+            
+            // Update progress
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            document.getElementById('counter').textContent = `${currentSlide} / ${totalSlides}`;
+        }
+        
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+        
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+        
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
