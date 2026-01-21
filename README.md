@@ -56,7 +56,7 @@ Câteva principii pe care le-am avut în minte când am structurat materialele:
 
 **Nu există "gena programatorului."** Abilitatea de a scrie cod e dobândită prin practică deliberată, nu e un talent înnăscut cu care te naști sau nu. Patitsas și colegii au demonstrat în 2016 că doar 5.8% din distribuțiile de note în cursurile de informatică sunt bimodal — restul mitului "unii pot, alții nu" e profeție auto-împlinită.
 
-**Începătorii nu sunt experți încetiți.** Au nevoie de abordări diferite, nu doar de mai mult timp. De aceea materialele includ Parsons Problems (reordonare cod), Peer Instruction (întrebări cu discuții în perechi), și Live Coding structurat — tehnici validate în cercetarea recentă din computing education.
+**Începătorii nu sunt (neaparat) experți potențiali.** Au nevoie de abordări diferite, nu doar de mai mult timp. De aceea materialele includ Parsons Problems (reordonare cod), Peer Instruction (întrebări cu discuții în perechi), și Live Coding structurat — tehnici validate în cercetarea recentă din computing education.
 
 **Erorile sunt oportunități, nu eșecuri.** Am normalizat greșeala în tot kit-ul. Fiecare programator a trecut prin aceleași bug-uri stupide — spațiul greșit în `[ $var ]`, uitatul de ghilimele, off-by-one în bucle. Când vezi că și instructorul greșește și repară în timp real, devine mai ușor să accepți că și tu vei greși.
 
