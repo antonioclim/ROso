@@ -1,0 +1,64 @@
+@startuml evolutia_so
+!include ../../diagrame_common/skin.puml
+title Evoluția Sistemelor de Operare
+
+skinparam rectangle {
+    roundCorner 10
+}
+
+' Generația 1
+rectangle "**Gen 1: Fără SO**\n1945-1955" as gen1 #FFCDD2 {
+    note as n1
+    • Programare cod mașină
+    • Un program pe rând
+    • Operare manuală
+    • CPU utilizare: ~30%
+    end note
+}
+
+' Generația 2
+rectangle "**Gen 2: Batch Processing**\n1955-1965" as gen2 #F8BBD9 {
+    note as n2
+    • GM-NAA I/O (1956)
+    • Tranziție automată între jobs
+    • CPU utilizare: ~90%
+    • Fără interactivitate
+    end note
+}
+
+' Generația 3
+rectangle "**Gen 3: Multiprogramare**\n1965-1980" as gen3 #E1BEE7 {
+    note as n3
+    • CTSS (1961), UNIX (1969)
+    • Time-sharing
+    • Multi-utilizator
+    • Interactivitate!
+    end note
+}
+
+' Generația 4
+rectangle "**Gen 4: PC & GUI**\n1980-2000" as gen4 #C5CAE9 {
+    note as n4
+    • MS-DOS (1981)
+    • Windows, Mac OS
+    • Linux (1991)
+    • GUI standard
+    end note
+}
+
+' Generația 5
+rectangle "**Gen 5: Mobile & Cloud**\n2000-prezent" as gen5 #BBDEFB {
+    note as n5
+    • iOS, Android
+    • Cloud computing
+    • Containere, K8s
+    • Edge, IoT
+    end note
+}
+
+gen1 -right-> gen2 : Automatizare
+gen2 -right-> gen3 : Partajare
+gen3 -down-> gen4 : Personal
+gen4 -left-> gen5 : Mobil/Distribuit
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml race_condition
+!include ../../diagrame_common/skin.puml
+title Race Condition - counter++
+
+skinparam sequence {
+    ParticipantPadding 30
+}
+
+participant "Thread A" as A #E3F2FD
+participant "Memoria\n(counter)" as M #FFF9C4
+participant "Thread B" as B #FCE4EC
+
+note over M
+**counter = 0**
+(inițial)
+end note
+
+== Scenariul cu RACE CONDITION ==
+
+A -> M : (1) LOAD counter\nregA = **0**
+activate A #C8E6C9
+
+B -> M : (2) LOAD counter\nregB = **0**
+activate B #FFCDD2
+
+note over A
+regA = 0 + 1 = **1**
+end note
+
+note over B
+regB = 0 + 1 = **1**
+end note
+
+A -> M : (3) STORE regA\ncounter = **1**
+deactivate A
+
+B -> M : (4) STORE regB\ncounter = **1**
+deactivate B
+
+note over M #FFCDD2
+**counter = 1**
+⚠️ **GREȘIT!**
+Ar trebui să fie 2!
+Am pierdut un increment!
+end note
+
+== Explicație ==
+
+note across #FFFDE7
+**Problema**: counter++ se descompune în 3 operații NON-atomice:
+1. LOAD counter → registru
+2. ADD 1 → registru  
+3. STORE registru → counter
+
+Dacă două thread-uri fac asta în paralel, rezultatele se **suprapun**!
+end note
+
+@enduml

@@ -1,0 +1,79 @@
+@startuml securitate_aaa_permisiuni
+!include ../../diagrame_common/skin.puml
+title Securitate: AAA Triad și Permisiuni Unix
+
+skinparam rectangle {
+    roundCorner 10
+}
+
+rectangle "**AAA TRIAD**" as aaa #FAFAFA {
+    
+    rectangle "**Authentication**\n(Cine ești?)" as authn #E3F2FD {
+        note as authn_note
+        • Parolă
+        • Cheie SSH
+        • Biometric
+        • 2FA/MFA
+        end note
+    }
+    
+    rectangle "**Authorization**\n(Ce poți face?)" as authz #C8E6C9 {
+        note as authz_note
+        • Permisiuni Unix
+        • ACL
+        • RBAC
+        • Capabilities
+        end note
+    }
+    
+    rectangle "**Audit**\n(Ce ai făcut?)" as audit #FFF9C4 {
+        note as audit_note
+        • /var/log/auth.log
+        • syslog
+        • auditd
+        • journalctl
+        end note
+    }
+}
+
+authn -[#3498DB]-> authz : Verificat?
+authz -[#27AE60]-> audit : Logare acțiuni
+
+rectangle "**PERMISIUNI UNIX**" as perms #FCE4EC {
+    
+    note as perms_note
+    **Format:** -rwxr-xr-- (0754)
+    
+    | Poziție | Categorie | Biți |
+    | 1 | Tip (-/d/l) | - |
+    | 2-4 | **Owner** | rwx (7) |
+    | 5-7 | **Group** | r-x (5) |
+    | 8-10 | **Others** | r-- (4) |
+    
+    **r** = read (4)
+    **w** = write (2)
+    **x** = execute (1)
+    end note
+    
+    rectangle "**Special Bits**" as special #FFFFFF {
+        note as special_note
+        **setuid (4xxx):** Rulează ca owner
+        **setgid (2xxx):** Rulează ca group
+        **sticky (1xxx):** Doar owner șterge
+        end note
+    }
+}
+
+rectangle "**MODELE ACCESS CONTROL**" as models #E1BEE7 {
+    rectangle "**DAC**\nOwner decide" as dac #FFFFFF
+    rectangle "**MAC**\nSistem decide\n(SELinux)" as mac #FFFFFF
+    rectangle "**RBAC**\nRoluri\n(K8s, AWS)" as rbac #FFFFFF
+}
+
+note bottom
+**Comenzi utile:**
+chmod 755 file | chown user:group file | getfacl file
+find / -perm -4000 (găsește setuid)
+end note
+
+@enduml
