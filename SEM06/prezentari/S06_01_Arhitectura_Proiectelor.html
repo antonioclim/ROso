@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arhitectura Proiectelor | CAPSTONE SO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
+    <style>
+        :root { --r-main-font-size: 32px; --r-code-font: 'JetBrains Mono', 'Fira Code', monospace; }
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+        .reveal pre { width: 100%; font-size: 0.55em; }
+        .reveal code { font-family: var(--r-code-font); }
+        .reveal ul { display: block; margin-left: 1em; }
+        .reveal li { margin-bottom: 0.5em; }
+        .two-columns { display: flex; gap: 2em; }
+        .two-columns > * { flex: 1; }
+        .three-columns { display: flex; gap: 1.5em; }
+        .three-columns > * { flex: 1; }
+        .highlight-box { background: rgba(100, 100, 255, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #6366f1; }
+        .warning-box { background: rgba(255, 150, 50, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #f59e0b; }
+        .success-box { background: rgba(50, 200, 100, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #10b981; }
+        .error-box { background: rgba(239, 68, 68, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #ef4444; }
+        .architecture-diagram { background: #0d1117; padding: 1.5em; border-radius: 10px; font-family: monospace; font-size: 0.65em; line-height: 1.4; text-align: left; }
+        .file-tree { text-align: left; font-family: monospace; font-size: 0.6em; background: #0d1117; padding: 1em; border-radius: 8px; }
+        .pattern-card { background: rgba(255,255,255,0.05); padding: 1em; border-radius: 8px; text-align: center; }
+        .pattern-icon { font-size: 2.5em; margin-bottom: 0.3em; }
+        .vs-table { width: 100%; border-collapse: collapse; font-size: 0.65em; }
+        .vs-table th, .vs-table td { padding: 0.5em; border: 1px solid #333; }
+        .vs-table th { background: rgba(99, 102, 241, 0.3); }
+        .good { color: #10b981; }
+        .bad { color: #ef4444; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============== TITLE ============== -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #0f172a 100%)">
+    <h1>Arhitectura Proiectelor</h1>
+    <h3>Design Patterns pentru Bash Profesional</h3>
+    <p style="margin-top: 2em; opacity: 0.7;">
+        CAPSTONE SO • Seminar 11-12<br>
+        <small>Modularitate • Separare Responsabilități • Best Practices</small>
+    </p>
+</section>
+
+<!-- ============== DE CE ARHITECTURĂ ============== -->
+<section>
+    <section data-background-color="#1e1e3f">
+        <h2>De Ce Contează Arhitectura?</h2>
+        <p>Diferența dintre un script și un proiect profesional</p>
+    </section>
+    
+    <section>
+        <h3>Script Naiv vs. Proiect Structurat</h3>
+        <div class="two-columns">
+            <div>
+                <h4 class="bad">Script Monolitic</h4>
+                <pre><code class="language-bash" style="font-size: 0.9em;">#!/bin/bash
+# Tot într-un singur fișier
+# 500+ linii fără structură
+
+cpu=$(cat /proc/stat | ...)
+if [ $cpu -gt 80 ]; then
+    echo "Alert!"
+    # ...mai mult cod
+fi
+
+# Backup logic mixed in
+tar -czf backup.tar.gz /data
+# ...și mai mult cod
+
+# Deploy logic
+scp backup.tar.gz server:
+# ...etc</code></pre>
+                <div class="error-box" style="font-size: 0.7em; margin-top: 0.5em;">
+                    Greu de citit, testat, menținut
+                </div>
+            </div>
+            <div>
+                <h4 class="good">Proiect Modular</h4>
+                <pre><code class="language-bash" style="font-size: 0.9em;">#!/bin/bash
+# main.sh - Entry point clar
+
+source ./lib/common.sh
+source ./core/monitor.sh
+source ./core/backup.sh
+
+main() {
+    parse_args "$@"
+    load_config
+    
+    case $COMMAND in
+        monitor) run_monitor ;;
+        backup)  run_backup ;;
+        *)       show_help ;;
+    esac
+}
+
+main "$@"</code></pre>
+                <div class="success-box" style="font-size: 0.7em; margin-top: 0.5em;">
+                    Clar, testabil, extensibil
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Beneficiile Arhitecturii Bune</h3>
+        <div class="three-columns">
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">🔧</div>
+                <h4>Mentenabilitate</h4>
+                <p style="font-size: 0.7em;">Modificări locale fără side effects</p>
+            </div>
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">🧪</div>
+                <h4>Testabilitate</h4>
+                <p style="font-size: 0.7em;">Unit testing pe componente izolate</p>
+            </div>
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">♻️</div>
+                <h4>Reusability</h4>
+                <p style="font-size: 0.7em;">Module reutilizabile în alte proiecte</p>
+            </div>
+        </div>
+        <div class="three-columns" style="margin-top: 1em;">
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">👥</div>
+                <h4>Colaborare</h4>
+                <p style="font-size: 0.7em;">Echipe pot lucra în paralel</p>
+            </div>
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">📈</div>
+                <h4>Scalabilitate</h4>
+                <p style="font-size: 0.7em;">Ușor de adăugat features noi</p>
+            </div>
+            <div class="pattern-card fragment">
+                <div class="pattern-icon">📖</div>
+                <h4>Documentare</h4>
+                <p style="font-size: 0.7em;">Structura = documentație implicită</p>
+            </div>
+        </div>
+    </section>
+</section>
+
+<!-- ============== PRINCIPII SOLID ============== -->
+<section>
+    <section data-background-color="#1a365d">
+        <h2>Principii SOLID în Bash</h2>
+        <p>Adaptarea principiilor OOP pentru scripting</p>
+    </section>
+    
+    <section>
+        <h3>S - Single Responsibility</h3>
+        <div class="highlight-box">
+            <strong>Principiu:</strong> Fiecare modul/funcție are o singură responsabilitate
+        </div>
+        <div class="two-columns" style="margin-top: 1em;">
+            <div>
+                <h4 class="bad">Încălcare</h4>
+                <pre><code class="language-bash">process_backup() {
+    # Face prea multe lucruri
+    validate_input "$@"
+    create_archive
+    compress_archive
+    upload_to_remote
+    send_notification
+    cleanup_old
+}</code></pre>
+            </div>
+            <div>
+                <h4 class="good">Corect</h4>
+                <pre><code class="language-bash"># Fișiere separate
+# validation.sh
+validate_backup_input() { ... }
+
+# archive.sh  
+create_archive() { ... }
+compress_archive() { ... }
+
+# remote.sh
+upload_to_remote() { ... }
+
+# notify.sh
+send_notification() { ... }</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>O - Open/Closed Principle</h3>
+        <div class="highlight-box">
+            <strong>Principiu:</strong> Deschis pentru extensie, închis pentru modificare
+        </div>
+        <pre><code class="language-bash"># Folosim plugin pattern - adăugăm compresoare noi fără a modifica codul existent
+
+# compressors/gzip.sh
+compress_gzip() { gzip -c "$1"; }
+decompress_gzip() { gunzip -c "$1"; }
+
+# compressors/zstd.sh  
+compress_zstd() { zstd -c "$1"; }
+decompress_zstd() { zstd -d -c "$1"; }
+
+# core/compress.sh - Nu modificăm, doar extindem
+compress_file() {
+    local file=$1 algorithm=$2
+    
+    # Încarcă plugin-ul dinamic
+    if [[ -f "compressors/${algorithm}.sh" ]]; then
+        source "compressors/${algorithm}.sh"
+        "compress_${algorithm}" "$file"
+    else
+        log_error "Unknown compressor: $algorithm"
+    fi
+}</code></pre>
+    </section>
+    
+    <section>
+        <h3>D - Dependency Inversion</h3>
+        <div class="highlight-box">
+            <strong>Principiu:</strong> Depinde de abstracții, nu de implementări concrete
+        </div>
+        <pre><code class="language-bash"># Definim interfața (contract)
+# interfaces/notifier.sh
+notify() {
+    local level=$1 message=$2
+    # Implementarea concretă este injectată
+    "${NOTIFIER_IMPL:-notify_stdout}" "$level" "$message"
+}
+
+# Implementări concrete
+notify_stdout() { echo "[$1] $2"; }
+notify_email()  { mail -s "[$1] Alert" "$ADMIN_EMAIL" <<< "$2"; }
+notify_slack()  { curl -X POST "$SLACK_WEBHOOK" -d "{\"text\":\"[$1] $2\"}"; }
+
+# Configurare - alegem implementarea
+export NOTIFIER_IMPL="notify_slack"
+
+# Utilizare - codul nu știe ce notifier folosește
+notify "ERROR" "Disk space critical!"</code></pre>
+    </section>
+</section>
+
+<!-- ============== STRUCTURA DIRECTOARELOR ============== -->
+<section>
+    <section data-background-color="#1e3a1e">
+        <h2>Structura Directoarelor</h2>
+        <p>Organizarea fizică a proiectului</p>
+    </section>
+    
+    <section>
+        <h3>Layout Standard CAPSTONE</h3>
+        <div class="file-tree">
+<pre>
+project_name/
+│
+├── 📄 main.sh                    # 🎯 Entry point unic
+│
+├── 📁 core/                      # 💼 Business logic
+│   ├── project_core.sh           #    Logica principală
+│   ├── project_utils.sh          #    Helpers specifice
+│   └── project_config.sh         #    Gestiune config
+│
+├── 📁 lib/                       # 📚 Biblioteci comune
+│   ├── common.sh                 #    Funcții generale
+│   ├── logging.sh                #    Framework logging
+│   ├── validation.sh             #    Validare input
+│   └── colors.sh                 #    Output colorat
+│
+├── 📁 config/                    # ⚙️ Configurații
+│   ├── default.conf              #    Valori default
+│   └── project.conf.example      #    Template config
+│
+├── 📁 tests/                     # 🧪 Teste
+│   ├── unit/                     #    Teste unitare
+│   │   ├── test_core.sh
+│   │   └── test_utils.sh
+│   ├── integration/              #    Teste integrare
+│   └── fixtures/                 #    Date test
+│
+├── 📁 docs/                      # 📖 Documentație
+│   └── README.md
+│
+└── 📄 Makefile                   # 🔨 Build automation
+</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Explicația Directoarelor</h3>
+        <table class="vs-table">
+            <thead>
+                <tr>
+                    <th>Director</th>
+                    <th>Responsabilitate</th>
+                    <th>Exemplu Conținut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="fragment">
+                    <td><code>core/</code></td>
+                    <td>Logica specifică proiectului</td>
+                    <td>Algoritmi backup, monitoring</td>
+                </tr>
+                <tr class="fragment">
+                    <td><code>lib/</code></td>
+                    <td>Cod reutilizabil generic</td>
+                    <td>Logging, validare, helpers</td>
+                </tr>
+                <tr class="fragment">
+                    <td><code>config/</code></td>
+                    <td>Fișiere configurație</td>
+                    <td>.conf, .env, templates</td>
+                </tr>
+                <tr class="fragment">
+                    <td><code>tests/</code></td>
+                    <td>Suite de teste</td>
+                    <td>Unit, integration, fixtures</td>
+                </tr>
+                <tr class="fragment">
+                    <td><code>docs/</code></td>
+                    <td>Documentație</td>
+                    <td>README, API docs, examples</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</section>
+
+<!-- ============== SOURCE CHAIN ============== -->
+<section>
+    <section data-background-color="#3d1a1a">
+        <h2>Pattern: Source Chain</h2>
+        <p>Încărcarea dependențelor în ordine corectă</p>
+    </section>
+    
+    <section>
+        <h3>Dependențe și Ordinea Încărcării</h3>
+        <div class="architecture-diagram">
+<pre>
+                    ORDINEA ÎNCĂRCĂRII (Source Chain)
+                    
+    ┌─────────────────────────────────────────────────────────┐
+    │  1. BASH OPTIONS & CONSTANTS                            │
+    │     set -euo pipefail                                   │
+    │     readonly SCRIPT_DIR="$(dirname ...)"                │
+    └─────────────────────┬───────────────────────────────────┘
+                          ▼
+    ┌─────────────────────────────────────────────────────────┐
+    │  2. FOUNDATION LIBRARIES                                │
+    │     source lib/common.sh      # Zero dependencies       │
+    │     source lib/colors.sh      # Zero dependencies       │
+    └─────────────────────┬───────────────────────────────────┘
+                          ▼
+    ┌─────────────────────────────────────────────────────────┐
+    │  3. CORE LIBRARIES                                      │
+    │     source lib/logging.sh     # Needs: common, colors   │
+    │     source lib/validation.sh  # Needs: common, logging  │
+    └─────────────────────┬───────────────────────────────────┘
+                          ▼
+    ┌─────────────────────────────────────────────────────────┐
+    │  4. PROJECT MODULES                                     │
+    │     source core/config.sh     # Needs: validation       │
+    │     source core/utils.sh      # Needs: common, logging  │
+    │     source core/core.sh       # Needs: all above        │
+    └─────────────────────────────────────────────────────────┘
+</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Implementare Source Chain</h3>
+        <pre><code class="language-bash">#!/bin/bash
+# main.sh - Entry point cu source chain robust
+
+# 1. Strict mode
+set -euo pipefail
+
+# 2. Determină locația absolută
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly SCRIPT_DIR
+
+# 3. Helper pentru source cu verificare
+source_module() {
+    local module="$1"
+    local path="${SCRIPT_DIR}/${module}"
+    
+    if [[ ! -f "$path" ]]; then
+        echo "FATAL: Module not found: $path" >&2
+        exit 1
+    fi
+    
+    # shellcheck source=/dev/null
+    source "$path"
+}
+
+# 4. Încarcă în ordinea corectă
+source_module "lib/common.sh"
+source_module "lib/colors.sh"
+source_module "lib/logging.sh"
+source_module "lib/validation.sh"
+source_module "core/config.sh"
+source_module "core/utils.sh"
+source_module "core/core.sh"
+
+# 5. Entry point
+main "$@"</code></pre>
+    </section>
+    
+    <section>
+        <h3>Guard Pattern - Evitare Încărcare Multiplă</h3>
+        <pre><code class="language-bash">#!/bin/bash
+# lib/logging.sh
+
+# Guard - previne încărcarea de mai multe ori
+[[ -n "${_LOGGING_SH_LOADED:-}" ]] && return 0
+readonly _LOGGING_SH_LOADED=1
+
+# Verifică dependențe
+if [[ -z "${_COMMON_SH_LOADED:-}" ]]; then
+    echo "ERROR: logging.sh requires common.sh" >&2
+    exit 1
+fi
+
+# Implementare
+declare -gA LOG_LEVELS=(
+    [TRACE]=0 [DEBUG]=1 [INFO]=2 
+    [WARN]=3 [ERROR]=4 [FATAL]=5
+)
+
+log() {
+    local level="${1:-INFO}"
+    shift
+    local message="$*"
+    # ...implementare
+}</code></pre>
+        <div class="highlight-box" style="font-size: 0.8em; margin-top: 1em;">
+            <strong>Guard Pattern:</strong> Variabila <code>_MODULE_SH_LOADED</code> previne 
+            re-executarea codului dacă fișierul este sourced de mai multe ori.
+        </div>
+    </section>
+</section>
+
+<!-- ============== DESIGN PATTERNS ============== -->
+<section>
+    <section data-background-color="#1a2d3d">
+        <h2>Design Patterns în Bash</h2>
+        <p>Soluții elegante pentru probleme comune</p>
+    </section>
+    
+    <section>
+        <h3>1. Factory Pattern</h3>
+        <pre><code class="language-bash"># Creează obiecte (arrays asociative) dinamic
+create_backup_job() {
+    local name=$1 source=$2 dest=$3
+    
+    # "Constructor" - returnează referință
+    local -n job="BACKUP_JOB_${name}"
+    
+    job=(
+        [name]="$name"
+        [source]="$source"
+        [destination]="$dest"
+        [created_at]="$(date -Iseconds)"
+        [status]="pending"
+        [type]="full"
+    )
+    
+    echo "BACKUP_JOB_${name}"
+}
+
+# Utilizare
+job_ref=$(create_backup_job "daily" "/var/www" "/backup")
+declare -n job="$job_ref"
+echo "Created job: ${job[name]} at ${job[created_at]}"</code></pre>
+    </section>
+    
+    <section>
+        <h3>2. Strategy Pattern</h3>
+        <pre><code class="language-bash"># Algoritmi interschimbabili pentru aceeași operație
+
+# Strategii de compresie
+strategy_gzip()  { gzip -c "$1" > "$2"; }
+strategy_bzip2() { bzip2 -c "$1" > "$2"; }
+strategy_zstd()  { zstd -q -c "$1" -o "$2"; }
+strategy_none()  { cp "$1" "$2"; }
+
+# Context - folosește strategia selectată
+compress_with_strategy() {
+    local input=$1 output=$2 strategy=${3:-gzip}
+    
+    # Selectează și execută strategia
+    local strategy_func="strategy_${strategy}"
+    
+    if declare -f "$strategy_func" > /dev/null; then
+        "$strategy_func" "$input" "$output"
+    else
+        log_error "Unknown compression strategy: $strategy"
+        return 1
+    fi
+}
+
+# Utilizare
+compress_with_strategy "data.tar" "data.tar.zst" "zstd"</code></pre>
+    </section>
+    
+    <section>
+        <h3>3. Observer Pattern</h3>
+        <pre><code class="language-bash"># Event system pentru notificări
+
+declare -a EVENT_HANDLERS=()
+
+# Înregistrare handler
+on_event() {
+    local event=$1 handler=$2
+    EVENT_HANDLERS+=("${event}:${handler}")
+}
+
+# Emitere event
+emit_event() {
+    local event=$1; shift
+    local data="$*"
+    
+    for registration in "${EVENT_HANDLERS[@]}"; do
+        local registered_event="${registration%%:*}"
+        local handler="${registration#*:}"
+        
+        if [[ "$registered_event" == "$event" ]]; then
+            "$handler" "$data"
+        fi
+    done
+}
+
+# Handlers
+on_backup_complete() { log_info "Backup finished: $1"; }
+on_backup_complete() { send_notification "Backup done: $1"; }
+
+# Setup
+on_event "backup:complete" "on_backup_complete"
+
+# Trigger
+emit_event "backup:complete" "/backup/daily_20240115.tar.gz"</code></pre>
+    </section>
+    
+    <section>
+        <h3>4. Command Pattern</h3>
+        <pre><code class="language-bash"># Encapsulare comenzi pentru undo/redo/queue
+
+declare -a COMMAND_HISTORY=()
+
+# Wrapper pentru comenzi cu history
+execute_command() {
+    local cmd="$*"
+    
+    # Log pentru audit
+    log_debug "Executing: $cmd"
+    
+    # Salvează în history
+    COMMAND_HISTORY+=("$cmd")
+    
+    # Execută
+    eval "$cmd"
+    local status=$?
+    
+    if [[ $status -ne 0 ]]; then
+        log_error "Command failed (exit: $status): $cmd"
+    fi
+    
+    return $status
+}
+
+# Replay ultimele N comenzi
+replay_commands() {
+    local count=${1:-${#COMMAND_HISTORY[@]}}
+    
+    for ((i=${#COMMAND_HISTORY[@]}-count; i<${#COMMAND_HISTORY[@]}; i++)); do
+        execute_command "${COMMAND_HISTORY[$i]}"
+    done
+}</code></pre>
+    </section>
+</section>
+
+<!-- ============== MODULARITATE ============== -->
+<section>
+    <section data-background-color="#2d1a3d">
+        <h2>Modularitate Practică</h2>
+        <p>Cum împărțim codul în module coezive</p>
+    </section>
+    
+    <section>
+        <h3>Criteriile unui Modul Bun</h3>
+        <div class="three-columns">
+            <div class="highlight-box">
+                <h4>Coeziune</h4>
+                <p style="font-size: 0.75em;">
+                    Toate funcțiile din modul servesc același scop
+                </p>
+                <pre><code class="language-bash" style="font-size: 0.8em;"># logging.sh - DOAR logging
+log_info() { ... }
+log_error() { ... }
+log_debug() { ... }
+set_log_level() { ... }</code></pre>
+            </div>
+            <div class="highlight-box">
+                <h4>Cuplare Slabă</h4>
+                <p style="font-size: 0.75em;">
+                    Dependențe minime între module
+                </p>
+                <pre><code class="language-bash" style="font-size: 0.8em;"># validation.sh
+# Folosește doar common.sh
+validate_path() {
+    is_empty "$1" && return 1
+    [[ -e "$1" ]]
+}</code></pre>
+            </div>
+            <div class="highlight-box">
+                <h4>Încapsulare</h4>
+                <p style="font-size: 0.75em;">
+                    Ascunde detaliile interne
+                </p>
+                <pre><code class="language-bash" style="font-size: 0.8em;"># API public
+get_cpu_usage() { ... }
+
+# Privat (prefix _)
+_parse_proc_stat() { ... }
+_calculate_diff() { ... }</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Exemplu: Modulul logging.sh</h3>
+        <pre><code class="language-bash">#!/bin/bash
+# lib/logging.sh - Framework de logging complet
+
+[[ -n "${_LOGGING_SH_LOADED:-}" ]] && return 0
+readonly _LOGGING_SH_LOADED=1
+
+# ═══════════════════════════════════════════════════════════
+# CONFIGURARE
+# ═══════════════════════════════════════════════════════════
+declare -g LOG_LEVEL="${LOG_LEVEL:-INFO}"
+declare -g LOG_FILE="${LOG_FILE:-}"
+declare -g LOG_FORMAT="${LOG_FORMAT:-'[%timestamp] [%level] %message'}"
+
+# ═══════════════════════════════════════════════════════════
+# API PUBLIC
+# ═══════════════════════════════════════════════════════════
+log_trace() { _log "TRACE" "$@"; }
+log_debug() { _log "DEBUG" "$@"; }
+log_info()  { _log "INFO"  "$@"; }
+log_warn()  { _log "WARN"  "$@"; }
+log_error() { _log "ERROR" "$@"; }
+log_fatal() { _log "FATAL" "$@"; exit 1; }
+
+set_log_level() { LOG_LEVEL="$1"; }
+set_log_file()  { LOG_FILE="$1"; }
+
+# ═══════════════════════════════════════════════════════════
+# IMPLEMENTARE PRIVATĂ
+# ═══════════════════════════════════════════════════════════
+_log() {
+    local level=$1; shift
+    _should_log "$level" || return 0
+    
+    local msg="$(_format_message "$level" "$*")"
+    echo -e "$msg" >&2
+    [[ -n "$LOG_FILE" ]] && echo "$msg" >> "$LOG_FILE"
+}</code></pre>
+    </section>
+</section>
+
+<!-- ============== API DESIGN ============== -->
+<section>
+    <section data-background-color="#3d2d1a">
+        <h2>Design API pentru Funcții</h2>
+        <p>Interfețe clare și consistente</p>
+    </section>
+    
+    <section>
+        <h3>Convenții pentru Funcții</h3>
+        <div class="two-columns">
+            <div>
+                <h4>Naming</h4>
+                <pre><code class="language-bash"># Verbe descriptive
+get_cpu_usage()
+set_log_level()
+is_file_readable()
+has_dependencies()
+validate_config()
+create_backup()
+parse_arguments()
+
+# Prefix pentru categorie
+file_exists()
+file_read()
+file_write()
+
+# Prefix _ pentru private
+_internal_helper()</code></pre>
+            </div>
+            <div>
+                <h4>Parametri & Return</h4>
+                <pre><code class="language-bash"># Documentare parametri
+# @param $1 - source path
+# @param $2 - destination path  
+# @param $3 - (optional) compression
+# @return 0 on success, 1 on failure
+# @output backup filename to stdout
+create_backup() {
+    local src="${1:?Source required}"
+    local dest="${2:?Dest required}"
+    local compress="${3:-gzip}"
+    
+    # Validare
+    [[ -d "$src" ]] || return 1
+    
+    # Logică
+    local filename="backup_$(date +%s)"
+    # ...
+    
+    # Output
+    echo "$filename"
+    return 0
+}</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Pattern: Options Object</h3>
+        <pre><code class="language-bash"># Pentru funcții cu mulți parametri - folosim array asociativ
+
+create_backup() {
+    # Parsare opțiuni din array asociativ
+    local -n opts=$1
+    
+    local source="${opts[source]:?Source required}"
+    local dest="${opts[destination]:?Destination required}"
+    local type="${opts[type]:-full}"
+    local compress="${opts[compress]:-gzip}"
+    local keep="${opts[keep]:-7}"
+    local notify="${opts[notify]:-false}"
+    
+    log_info "Creating $type backup: $source → $dest"
+    log_debug "Options: compress=$compress, keep=$keep, notify=$notify"
+    
+    # Implementare...
+}
+
+# Utilizare - mult mai clar decât 6 parametri poziționali
+declare -A backup_opts=(
+    [source]="/var/www"
+    [destination]="/backup"
+    [type]="incremental"
+    [compress]="zstd"
+    [keep]=14
+    [notify]=true
+)
+
+create_backup backup_opts</code></pre>
+    </section>
+</section>
+
+<!-- ============== BEST PRACTICES ============== -->
+<section>
+    <section data-background-color="#1a1a2e">
+        <h2>Best Practices Checklist</h2>
+        <p>Reguli de urmat în proiecte CAPSTONE</p>
+    </section>
+    
+    <section>
+        <h3>Checklist Arhitectură</h3>
+        <div class="two-columns">
+            <div class="success-box">
+                <h4>DO</h4>
+                <ul style="font-size: 0.8em;">
+                    <li>Un entry point clar (main.sh)</li>
+                    <li>Separare core/lib/config/tests</li>
+                    <li>Funcții mici, focusate</li>
+                    <li>Dependențe explicite (source)</li>
+                    <li>Guard pattern pentru module</li>
+                    <li>Prefix _ pentru funcții private</li>
+                    <li>Documentare parametri</li>
+                    <li>Return codes consistente</li>
+                </ul>
+            </div>
+            <div class="error-box">
+                <h4>DON'T</h4>
+                <ul style="font-size: 0.8em;">
+                    <li>Scripturi monolitice >500 linii</li>
+                    <li>Variabile globale fără prefixe</li>
+                    <li>Hardcoding paths/values</li>
+                    <li>Funcții cu >50 linii</li>
+                    <li>Side effects în funcții</li>
+                    <li>Circular dependencies</li>
+                    <li>God functions (fac totul)</li>
+                    <li>Copy-paste code</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Exemplu Complet - Proiect Mini</h3>
+        <div class="architecture-diagram">
+<pre>
+mini_project/
+├── main.sh           ──────►  Entry point, orchestration
+│
+├── lib/
+│   ├── common.sh     ──────►  is_empty(), die(), trim()
+│   └── logging.sh    ──────►  log_info(), log_error()
+│
+├── core/
+│   ├── config.sh     ──────►  load_config(), get_config()
+│   └── processor.sh  ──────►  process_file(), validate_input()
+│
+├── config/
+│   └── default.conf  ──────►  KEY=value pairs
+│
+└── tests/
+    └── test_processor.sh ──►  test_process_file(), test_validate()
+
+Dependențe:
+  main.sh ─────► common.sh ◄─── logging.sh
+                    ▲
+                    │
+              config.sh ◄─── processor.sh
+</pre>
+        </div>
+    </section>
+</section>
+
+<!-- ============== EXERCIȚIU ============== -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)">
+    <h2>Exercițiu Practic</h2>
+    <div class="highlight-box">
+        <h4>Refactorizare Script Monolitic</h4>
+        <p>Primiți un script de 300 linii. Sarcina voastră:</p>
+        <ol style="font-size: 0.9em;">
+            <li>Identificați responsabilitățile distincte</li>
+            <li>Creați structura de directoare</li>
+            <li>Extrageți module (lib/, core/)</li>
+            <li>Implementați source chain</li>
+            <li>Adăugați guard pattern</li>
+        </ol>
+    </div>
+    <p style="margin-top: 2em;">
+        <strong>Timp:</strong> 45 minute | <strong>Punctaj:</strong> 10p arhitectură
+    </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+<script>
+Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    plugins: [RevealHighlight]
+});
+</script>
+</body>
+</html>
