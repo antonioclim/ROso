@@ -62,7 +62,7 @@ Câteva principii pe care le-am avut în minte când am structurat materialele:
 
 **LLM-urile sunt tool-uri, nu adversari.** Studenții de azi au acces la ChatGPT, Claude, Gemini — n-are sens să facem cursuri care ignoră realitatea. Am inclus exerciții explicit "LLM-aware" unde trebuie să evaluezi ce generează AI-ul, nu doar să copiezi. Scopul e înțelegerea, nu finalizarea temei.
 
-**Atenția funcționează în sprints.** Cercetările din neuroștiință arată că atenția susținută pentru studenți e realistă în ferestre de 5-10 minute, nu 50. De aceea temele sunt structurate în micro-milestone-uri cu verificări imediate. Pauzele nu sunt pierdere de timp — incubația ajută la insight.
+**Atenția funcționează în "sprints".** Cercetările din neuroștiință arată că atenția susținută pentru studenți e realistă în ferestre de 5-10 minute, nu 50. De aceea temele sunt structurate în micro-milestone-uri cu verificări imediate. Pauzele nu sunt pierdere de timp — incubația ajută la insight.
 
 Dacă sună ciudat că un curs de Sisteme de Operare se gândește la neuroștiință și pedagogie: așa ar trebui să arate orice curs. Predatul tradițional — slide-uri citite monoton timp de două ore, cu studenții în rol pasiv — nu a funcționat niciodată bine, doar am acceptat colectiv că așa e normal. Nu e normal. E învățământ industrial: eficient pentru a procesa oameni, ineficient pentru a-i învăța ceva.
 
