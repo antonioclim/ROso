@@ -64,15 +64,15 @@ Câteva principii pe care le-am avut în minte când am structurat materialele:
 
 **Atenția funcționează în "sprints".** Cercetările din neuroștiință arată că atenția susținută pentru studenți e realistă în ferestre de 5-10 minute, nu 50. De aceea temele sunt structurate în micro-milestone-uri cu verificări imediate. Pauzele nu sunt pierdere de timp — incubația ajută la insight.
 
-Dacă sună ciudat că un curs de Sisteme de Operare se gândește la neuroștiință și pedagogie: așa ar trebui să arate orice curs. Predatul tradițional — slide-uri citite monoton timp de două ore, cu studenții în rol pasiv — nu a funcționat niciodată bine, doar am acceptat colectiv că așa e normal. Nu e normal. E învățământ industrial: eficient pentru a procesa oameni, ineficient pentru a-i învăța ceva.
+Dacă sună ciudat că un curs de Sisteme de Operare sunt referiri la neuroștiință și pedagogie: așa ar trebui să arate orice curs. Predatul tradițional — slide-uri citite monoton timp de două ore, cu studenții în rol pasiv — nu a funcționat niciodată bine, doar am acceptat colectiv că așa e normal. Nu e normal! E învățământ industrial, pe banda rulanta: eficient pentru a procesa oameni, ineficient pentru a-i învăța ceva.
 
-Materialele de aici sunt rezultatul a ani de experimentare, testare, și iterare. Metodele de Peer Instruction, Productive Failure, Subgoal Labeling nu sunt găsite de mine — sunt validate în cercetare la SIGCSE, ICER, ITiCSE. Ce am făcut eu e să le aplic în contextul concret al cursului nostru și să văd ce funcționează cu studenții de la ASE.
+Materialele de aici sunt rezultatul a ani de experimentare, testare, și iterare. Metodele de Peer Instruction, Productive Failure, Subgoal Labeling nu sunt găsite de mine — sunt validate în cercetare la SIGCSE, ICER, ITiCSE. Ce am făcut eu e să le aplic în contextul concret al cursului nostru și să văd ce funcționează cu studenții mei.
 
 ---
 
 # PARTEA I: SETUP ȘI CONFIGURARE
 
-Această secțiune acoperă tot ce trebuie să faci înainte de primul seminar. Fără un mediu funcțional, restul e inutil.
+Această secțiune acoperă tot ce trebuie să faci înainte de primul seminar. Fără un mediu funcțional, restul e (deocamdata) inutil.
 
 ---
 
