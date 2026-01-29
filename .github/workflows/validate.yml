@@ -1,0 +1,61 @@
+name: Validate Repository
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate-structure:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Required Files Exist
+        run: |
+          echo "Verificare fișiere obligatorii..."
+          errors=0
+          for file in README.md LICENSE LICENCE.md; do
+            if [ ! -f "$file" ]; then
+              echo "⚠️ Nu există: $file"
+            else
+              echo "✓ Găsit: $file"
+            fi
+          done
+          
+          echo ""
+          echo "Verificare structură seminarii..."
+          for sem in SEM01 SEM02 SEM03 SEM04 SEM05 SEM06; do
+            if [ -d "$sem" ]; then
+              echo "✓ Director: $sem"
+            else
+              echo "⚠️ Lipsește director: $sem"
+            fi
+          done
+          
+          echo ""
+          echo "Verificare structură cursuri..."
+          if [ -d "SO_curs" ]; then
+            echo "✓ Director: SO_curs"
+          else
+            echo "⚠️ Lipsește director: SO_curs"
+          fi
+
+      - name: Validate YAML Syntax
+        run: |
+          echo "Verificare sintaxă YAML..."
+          for file in .github/ISSUE_TEMPLATE/*.yml .github/workflows/*.yml; do
+            if [ -f "$file" ]; then
+              python3 -c "import yaml; yaml.safe_load(open('$file'))" && echo "✓ $file" || echo "❌ $file"
+            fi
+          done
+
+      - name: Check Markdown Links (Optional)
+        continue-on-error: true
+        run: |
+          echo "Verificare link-uri în README..."
+          grep -oE '\[[^]]+\]\([^)]+\)' README.md | head -20 || true
