@@ -1,0 +1,55 @@
+name: 💡 Cerere Funcționalitate
+description: Sugerează o funcționalitate nouă sau îmbunătățire
+title: "[FEATURE] "
+labels: ["enhancement"]
+assignees:
+  - antonioclim
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria
+      options:
+        - Exercițiu nou
+        - Secțiune documentație nouă
+        - Îmbunătățire script
+        - Proiect nou
+        - Diagrame/Vizualizări
+        - Altele
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrierea Funcționalității
+      placeholder: "Descrie ce ai vrea să vezi adăugat..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema sau Motivația
+      placeholder: "De ce crezi că ar fi util?"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioritate Sugerată
+      options:
+        - Low (ar fi drăguț)
+        - Medium (ar ajuta)
+        - High (este necesar)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist Pre-submitere
+      options:
+        - label: Am căutat în issues existente
+          required: true
