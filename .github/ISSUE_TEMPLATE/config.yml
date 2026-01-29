@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentație Curs
+    url: https://github.com/antonioclim/ROso#readme
+    about: Consultă README-ul complet înainte de a deschide un issue.
+  - name: 🔧 Ghid Troubleshooting
+    url: https://github.com/antonioclim/ROso#troubleshooting
+    about: Probleme comune și soluții sunt documentate aici.
+  - name: 📋 Licență și Permisiuni
+    url: https://github.com/antonioclim/ROso/blob/main/LICENCE.md
+    about: Citește termenii licenței restrictive înainte de a solicita permisiuni.
