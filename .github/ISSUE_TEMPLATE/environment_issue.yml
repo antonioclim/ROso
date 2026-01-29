@@ -1,0 +1,69 @@
+name: 🔧 Problemă Mediu/Configurare
+description: Raportează probleme cu setup-ul sau mediul de lucru
+title: "[ENV] "
+labels: ["environment"]
+assignees:
+  - antonioclim
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria Problemei
+      options:
+        - Instalare WSL2
+        - Instalare VirtualBox
+        - Instalare Ubuntu
+        - Configurare SSH/PuTTY
+        - Probleme cu pachete (apt)
+        - Probleme cu Python/pip
+        - Probleme cu permisiuni
+        - Probleme de compatibilitate
+        - Altele
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrierea Problemei
+      placeholder: "Descrie problema întâlnită..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pași Deja Încercați
+      placeholder: |
+        1. Am încercat să...
+        2. Am verificat că...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Mesaje de Eroare
+      render: shell
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Informații Sistem
+      placeholder: |
+        OS: Windows 11 / Windows 10 / macOS / Linux
+        Versiune Windows (winver): 
+        WSL Version (wsl --version):
+        Ubuntu Version (lsb_release -a):
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist Pre-submitere
+      options:
+        - label: Am consultat GHID_WSL2_Ubuntu2404_INCEPATORI_SO_ASE.md
+          required: true
+        - label: Am consultat GHID_VirtualBox_Ubuntu2404_INCEPATORI_SO_ASE.md
+          required: false
