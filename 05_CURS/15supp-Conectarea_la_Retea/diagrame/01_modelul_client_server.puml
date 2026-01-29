@@ -1,0 +1,10 @@
+@startuml
+title Modelul Client-Server: Flux Socket TCP
+participant "Client" as C
+participant "Server" as S
+S -> S: socket() -> bind() -> listen()
+C -> C: socket()
+C -> S: connect() / accept()
+C <-> S: read/write
+C -> S: close()
+@enduml

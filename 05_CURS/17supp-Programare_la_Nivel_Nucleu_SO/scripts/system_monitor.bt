@@ -1,0 +1,416 @@
+#!/usr/bin/env bpftrace
+/*
+ * system_monitor.bt - Monitorizare comprehensivă sistem cu bpftrace
+ * 
+ * Descriere:
+ *   Script de diagnosticare care monitorizează simultan multiple aspecte
+ *   ale sistemului: procese, I/O, rețea, memorie, planificator.
+ *
+ * Utilizare:
+ *   sudo bpftrace system_monitor.bt
+ *   sudo bpftrace system_monitor.bt -p PID    # Filtru pe proces specific
+ *
+ * Cerințe:
+ *   - Linux kernel 4.9+ (recomandat 5.x+)
+ *   - bpftrace instalat
+ *   - Privilegii root/CAP_BPF
+ *
+ * Autor: Curs SO - ASE București CSIE
+ * Versiune: 1.0
+ */
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * CONFIGURAȚIE ȘI INIȚIALIZARE
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+BEGIN {
+    printf("\n");
+    printf("╔══════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║           MONITORIZARE SISTEM LINUX CU eBPF/bpftrace                     ║\n");
+    printf("║                                                                          ║\n");
+    printf("║  Acest script monitorizează:                                             ║\n");
+    printf("║    • Procese noi (fork/exec)                                             ║\n");
+    printf("║    • Operații fișiere (open/read/write)                                  ║\n");
+    printf("║    • Activitate rețea (conexiuni TCP)                                    ║\n");
+    printf("║    • Latență I/O bloc                                                    ║\n");
+    printf("║    • Activitate planificator                                             ║\n");
+    printf("║                                                                          ║\n");
+    printf("║  Apăsați Ctrl+C pentru a opri și a vedea statisticile finale.            ║\n");
+    printf("╚══════════════════════════════════════════════════════════════════════════╝\n");
+    printf("\n");
+    
+    // Header pentru evenimente în timp real
+    printf("%-12s %-8s %-16s %-8s %s\n", 
+           "TIMESTAMP", "TIP", "PROCES", "PID", "DETALII");
+    printf("─────────────────────────────────────────────────────────────────────────────\n");
+    
+    // Inițializare contoare
+    @start_time = nsecs;
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE PROCESE
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Trasare procese noi (execve)
+tracepoint:syscalls:sys_enter_execve {
+    $filename = str(args->filename);
+    
+    // Afișare eveniment
+    printf("%-12s %-8s %-16s %-8d %s\n",
+           strftime("%H:%M:%S", nsecs),
+           "EXEC",
+           comm,
+           pid,
+           $filename);
+    
+    // Statistici agregate
+    @exec_count[comm] = count();
+    @exec_total = count();
+}
+
+// Trasare fork
+tracepoint:syscalls:sys_exit_clone /args->ret > 0/ {
+    printf("%-12s %-8s %-16s %-8d child_pid=%d\n",
+           strftime("%H:%M:%S", nsecs),
+           "FORK",
+           comm,
+           pid,
+           args->ret);
+    
+    @fork_count[comm] = count();
+    @fork_total = count();
+}
+
+// Trasare exit procese
+tracepoint:syscalls:sys_enter_exit_group {
+    printf("%-12s %-8s %-16s %-8d exit_code=%d\n",
+           strftime("%H:%M:%S", nsecs),
+           "EXIT",
+           comm,
+           pid,
+           args->error_code);
+    
+    @exit_count = count();
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE OPERAȚII FIȘIERE
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Trasare deschidere fișiere
+tracepoint:syscalls:sys_enter_openat {
+    $filename = str(args->filename);
+    
+    // Filtrare fișiere sistem comune pentru a reduce zgomotul
+    if (strncmp($filename, "/proc/", 6) != 0 && 
+        strncmp($filename, "/sys/", 5) != 0) {
+        
+        printf("%-12s %-8s %-16s %-8d %s\n",
+               strftime("%H:%M:%S", nsecs),
+               "OPEN",
+               comm,
+               pid,
+               $filename);
+        
+        @open_count[comm] = count();
+        @open_files[$filename] = count();
+    }
+}
+
+// Statistici read/write
+tracepoint:syscalls:sys_exit_read /args->ret > 0/ {
+    @read_bytes[comm] = sum(args->ret);
+    @read_count[comm] = count();
+}
+
+tracepoint:syscalls:sys_exit_write /args->ret > 0/ {
+    @write_bytes[comm] = sum(args->ret);
+    @write_count[comm] = count();
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE REȚEA
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Conexiuni TCP outbound
+kprobe:tcp_v4_connect {
+    printf("%-12s %-8s %-16s %-8d TCP connect initiated\n",
+           strftime("%H:%M:%S", nsecs),
+           "NET_OUT",
+           comm,
+           pid);
+    
+    @tcp_connect[comm] = count();
+}
+
+// Conexiuni TCP inbound (accept)
+kretprobe:inet_csk_accept /retval != 0/ {
+    printf("%-12s %-8s %-16s %-8d TCP connection accepted\n",
+           strftime("%H:%M:%S", nsecs),
+           "NET_IN",
+           comm,
+           pid);
+    
+    @tcp_accept[comm] = count();
+}
+
+// Trasare pachete trimise
+kprobe:tcp_sendmsg {
+    @tcp_send_bytes[comm] = sum(arg2);
+    @tcp_send_count[comm] = count();
+}
+
+// Trasare pachete primite
+kprobe:tcp_recvmsg {
+    @tcp_recv_count[comm] = count();
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE I/O BLOC (DISC)
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Începutul operației I/O
+tracepoint:block:block_rq_issue {
+    @io_start[args->dev, args->sector] = nsecs;
+}
+
+// Sfârșitul operației I/O
+tracepoint:block:block_rq_complete /@io_start[args->dev, args->sector]/ {
+    $latency_us = (nsecs - @io_start[args->dev, args->sector]) / 1000;
+    
+    // Histogramă latență
+    @io_latency_hist = hist($latency_us);
+    
+    // Statistici per tip operație
+    @io_latency_by_type[args->rwbs] = avg($latency_us);
+    @io_count_by_type[args->rwbs] = count();
+    
+    // Alertă pentru I/O lent (>10ms)
+    if ($latency_us > 10000) {
+        printf("%-12s %-8s %-16s %-8s latency=%dμs sector=%d\n",
+               strftime("%H:%M:%S", nsecs),
+               "IO_SLOW",
+               "-",
+               args->rwbs,
+               $latency_us,
+               args->sector);
+        
+        @io_slow_count = count();
+    }
+    
+    delete(@io_start[args->dev, args->sector]);
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE PLANIFICATOR
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Context switch
+tracepoint:sched:sched_switch {
+    @context_switches = count();
+    @ctx_switch_by_prev[args->prev_comm] = count();
+    
+    // Salvare timestamp pentru calcul latență run queue
+    if (args->prev_state == 0) {  // TASK_RUNNING
+        @runq_start[args->next_pid] = nsecs;
+    }
+}
+
+// Măsurare latență run queue
+tracepoint:sched:sched_wakeup {
+    @wakeup_start[args->pid] = nsecs;
+}
+
+tracepoint:sched:sched_switch /@wakeup_start[args->next_pid]/ {
+    $latency_us = (nsecs - @wakeup_start[args->next_pid]) / 1000;
+    @runq_latency = hist($latency_us);
+    delete(@wakeup_start[args->next_pid]);
+}
+
+// Migrări între CPU-uri
+tracepoint:sched:sched_migrate_task {
+    printf("%-12s %-8s %-16s %-8d CPU %d -> %d\n",
+           strftime("%H:%M:%S", nsecs),
+           "MIGRATE",
+           args->comm,
+           args->pid,
+           args->orig_cpu,
+           args->dest_cpu);
+    
+    @migrations[args->comm] = count();
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * MONITORIZARE MEMORIE
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+// Page faults
+software:page-faults:100 {
+    @page_faults[comm] = count();
+}
+
+// Extindere heap (brk)
+tracepoint:syscalls:sys_enter_brk /args->brk > 0/ {
+    @brk_calls[comm] = count();
+}
+
+// mmap pentru alocări mari
+tracepoint:syscalls:sys_enter_mmap /args->len > 1048576/ {
+    printf("%-12s %-8s %-16s %-8d large_mmap size=%dMB\n",
+           strftime("%H:%M:%S", nsecs),
+           "MMAP_LG",
+           comm,
+           pid,
+           args->len / 1048576);
+    
+    @large_mmap[comm] = sum(args->len);
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * RAPORTARE PERIODICĂ (LA FIECARE 30 SECUNDE)
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+interval:s:30 {
+    printf("\n");
+    printf("═══════════════════════════════════════════════════════════════════════════\n");
+    printf("                    SUMAR PERIODIC (30 secunde)                            \n");
+    printf("═══════════════════════════════════════════════════════════════════════════\n");
+    
+    printf("\n--- Context Switches: %d ---\n", @context_switches);
+    printf("--- I/O Slow Count: %d ---\n", @io_slow_count);
+    printf("--- Exec Total: %d ---\n", @exec_total);
+    printf("--- Fork Total: %d ---\n", @fork_total);
+    
+    printf("\n--- Top 5 procese după bytes citiți ---\n");
+    print(@read_bytes, 5);
+    
+    printf("\n--- Top 5 procese după bytes scriși ---\n");
+    print(@write_bytes, 5);
+    
+    printf("═══════════════════════════════════════════════════════════════════════════\n");
+    printf("\n");
+}
+
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * RAPORT FINAL LA CTRL+C
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+END {
+    $duration_sec = (nsecs - @start_time) / 1000000000;
+    
+    printf("\n\n");
+    printf("╔══════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║                         RAPORT FINAL                                     ║\n");
+    printf("╠══════════════════════════════════════════════════════════════════════════╣\n");
+    printf("║  Durată monitorizare: %d secunde                                          \n", $duration_sec);
+    printf("╚══════════════════════════════════════════════════════════════════════════╝\n");
+    
+    // ═══ PROCESE ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                              PROCESE                                     │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Procese executate (exec)]:\n");
+    print(@exec_count);
+    
+    printf("\n[Fork-uri per proces părinte]:\n");
+    print(@fork_count);
+    
+    // ═══ FIȘIERE ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                         OPERAȚII FIȘIERE                                 │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Open per proces]:\n");
+    print(@open_count, 10);
+    
+    printf("\n[Top 10 fișiere deschise]:\n");
+    print(@open_files, 10);
+    
+    printf("\n[Bytes citiți per proces]:\n");
+    print(@read_bytes, 10);
+    
+    printf("\n[Bytes scriși per proces]:\n");
+    print(@write_bytes, 10);
+    
+    // ═══ REȚEA ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                              REȚEA TCP                                   │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Conexiuni TCP inițiate]:\n");
+    print(@tcp_connect);
+    
+    printf("\n[Conexiuni TCP acceptate]:\n");
+    print(@tcp_accept);
+    
+    printf("\n[Bytes TCP trimiși]:\n");
+    print(@tcp_send_bytes, 10);
+    
+    // ═══ I/O BLOC ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                           I/O BLOC (DISC)                                │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Histogramă latență I/O (μs)]:\n");
+    print(@io_latency_hist);
+    
+    printf("\n[Latență medie per tip operație (μs)]:\n");
+    print(@io_latency_by_type);
+    
+    printf("\n[Număr operații per tip]:\n");
+    print(@io_count_by_type);
+    
+    // ═══ PLANIFICATOR ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                            PLANIFICATOR                                  │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Histogramă latență run queue (μs)]:\n");
+    print(@runq_latency);
+    
+    printf("\n[Context switches totale]: %d\n", @context_switches);
+    
+    printf("\n[Migrări între CPU-uri]:\n");
+    print(@migrations, 10);
+    
+    // ═══ MEMORIE ═══
+    printf("\n┌──────────────────────────────────────────────────────────────────────────┐\n");
+    printf("│                              MEMORIE                                     │\n");
+    printf("└──────────────────────────────────────────────────────────────────────────┘\n");
+    
+    printf("\n[Page faults per proces]:\n");
+    print(@page_faults, 10);
+    
+    printf("\n[Alocări mari (mmap >1MB)]:\n");
+    print(@large_mmap);
+    
+    // Cleanup
+    clear(@io_start);
+    clear(@wakeup_start);
+    clear(@runq_start);
+    clear(@start_time);
+    
+    printf("\n═══════════════════════════════════════════════════════════════════════════\n");
+    printf("                      Monitorizare încheiată.                              \n");
+    printf("═══════════════════════════════════════════════════════════════════════════\n");
+}

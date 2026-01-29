@@ -1,0 +1,162 @@
+# C13_05_EVALUARE_FORMATIVA.yaml
+# Curs 13: Securitate în Sisteme de Operare
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 13
+  subiect: "Securitate în Sisteme de Operare"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce înseamnă triada CIA în securitate?"
+    optiuni:
+      - "Central Intelligence Agency"
+      - "Confidentiality, Integrity, Availability"
+      - "Create, Install, Activate"
+      - "Control, Inspect, Authenticate"
+    corect: 1
+    explicatie: "CIA: Confidențialitate (acces autorizat), Integritate (date nealterate), Disponibilitate (sistem accesibil)."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce reprezintă permisiunile rwxr-xr-- în Linux?"
+    optiuni:
+      - "Toți au acces complet"
+      - "Owner: read+write+execute, Group: read+execute, Others: read only"
+      - "Fișierul este criptat"
+      - "Fișierul este executabil"
+    corect: 1
+    explicatie: "rwx (owner=7), r-x (group=5), r-- (others=4). Mod octal: 754."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce este SUID bit?"
+    optiuni:
+      - "Un virus"
+      - "Când este setat pe un executabil, acesta rulează cu permisiunile owner-ului, nu ale celui care îl execută"
+      - "Un tip de criptare"
+      - "O comandă de rețea"
+    corect: 1
+    explicatie: "SUID: permite utilizatorilor normali să execute programe cu privilegii elevate (ex: passwd)."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Care este diferența între autentificare și autorizare?"
+    optiuni:
+      - "Sunt identice"
+      - "Autentificare: verifică CINE ești. Autorizare: verifică CE ai voie să faci"
+      - "Autorizare vine prima"
+      - "Autentificarea nu este necesară"
+    corect: 1
+    explicatie: "Autentificare = identity verification (login). Autorizare = access control (permisiuni)."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este principiul 'least privilege'?"
+    optiuni:
+      - "Toți utilizatorii au acces root"
+      - "Procesele și utilizatorii primesc doar permisiunile minime necesare pentru task-ul lor"
+      - "Privilegiile cresc automat"
+      - "Nu se aplică în practică"
+    corect: 1
+    explicatie: "Least privilege: minimizează suprafața de atac. Dacă un proces e compromis, daunele sunt limitate."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un buffer overflow?"
+    optiuni:
+      - "RAM-ul este plin"
+      - "Datele scrise într-un buffer depășesc limita lui, suprascriind memorie adiacentă"
+      - "Un tip de compresie"
+      - "O eroare de rețea"
+    corect: 1
+    explicatie: "Buffer overflow: poate suprascrie return address pe stack, permițând execuție de cod arbitrar."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este ASLR (Address Space Layout Randomization)?"
+    optiuni:
+      - "Un algoritm de criptare"
+      - "Randomizează pozițiile în memorie (stack, heap, libraries) pentru a îngreuna exploatarea"
+      - "Un firewall"
+      - "Un tip de permisiune"
+    corect: 1
+    explicatie: "ASLR: atacatorul nu știe unde sunt datele în memorie → overflow nu știe unde să sară."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "De ce sticky bit pe /tmp previne ștergerea fișierelor altor utilizatori?"
+    optiuni:
+      - "Criptează fișierele"
+      - "Cu sticky bit, doar owner-ul fișierului sau root poate șterge fișiere din director"
+      - "Compresează fișierele"
+      - "Ascunde fișierele"
+    corect: 1
+    explicatie: "Sticky bit (t): în directoare world-writable, previne ștergerea fișierelor de către non-owners."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "De ce DEP/NX bit ajută la prevenirea buffer overflow exploits?"
+    optiuni:
+      - "Criptează memoria"
+      - "Marchează zone de memorie ca non-executable: datele injectate nu pot fi executate ca cod"
+      - "Crește viteza"
+      - "Nu ajută"
+    corect: 1
+    explicatie: "NX: stack/heap non-executable. Shellcode injectat nu poate rula direct, necesită tehnici ROP."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "Ce avantaj oferă sandboxing-ul aplicațiilor (ex: containers, seccomp)?"
+    optiuni:
+      - "Crește viteza"
+      - "Limitează syscalls și resurse disponibile, reducând impactul unei compromiteri"
+      - "Economisește memorie"
+      - "Nu oferă avantaje"
+    corect: 1
+    explicatie: "Sandbox: aplicația compromisă nu poate accesa tot sistemul, doar resursele permise."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Care este riscul principal al programelor SUID root?"
+    optiuni:
+      - "Sunt prea lente"
+      - "Orice vulnerabilitate în program oferă atacatorului acces root complet"
+      - "Consumă prea multă memorie"
+      - "Nu există risc"
+    corect: 1
+    explicatie: "Bug în SUID root = privilege escalation. Atacatorul câștigă root prin exploatarea programului."
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Găsești un fișier cu permisiuni -rwsr-xr-x owned by root. Ce risc de securitate poate exista?"
+    optiuni:
+      - "Nici unul"
+      - "Este SUID root: orice vulnerabilitate permite privilege escalation la root"
+      - "Fișierul este corupt"
+      - "Permisiunile sunt normale"
+    corect: 1
+    explicatie: "SUID (s în owner execute) + owner=root = execuție ca root. Auditare atentă necesară."

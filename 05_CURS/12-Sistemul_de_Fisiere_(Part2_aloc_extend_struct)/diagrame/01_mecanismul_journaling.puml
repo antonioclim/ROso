@@ -1,0 +1,51 @@
+@startuml mecanismul_journaling
+!include ../../diagrame_common/skin.puml
+title Mecanismul de Journaling (ext4)
+
+skinparam activity {
+    DiamondBackgroundColor #FFF9C4
+}
+
+|Aplicație|
+start
+:Scrie date noi;
+
+|Kernel / FS|
+:1. **TXB** (Transaction Begin)
+Scrie în jurnal;
+
+:2. Scrie **metadata + date**
+în jurnal;
+
+:3. **TXE** (Transaction End)
+Marchează tranzacția completă;
+
+:4. **Checkpoint**
+Scrie datele la locația finală;
+
+:5. Șterge tranzacția
+din jurnal;
+
+|Disc|
+:Date salvate!;
+stop
+
+legend right
+**La CRASH / Power Failure:**
+
+**Scenariul 1:** Crash înainte de TXE
+→ Tranzacție incompletă → **Ignoră**
+
+**Scenariul 2:** Crash după TXE
+→ Tranzacție completă → **Replay**
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Moduri ext4:**
+|= Mod |= Ce e journaled |= Viteză |
+| journal | Metadata + Date | Lent |
+| **ordered** | Metadata (default) | Mediu |
+| writeback | Doar metadata | Rapid |
+endlegend
+
+@enduml
