@@ -1,0 +1,154 @@
+# Quiz Formativ - Seminar 01: Shell Fundamentals
+# Sisteme de Operare | ASE București - CSIE
+# Format: YAML rulabil cu quiz_runner.py
+
+metadata:
+  titlu: "Quiz S01: Shell Fundamentals"
+  seminar: 1
+  timp_estimat: "15 minute"
+  bloom_distribution:
+    remember: 20%
+    understand: 30%
+    apply: 30%
+    analyse: 20%
+
+intrebari:
+  - id: q01
+    tip: mcq
+    bloom: remember
+    lo: LO1.1
+    text: "Ce afișează comanda pwd?"
+    optiuni:
+      - "A) Lista de procese"
+      - "B) Utilizatorul curent"
+      - "C) Directorul curent de lucru"
+      - "D) Parola utilizatorului"
+    corect: C
+    explicatie: "pwd = Print Working Directory. Afișează calea absolută a directorului în care te afli."
+    misconceptie_vizata: M1.1
+
+  - id: q02
+    tip: mcq
+    bloom: remember
+    lo: LO1.2
+    text: "Care director conține fișierele de configurare ale sistemului?"
+    optiuni:
+      - "A) /home"
+      - "B) /etc"
+      - "C) /bin"
+      - "D) /tmp"
+    corect: B
+    explicatie: "/etc (et cetera sau editable text configuration) conține fișierele de configurare globale ale sistemului."
+    misconceptie_vizata: M1.2
+
+  - id: q03
+    tip: mcq
+    bloom: understand
+    lo: LO2.1
+    text: "Care este diferența dintre shell și terminal?"
+    optiuni:
+      - "A) Sunt sinonime"
+      - "B) Shell-ul este programul care interpretează comenzi, terminalul este interfața"
+      - "C) Terminalul interpretează comenzi, shell-ul este fereastra"
+      - "D) Nu există diferență funcțională"
+    corect: B
+    explicatie: "Shell-ul (bash, zsh) este interpreterul de comenzi. Terminalul (GNOME Terminal, Windows Terminal) este emulator de terminal - interfața grafică."
+    misconceptie_vizata: M2.1
+
+  - id: q04
+    tip: mcq
+    bloom: understand
+    lo: LO2.2
+    text: "Ce tip de cale este '/home/stud/proiect'?"
+    optiuni:
+      - "A) Cale relativă"
+      - "B) Cale absolută"
+      - "C) Cale simbolică"
+      - "D) Cale virtuală"
+    corect: B
+    explicatie: "O cale absolută începe cu / (rădăcina) și specifică locația completă. Căile relative nu încep cu /."
+    misconceptie_vizata: M2.2
+
+  - id: q05
+    tip: mcq
+    bloom: understand
+    lo: LO3.1
+    text: "Dacă setez VAR='test' fără export și pornesc un subshell, ce va afișa echo $VAR în subshell?"
+    optiuni:
+      - "A) test"
+      - "B) Nimic (string gol)"
+      - "C) Eroare"
+      - "D) $VAR literal"
+    corect: B
+    explicatie: "Variabilele locale (fără export) nu sunt vizibile în subprocese. export VAR face variabila parte din environment."
+    misconceptie_vizata: M3.1
+
+  - id: q06
+    tip: mcq
+    bloom: apply
+    lo: LO4.1
+    text: "Ce comandă creează structura de directoare /proiect/src/main/java dacă nu există?"
+    optiuni:
+      - "A) mkdir /proiect/src/main/java"
+      - "B) mkdir -p /proiect/src/main/java"
+      - "C) mkdir -r /proiect/src/main/java"
+      - "D) mkdir --create /proiect/src/main/java"
+    corect: B
+    explicatie: "Opțiunea -p (parents) creează toate directoarele părinte necesare. Fără -p, mkdir eșuează dacă părinții nu există."
+    misconceptie_vizata: M3.2
+
+  - id: q07
+    tip: mcq
+    bloom: apply
+    lo: LO4.2
+    text: "Tocmai ai modificat ~/.bashrc. Ce comandă aplică modificările în sesiunea curentă?"
+    optiuni:
+      - "A) restart bash"
+      - "B) source ~/.bashrc"
+      - "C) refresh ~/.bashrc"
+      - "D) reload ~/.bashrc"
+    corect: B
+    explicatie: "source (sau .) execută scriptul în shell-ul curent, aplicând modificările imediat. Alternativa este un nou terminal."
+    misconceptie_vizata: M3.3
+
+  - id: q08
+    tip: mcq
+    bloom: apply
+    lo: LO5.1
+    text: "Ce fișiere creează comanda: touch file{1,2,3}.txt ?"
+    optiuni:
+      - "A) file{1,2,3}.txt (un singur fișier)"
+      - "B) file1.txt, file2.txt, file3.txt"
+      - "C) file123.txt"
+      - "D) Eroare de sintaxă"
+    corect: B
+    explicatie: "Brace expansion {} expandează pattern-ul înainte de execuție. Nu este globbing (care folosește *)."
+    misconceptie_vizata: M1.3
+
+  - id: q09
+    tip: mcq
+    bloom: analyse
+    lo: LO6.1
+    text: "NUME='Ion'; echo 'Salut $NUME' afișează:"
+    optiuni:
+      - "A) Salut Ion"
+      - "B) Salut $NUME"
+      - "C) Eroare de sintaxă"
+      - "D) Salut (gol)"
+    corect: B
+    explicatie: "Single quotes ('') păstrează totul literal - variabilele NU se expandează. Double quotes (\"\") permit expansiunea."
+    misconceptie_vizata: M1.4
+
+  - id: q10
+    tip: mcq
+    bloom: analyse
+    lo: LO6.2
+    text: "Ce semnifică exit code 0 în Linux?"
+    optiuni:
+      - "A) Eroare"
+      - "B) Comandă inexistentă"
+      - "C) Succes"
+      - "D) Permisiuni insuficiente"
+    corect: C
+    explicatie: "Convenția Unix: 0 = succes, non-zero = eroare. Verifici cu echo $? după execuție."
+    misconceptie_vizata: M3.4
