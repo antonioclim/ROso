@@ -1,0 +1,222 @@
+# C01_05_EVALUARE_FORMATIVA.yaml
+# Curs 1: Introducere în Sisteme de Operare
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 1
+  subiect: "Introducere în Sisteme de Operare"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  tip: "quiz_conceptual"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Care este definiția unui sistem de operare?"
+    optiuni:
+      - "Un program care gestionează hardware-ul și oferă servicii aplicațiilor"
+      - "Un limbaj de programare pentru scrierea aplicațiilor"
+      - "O componentă hardware a calculatorului"
+      - "O bază de date pentru stocare"
+    corect: 0
+    explicatie: "SO-ul este stratul software între hardware și aplicații, gestionând resurse și oferind abstracții."
+    referinta: "README.md, secțiunea 'Ce este un Sistem de Operare'"
+
+  - id: q02
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Care sunt cele două roluri principale ale unui sistem de operare?"
+    optiuni:
+      - "Compilare și execuție"
+      - "Gestionar de resurse și mașină extinsă (abstracție)"
+      - "Stocare și rețea"
+      - "Securitate și backup"
+    corect: 1
+    explicatie: "SO-ul gestionează resursele hardware și oferă o mașină virtuală extinsă cu abstracții convenabile."
+    referinta: "README.md, secțiunea 'Rolurile SO'"
+
+  - id: q03
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Ce reprezintă acronimul BIOS?"
+    optiuni:
+      - "Basic Input Output System"
+      - "Binary Integrated Operating System"
+      - "Boot Interface Operating Software"
+      - "Base Infrastructure Operating Service"
+    corect: 0
+    explicatie: "BIOS = Basic Input Output System, firmware-ul care inițializează hardware-ul la pornire."
+    referinta: "README.md, secțiunea 'Procesul de Boot'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "De ce este necesară multiprogramarea în sistemele de operare moderne?"
+    optiuni:
+      - "Pentru a reduce costul hardware-ului"
+      - "Pentru a maximiza utilizarea CPU-ului în timp ce procesele așteaptă I/O"
+      - "Pentru a crește viteza ceasului procesorului"
+      - "Pentru a elimina necesitatea memoriei RAM"
+    corect: 1
+    explicatie: "Multiprogramarea permite CPU-ului să execute alt proces când unul așteaptă I/O, crescând eficiența."
+    referinta: "README.md, secțiunea 'Multiprogramare'"
+
+  - id: q05
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Care este diferența fundamentală între kernel mode și user mode?"
+    optiuni:
+      - "Kernel mode este mai lent"
+      - "User mode are acces complet la hardware"
+      - "Kernel mode are privilegii complete, user mode are acces restricționat"
+      - "Nu există diferență, sunt sinonime"
+    corect: 2
+    explicatie: "Kernel mode permite acces complet la hardware și instrucțiuni privilegiate; user mode este restricționat."
+    referinta: "README.md, secțiunea 'Dual Mode Operation'"
+
+  - id: q06
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Ce se întâmplă când o aplicație încearcă să acceseze direct hardware-ul?"
+    optiuni:
+      - "Hardware-ul răspunde direct"
+      - "Se generează o excepție și SO-ul preia controlul"
+      - "Aplicația primește acces temporar"
+      - "Sistemul se repornește automat"
+    corect: 1
+    explicatie: "În user mode, accesul direct la hardware generează o excepție (trap), SO-ul decidând acțiunea."
+    referinta: "README.md, secțiunea 'Protecție Hardware'"
+
+  - id: q07
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un system call (apel de sistem)?"
+    optiuni:
+      - "Un apel telefonic între servere"
+      - "Interfața prin care aplicațiile solicită servicii de la kernel"
+      - "O eroare de sistem"
+      - "Un tip de virus"
+    corect: 1
+    explicatie: "System call-urile sunt interfața controlată prin care aplicațiile (user mode) cer servicii kernel-ului."
+    referinta: "README.md, secțiunea 'System Calls'"
+
+  - id: q08
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "De ce bootloader-ul încarcă kernel-ul în RAM și nu îl execută direct de pe disk?"
+    optiuni:
+      - "Pentru că disk-ul este mai sigur"
+      - "RAM-ul permite acces aleatoriu rapid, necesar pentru execuție"
+      - "Disk-ul nu poate stoca kernel-ul"
+      - "Este o convenție fără motiv tehnic"
+    corect: 1
+    explicatie: "CPU-ul execută instrucțiuni din RAM (acces în nanosecunde), nu de pe disk (acces în milisecunde)."
+    referinta: "README.md, secțiunea 'Procesul de Boot'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "Într-un sistem batch fără multiprogramare, CPU-ul stă idle 95% din timp în timpul I/O. Cu 5 procese în multiprogramare, ce utilizare CPU estimați?"
+    optiuni:
+      - "5%"
+      - "Aproximativ 23% (1 - 0.95^5)"
+      - "95%"
+      - "100%"
+    corect: 1
+    explicatie: "Probabilitatea ca TOATE cele 5 procese să fie în I/O simultan: 0.95^5 ≈ 77%. Deci CPU activ ≈ 23%."
+    referinta: "README.md, secțiunea 'Gradul de Multiprogramare'"
+
+  - id: q10
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "Ce tip de SO este mai potrivit pentru un sistem de control al airbag-urilor?"
+    optiuni:
+      - "SO general-purpose (Linux desktop)"
+      - "SO real-time hard (garantează deadline-uri)"
+      - "SO batch (procesare în loturi)"
+      - "SO time-sharing (interactiv)"
+    corect: 1
+    explicatie: "Airbag-ul necesită răspuns garantat în microsecunde; SO real-time hard oferă aceste garanții."
+    referinta: "README.md, secțiunea 'Tipuri de Sisteme de Operare'"
+
+  - id: q11
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "De ce microkernel-urile sunt considerate mai sigure dar mai lente decât kernel-urile monolitice?"
+    optiuni:
+      - "Au mai puțin cod, deci mai puține bug-uri"
+      - "Serviciile rulează în user mode cu comunicare IPC, adăugând overhead dar izolând defectele"
+      - "Folosesc criptare pentru toate operațiile"
+      - "Nu permit aplicații third-party"
+    corect: 1
+    explicatie: "În microkernel, serviciile (drivere, FS) rulează izolat în user mode; comunicarea IPC adaugă latență."
+    referinta: "README.md, secțiunea 'Microkernel vs Monolithic'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    tip: mcq
+    bloom: apply
+    dificultate: greu
+    text: "Un programator vrea să scrie date pe disk. Care este secvența corectă de operații?"
+    context: |
+      Aplicația rulează în user mode și vrea să scrie un fișier.
+    optiuni:
+      - "Aplicația scrie direct pe disk prin instrucțiuni I/O"
+      - "Aplicația apelează write() → trap în kernel → kernel verifică permisiuni → kernel execută I/O → return"
+      - "Aplicația comută manual în kernel mode și scrie"
+      - "Aplicația trimite date prin rețea la kernel"
+    corect: 1
+    explicatie: "System call-ul write() generează trap, kernel-ul preia controlul, verifică și execută I/O în mod privilegiat."
+    referinta: "README.md, secțiunea 'Fluxul unui System Call'"
+
+statistici:
+  total_intrebari: 12
+  by_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+  by_dificultate:
+    usor: 3
+    mediu: 5
+    greu: 4
+  raspunsuri_corecte_distributie:
+    optiune_a: 2
+    optiune_b: 6
+    optiune_c: 3
+    optiune_d: 1

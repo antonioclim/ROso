@@ -1,0 +1,79 @@
+@startuml mecanismul_syscall
+!include ../../diagrame_common/skin.puml
+title Mecanismul System Call - open()
+
+skinparam sequence {
+    ParticipantPadding 20
+    BoxPadding 10
+}
+
+box "User Space" #E3F2FD
+    participant "Aplicație\nC" as app
+    participant "glibc\nwrapper" as libc
+end box
+
+box "Kernel Space" #FFCCBC
+    participant "Syscall\nEntry" as entry
+    participant "sys_call_table" as table
+    participant "sys_open()" as sysopen
+end box
+
+participant "Hardware\nCPU" as cpu
+
+== Inițiere Apel ==
+app -> libc : open("/tmp/file", O_RDONLY)
+activate libc #C8E6C9
+
+libc -> libc : Pregătește registre:\n%rax = 2 (nr syscall)\n%rdi = path\n%rsi = flags
+
+libc -> cpu : **syscall** instruction
+activate cpu #FFCDD2
+
+== Tranziție User → Kernel ==
+cpu -> cpu : Salvează RIP, RFLAGS\nComută Ring 3 → Ring 0\nÎncarcă kernel stack
+
+cpu -> entry : Jump to entry point
+deactivate cpu
+activate entry #FFE0B2
+
+== Procesare în Kernel ==
+entry -> entry : Salvează registrele\npe kernel stack
+
+entry -> table : Lookup %rax în\nsys_call_table[2]
+activate table #FFF9C4
+table --> entry : sys_open address
+deactivate table
+
+entry -> sysopen : Apelează sys_open()
+activate sysopen #C8E6C9
+
+sysopen -> sysopen : 1. copy_from_user(path)\n2. Verifică permisiuni\n3. Caută inode în VFS\n4. Alocă file descriptor\n5. Returnează fd
+
+sysopen --> entry : fd = 3
+deactivate sysopen
+
+== Tranziție Kernel → User ==
+entry -> entry : Verifică semnale pending\nRestaurează registre
+
+entry -> cpu : **sysret** instruction
+deactivate entry
+activate cpu #FFCDD2
+
+cpu -> cpu : Comută Ring 0 → Ring 3\nRestaurează RIP, RSP
+
+cpu -> libc : Return cu %rax = 3
+deactivate cpu
+
+== Finalizare ==
+libc -> libc : if (rax < 0)\n  errno = -rax\n  return -1\nreturn rax
+
+libc --> app : fd = 3
+deactivate libc
+
+note right of app
+  **Succes!**
+  Fișierul deschis
+  cu fd = 3
+end note
+
+@enduml

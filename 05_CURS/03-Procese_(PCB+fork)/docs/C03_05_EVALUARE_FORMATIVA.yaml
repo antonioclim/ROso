@@ -1,0 +1,178 @@
+# C03_05_EVALUARE_FORMATIVA.yaml
+# Curs 3: Procese (PCB + fork)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 3
+  subiect: "Procese (PCB + fork)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un proces?"
+    optiuni:
+      - "Un fișier executabil stocat pe disk"
+      - "Un program în execuție cu resurse alocate"
+      - "O funcție din codul sursă"
+      - "Un tip de memorie"
+    corect: 1
+    explicatie: "Un proces = program în execuție + spațiu de adrese + resurse (fișiere, memorii, etc.)."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce conține PCB (Process Control Block)?"
+    optiuni:
+      - "Doar codul programului"
+      - "PID, stare, registre CPU, informații de planificare, resurse"
+      - "Doar memoria heap"
+      - "Parola utilizatorului"
+    corect: 1
+    explicatie: "PCB conține toate informațiile necesare SO-ului pentru a gestiona procesul."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce returnează fork() în procesul copil?"
+    optiuni:
+      - "PID-ul părintelui"
+      - "0"
+      - "-1"
+      - "PID-ul copilului"
+    corect: 1
+    explicatie: "fork() returnează 0 în copil, PID-ul copilului în părinte, -1 la eroare."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Care sunt cele 5 stări principale ale unui proces?"
+    optiuni:
+      - "Start, Run, Stop, Pause, End"
+      - "New, Ready, Running, Waiting, Terminated"
+      - "Init, Active, Sleep, Wake, Exit"
+      - "Create, Execute, Block, Resume, Kill"
+    corect: 1
+    explicatie: "Modelul standard cu 5 stări: New → Ready ↔ Running → Terminated, cu Waiting pentru I/O."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce face familia de funcții exec()?"
+    optiuni:
+      - "Creează un proces nou"
+      - "Înlocuiește imaginea procesului curent cu un nou program"
+      - "Termină procesul curent"
+      - "Duplică procesul"
+    corect: 1
+    explicatie: "exec() înlocuiește codul, datele și stack-ul cu cele ale noului program; PID-ul rămâne același."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un proces zombie?"
+    optiuni:
+      - "Un proces care consumă prea multă memorie"
+      - "Un proces terminat al cărui părinte nu a apelat wait()"
+      - "Un proces blocat în I/O"
+      - "Un virus"
+    corect: 1
+    explicatie: "Zombie = proces terminat dar părintele nu a citit exit status-ul; ocupă un slot în tabelul de procese."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un proces orfan și ce se întâmplă cu el?"
+    optiuni:
+      - "Un proces fără fișiere deschise"
+      - "Un proces al cărui părinte a murit; este adoptat de init (PID 1)"
+      - "Un proces în starea New"
+      - "Un proces fără memorie alocată"
+    corect: 1
+    explicatie: "Când părintele moare, copiii devin orfani și sunt adoptați de procesul init pentru cleanup."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "De ce fork() creează o copie a procesului în loc să creeze un proces gol?"
+    optiuni:
+      - "Pentru compatibilitate cu Windows"
+      - "Pentru a permite copilului să moștenească contextul și resursele părintelui"
+      - "Pentru a economisi memorie"
+      - "Este o eroare de design"
+    corect: 1
+    explicatie: "Moștenirea permite copilului să continue de unde a rămas părintele, cu aceleași variabile și fișiere."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Ce tehnică face fork() eficient pe sistemele moderne?"
+    optiuni:
+      - "Copierea imediată a întregii memorii"
+      - "Copy-on-Write (COW): paginile sunt partajate și copiate doar la scriere"
+      - "Compresie de memorie"
+      - "Swap automat"
+    corect: 1
+    explicatie: "COW amână copierea până când un proces modifică o pagină, economisind memorie și timp."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "De ce shell-ul folosește fork() + exec() în loc de un singur apel?"
+    optiuni:
+      - "Din motive istorice, fără beneficii practice"
+      - "Permite configurarea procesului copil (redirecționări, pipe-uri) între fork și exec"
+      - "exec() nu există pe sisteme moderne"
+      - "fork() este mai rapid singur"
+    corect: 1
+    explicatie: "Între fork() și exec(), shell-ul poate redirecționa stdin/stdout, seta variabile de mediu etc."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Un program apelează fork() de 3 ori în secvență. Câte procese există la final?"
+    optiuni:
+      - "3"
+      - "4"
+      - "8"
+      - "6"
+    corect: 2
+    explicatie: "Fiecare fork() dublează procesele: 1→2→4→8. Formula: 2^n procese pentru n fork()-uri."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Scrii un program care creează un copil să execute 'ls -la'. Care este secvența corectă?"
+    optiuni:
+      - "exec('ls -la'); fork();"
+      - "pid = fork(); if (pid == 0) execlp('ls', 'ls', '-la', NULL); else wait(NULL);"
+      - "fork(); exec('ls'); wait();"
+      - "wait(); fork(); exec();"
+    corect: 1
+    explicatie: "fork() creează copilul, copilul (pid==0) execută ls, părintele așteaptă cu wait()."

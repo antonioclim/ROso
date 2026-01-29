@@ -1,0 +1,178 @@
+# C04_05_EVALUARE_FORMATIVA.yaml
+# Curs 4: Planificarea Proceselor (Scheduling)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 4
+  subiect: "Planificarea Proceselor (Scheduling)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un scheduler (planificator)?"
+    optiuni:
+      - "Un compilator de cod"
+      - "Componenta SO care decide ce proces rulează pe CPU"
+      - "Un tip de memorie"
+      - "Un protocol de rețea"
+    corect: 1
+    explicatie: "Scheduler-ul selectează procesul următor din Ready queue pentru execuție pe CPU."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce înseamnă preemption (preempțiune)?"
+    optiuni:
+      - "Terminarea forțată a unui proces"
+      - "SO-ul poate întrerupe un proces în execuție pentru a rula altul"
+      - "Crearea unui proces nou"
+      - "Alocarea de memorie"
+    corect: 1
+    explicatie: "Preemption = capacitatea SO-ului de a suspenda forțat un proces pentru a da CPU-ul altuia."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce este turnaround time?"
+    optiuni:
+      - "Timpul de pornire a sistemului"
+      - "Timpul total de la submit până la terminarea procesului"
+      - "Timpul de execuție pe CPU"
+      - "Timpul de așteptare în coadă"
+    corect: 1
+    explicatie: "Turnaround time = timpul total (submission → completion), include waiting + execution."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Care este diferența între FCFS și SJF?"
+    optiuni:
+      - "FCFS este preemptiv, SJF nu"
+      - "FCFS servește în ordinea sosirii, SJF servește cel mai scurt job primul"
+      - "SJF este mai lent"
+      - "Nu există diferență"
+    corect: 1
+    explicatie: "FCFS = First Come First Served (ordine sosire). SJF = Shortest Job First (cel mai scurt)."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce problemă rezolvă Round Robin (RR)?"
+    optiuni:
+      - "Minimizează turnaround time"
+      - "Asigură echitate prin cuante de timp egale pentru toate procesele"
+      - "Elimină deadlock-urile"
+      - "Reduce consumul de memorie"
+    corect: 1
+    explicatie: "RR oferă fiecărui proces o cuantă de timp, prevenind starvation și asigurând fairness."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este starvation (înfometare) în context de planificare?"
+    optiuni:
+      - "Un proces care consumă prea mult CPU"
+      - "Un proces care nu primește niciodată CPU deoarece altele au prioritate mai mare"
+      - "Lipsa memoriei RAM"
+      - "Eroare de disk"
+    corect: 1
+    explicatie: "Starvation = un proces așteaptă indefinit CPU-ul deoarece alte procese îl preemptează mereu."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "De ce SJF are cel mai mic average waiting time dar nu este folosit direct?"
+    optiuni:
+      - "Este prea rapid"
+      - "Nu putem cunoaște dinainte durata exactă a CPU burst-ului"
+      - "Consumă prea multă memorie"
+      - "Nu funcționează pe multi-core"
+    corect: 1
+    explicatie: "SJF este optim teoretic dar necesită predicția duratei, care trebuie estimată (exponential averaging)."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Cum funcționează aging în planificarea cu priorități?"
+    optiuni:
+      - "Termină procesele vechi"
+      - "Crește treptat prioritatea proceselor care așteaptă mult, prevenind starvation"
+      - "Reduce prioritatea proceselor CPU-bound"
+      - "Șterge procesele inactive"
+    corect: 1
+    explicatie: "Aging = incrementarea periodică a priorității proceselor în așteptare pentru a preveni înfometarea."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Pentru procese interactive (editoare text), ce algoritm este mai potrivit?"
+    optiuni:
+      - "FCFS - pentru predictibilitate"
+      - "SJF - pentru throughput maxim"
+      - "Round Robin sau MLFQ cu prioritate pentru I/O-bound"
+      - "Batch processing"
+    corect: 2
+    explicatie: "Procesele interactive sunt I/O-bound și beneficiază de răspuns rapid; RR/MLFQ le favorizează."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "Cuanta de timp în RR este 10ms. Un proces necesită 25ms CPU. De câte ori va fi preemptat?"
+    optiuni:
+      - "1 dată"
+      - "2 ori"
+      - "3 ori"
+      - "Niciodată"
+    corect: 1
+    explicatie: "Rulează 10ms (preemptat), 10ms (preemptat), 5ms (termină). Deci 2 preempțiuni."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "De ce MLFQ (Multi-Level Feedback Queue) este considerat cel mai versatil algoritm?"
+    optiuni:
+      - "Este cel mai simplu de implementat"
+      - "Combină avantajele mai multor algoritmi și se adaptează la comportamentul proceselor"
+      - "Folosește cel mai puțin CPU"
+      - "Nu necesită priorități"
+    corect: 1
+    explicatie: "MLFQ ajustează dinamic prioritățile: procese interactive urcă, CPU-bound coboară, prevenind starvation."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Trei procese: P1(burst=6), P2(burst=2), P3(burst=4) sosesc la t=0. Cu SJF, care este average waiting time?"
+    optiuni:
+      - "4.0"
+      - "3.33"
+      - "2.67"
+      - "5.0"
+    corect: 2
+    explicatie: "Ordine SJF: P2(2), P3(4), P1(6). Waiting: P2=0, P3=2, P1=6. Average = (0+2+6)/3 = 2.67."
