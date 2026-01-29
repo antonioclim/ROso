@@ -1,0 +1,164 @@
+{
+  "quiz_metadata": {
+    "title": "SEM05: Advanced Bash Scripting - Quiz Formativ",
+    "description": "Quiz de auto-evaluare pentru Seminarul 05",
+    "course": "Sisteme de Operare",
+    "institution": "ASE București - CSIE",
+    "author": "ing. dr. Antonio Clim",
+    "version": "1.0.0",
+    "date": "2025-01",
+    "time_limit_minutes": 25,
+    "passing_score_percent": 60,
+    "shuffle_questions": true,
+    "lms_compatibility": ["moodle", "canvas", "blackboard"]
+  },
+  "categories": [
+    {"id": "functii", "name": "Funcții Bash"},
+    {"id": "arrays", "name": "Arrays"},
+    {"id": "stabilitate", "name": "Stabilitate"},
+    {"id": "trap", "name": "Trap și Error Handling"}
+  ],
+  "bloom_distribution": {
+    "remember": 3,
+    "understand": 6,
+    "apply": 5,
+    "analyse": 3,
+    "evaluate": 1
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "functii",
+      "points": 1,
+      "question_text": "Ce afișează ultima linie din acest script?",
+      "question_code": "#!/bin/bash\ncount=10\nincrement() {\n    count=$((count + 1))\n}\nincrement\necho \"După funcție: $count\"",
+      "answers": [
+        {"id": "a", "text": "După funcție: 10", "correct": false},
+        {"id": "b", "text": "După funcție: 11", "correct": true},
+        {"id": "c", "text": "După funcție: (gol)", "correct": false},
+        {"id": "d", "text": "Eroare", "correct": false}
+      ],
+      "feedback_correct": "Corect! Variabilele sunt GLOBALE by default în funcții Bash.",
+      "feedback_incorrect": "Variabilele în funcții Bash sunt GLOBALE. Folosește local pentru izolare."
+    },
+    {
+      "id": "q02",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "functii",
+      "points": 1,
+      "question_text": "Ce afișează acest script?",
+      "question_code": "#!/bin/bash\nget_value() { return 42; }\nresult=$(get_value)\necho \"Result: '$result'\"",
+      "answers": [
+        {"id": "a", "text": "Result: '42'", "correct": false},
+        {"id": "b", "text": "Result: '' (string gol)", "correct": true},
+        {"id": "c", "text": "Result: '0'", "correct": false},
+        {"id": "d", "text": "Eroare", "correct": false}
+      ],
+      "feedback_correct": "Corect! return setează doar exit code, nu returnează valori.",
+      "feedback_incorrect": "return în Bash setează doar exit code (0-255). Folosește echo pentru valori."
+    },
+    {
+      "id": "q04",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "arrays",
+      "points": 1,
+      "question_text": "Ce afișează: arr=(\"a\" \"b\" \"c\"); echo \"${arr[1]}\"",
+      "answers": [
+        {"id": "a", "text": "a", "correct": false},
+        {"id": "b", "text": "b", "correct": true},
+        {"id": "c", "text": "c", "correct": false},
+        {"id": "d", "text": "Eroare", "correct": false}
+      ],
+      "feedback_correct": "Corect! Arrays în Bash încep de la index 0.",
+      "feedback_incorrect": "Arrays Bash sunt 0-indexed: arr[0]=a, arr[1]=b, arr[2]=c"
+    },
+    {
+      "id": "q05",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "arrays",
+      "points": 1,
+      "question_text": "Ce afișează FĂRĂ declare -A: config[host]=\"x\"; config[port]=\"y\"; echo \"${!config[@]}\"",
+      "answers": [
+        {"id": "a", "text": "host port", "correct": false},
+        {"id": "b", "text": "0", "correct": true},
+        {"id": "c", "text": "0 0", "correct": false},
+        {"id": "d", "text": "Eroare", "correct": false}
+      ],
+      "feedback_correct": "Corect! Fără declare -A, cheile sunt evaluate ca 0.",
+      "feedback_incorrect": "declare -A e OBLIGATORIU pentru arrays asociative!"
+    },
+    {
+      "id": "q08",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "stabilitate",
+      "points": 1,
+      "question_text": "Ce face set -u?",
+      "answers": [
+        {"id": "a", "text": "Oprește la variabile nedefinite", "correct": true},
+        {"id": "b", "text": "Oprește la erori", "correct": false},
+        {"id": "c", "text": "Activează pipefail", "correct": false},
+        {"id": "d", "text": "Activează debugging", "correct": false}
+      ],
+      "feedback_correct": "Corect! -u (nounset) oprește scriptul la variabile nedefinite.",
+      "feedback_incorrect": "set -u face ca variabilele nedefinite să cauzeze eroare."
+    },
+    {
+      "id": "q09",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "stabilitate",
+      "points": 1,
+      "question_text": "Cu set -e, ce se întâmplă la: if false; then echo x; fi; echo \"după\"",
+      "answers": [
+        {"id": "a", "text": "Script se oprește", "correct": false},
+        {"id": "b", "text": "Afișează \"după\"", "correct": true},
+        {"id": "c", "text": "Afișează \"x\" apoi \"după\"", "correct": false},
+        {"id": "d", "text": "Eroare", "correct": false}
+      ],
+      "feedback_correct": "Corect! set -e NU funcționează în condiții if/while.",
+      "feedback_incorrect": "set -e are excepții: comenzi în if, ||, &&, !"
+    },
+    {
+      "id": "q13",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "trap",
+      "points": 1,
+      "question_text": "Când se execută trap cleanup EXIT?",
+      "answers": [
+        {"id": "a", "text": "Întotdeauna la ieșire", "correct": true},
+        {"id": "b", "text": "Doar la succes", "correct": false},
+        {"id": "c", "text": "Doar la eroare", "correct": false},
+        {"id": "d", "text": "Niciodată automat", "correct": false}
+      ],
+      "feedback_correct": "Corect! trap EXIT se execută ÎNTOTDEAUNA la ieșire.",
+      "feedback_incorrect": "trap EXIT se execută la orice ieșire: succes, eroare, Ctrl+C."
+    },
+    {
+      "id": "q17",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "stabilitate",
+      "points": 1,
+      "question_text": "Care atribuire este CORECTĂ?",
+      "answers": [
+        {"id": "a", "text": "VAR=\"value\"", "correct": true},
+        {"id": "b", "text": "VAR = \"value\"", "correct": false},
+        {"id": "c", "text": "VAR= \"value\"", "correct": false},
+        {"id": "d", "text": "$VAR=\"value\"", "correct": false}
+      ],
+      "feedback_correct": "Corect! Bash nu permite spații în jurul =.",
+      "feedback_incorrect": "În Bash, atribuirea e VAR=value FĂRĂ spații în jurul =."
+    }
+  ],
+  "export_notes": {
+    "moodle_import": "Folosește formatul Moodle XML sau GIFT",
+    "canvas_import": "Exportă ca QTI 2.1 pentru Canvas"
+  }
+}

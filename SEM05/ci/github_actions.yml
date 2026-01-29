@@ -1,0 +1,303 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# github_actions.yml — CI Pipeline pentru Seminar 05
+# ═══════════════════════════════════════════════════════════════════════════════
+# Sisteme de Operare | ASE București - CSIE
+# Seminar 05: Advanced Bash Scripting
+#
+# UTILIZARE:
+#   Copiază acest fișier în .github/workflows/ci.yml în repository
+#
+# DECLANȘARE:
+#   - La fiecare push pe main/master
+#   - La fiecare Pull Request
+#   - Manual din interfața GitHub (workflow_dispatch)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: SEM05 CI Pipeline
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'SEM05/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'SEM05/**'
+  workflow_dispatch:
+    inputs:
+      run_full_tests:
+        description: 'Rulează testele complete'
+        required: false
+        default: 'true'
+
+env:
+  SEMINAR_DIR: SEM05
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 1: Lint Bash Scripts
+  # ═══════════════════════════════════════════════════════════════════════════
+  lint-bash:
+    name: ShellCheck Bash Scripts
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+      
+      - name: Run ShellCheck on scripts/bash
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  ShellCheck: scripts/bash/*.sh"
+          echo "═══════════════════════════════════════════════════════════════"
+          shellcheck --severity=warning ${{ env.SEMINAR_DIR }}/scripts/bash/*.sh
+      
+      - name: Run ShellCheck on scripts/demo
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  ShellCheck: scripts/demo/*.sh"
+          echo "═══════════════════════════════════════════════════════════════"
+          shellcheck --severity=warning ${{ env.SEMINAR_DIR }}/scripts/demo/*.sh
+      
+      - name: Run ShellCheck on teste
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  ShellCheck: teste/*.sh"
+          echo "═══════════════════════════════════════════════════════════════"
+          shellcheck --severity=warning ${{ env.SEMINAR_DIR }}/teste/*.sh || true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 2: Lint Python Scripts
+  # ═══════════════════════════════════════════════════════════════════════════
+  lint-python:
+    name: Ruff Python Linting
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff pyyaml rich
+      
+      - name: Run Ruff on scripts/python
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Ruff: scripts/python/*.py"
+          echo "═══════════════════════════════════════════════════════════════"
+          ruff check ${{ env.SEMINAR_DIR }}/scripts/python/*.py --ignore=E501
+      
+      - name: Run Ruff on formative
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Ruff: formative/*.py"
+          echo "═══════════════════════════════════════════════════════════════"
+          ruff check ${{ env.SEMINAR_DIR }}/formative/*.py --ignore=E501 || true
+      
+      - name: Check Python syntax
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Verificare sintaxă Python"
+          echo "═══════════════════════════════════════════════════════════════"
+          python -m py_compile ${{ env.SEMINAR_DIR }}/scripts/python/*.py
+          python -m py_compile ${{ env.SEMINAR_DIR }}/formative/*.py || true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 3: Validate YAML/JSON
+  # ═══════════════════════════════════════════════════════════════════════════
+  validate-config:
+    name: Validate YAML/JSON Config
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install PyYAML
+        run: pip install pyyaml
+      
+      - name: Validate quiz.yaml
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Validare quiz.yaml"
+          echo "═══════════════════════════════════════════════════════════════"
+          python -c "
+          import yaml
+          import sys
+          try:
+              with open('${{ env.SEMINAR_DIR }}/formative/quiz.yaml', 'r') as f:
+                  data = yaml.safe_load(f)
+              print(f'✓ quiz.yaml valid - {len(data.get(\"intrebari\", []))} întrebări')
+          except Exception as e:
+              print(f'✗ Eroare: {e}')
+              sys.exit(1)
+          "
+      
+      - name: Validate quiz_lms.json
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Validare quiz_lms.json"
+          echo "═══════════════════════════════════════════════════════════════"
+          python -c "
+          import json
+          import sys
+          try:
+              with open('${{ env.SEMINAR_DIR }}/formative/quiz_lms.json', 'r') as f:
+                  data = json.load(f)
+              print(f'✓ quiz_lms.json valid - {len(data.get(\"questions\", []))} întrebări')
+          except Exception as e:
+              print(f'✗ Eroare: {e}')
+              sys.exit(1)
+          "
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 4: Run Tests
+  # ═══════════════════════════════════════════════════════════════════════════
+  test:
+    name: Run Automated Tests
+    runs-on: ubuntu-latest
+    needs: [lint-bash, lint-python]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        run: pip install pyyaml rich
+      
+      - name: Run test suite
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Rulare teste automate"
+          echo "═══════════════════════════════════════════════════════════════"
+          cd ${{ env.SEMINAR_DIR }}
+          if [ -f teste/run_all_tests.sh ]; then
+            bash teste/run_all_tests.sh
+          else
+            echo "Avertisment: run_all_tests.sh nu există"
+          fi
+      
+      - name: Test quiz_runner.py loads correctly
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Test: quiz_runner.py se încarcă corect"
+          echo "═══════════════════════════════════════════════════════════════"
+          cd ${{ env.SEMINAR_DIR }}
+          python -c "
+          import sys
+          sys.path.insert(0, 'formative')
+          from quiz_runner import QuizRunner
+          runner = QuizRunner('formative/quiz.yaml', use_rich=False)
+          print(f'✓ QuizRunner inițializat - {len(runner.quiz_data.get(\"intrebari\", []))} întrebări')
+          "
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 5: Documentation Check
+  # ═══════════════════════════════════════════════════════════════════════════
+  docs-check:
+    name: Documentation Completeness
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check required files exist
+        run: |
+          echo "═══════════════════════════════════════════════════════════════"
+          echo "  Verificare fișiere obligatorii"
+          echo "═══════════════════════════════════════════════════════════════"
+          
+          MISSING=0
+          
+          # Docs
+          for f in S05_00 S05_01 S05_02 S05_03 S05_04 S05_05 S05_06 S05_07 S05_08 S05_09 S05_10; do
+            if ls ${{ env.SEMINAR_DIR }}/docs/${f}*.md 1>/dev/null 2>&1; then
+              echo "✓ docs/${f}*.md"
+            else
+              echo "✗ docs/${f}*.md LIPSEȘTE"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          
+          # Formative
+          for f in quiz.yaml quiz_lms.json quiz_runner.py; do
+            if [ -f "${{ env.SEMINAR_DIR }}/formative/$f" ]; then
+              echo "✓ formative/$f"
+            else
+              echo "✗ formative/$f LIPSEȘTE"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          
+          # Root files
+          for f in README.md Makefile requirements.txt; do
+            if [ -f "${{ env.SEMINAR_DIR }}/$f" ]; then
+              echo "✓ $f"
+            else
+              echo "✗ $f LIPSEȘTE"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          
+          # CI
+          for f in github_actions.yml linting.toml; do
+            if [ -f "${{ env.SEMINAR_DIR }}/ci/$f" ]; then
+              echo "✓ ci/$f"
+            else
+              echo "✗ ci/$f LIPSEȘTE"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          
+          echo ""
+          if [ $MISSING -eq 0 ]; then
+            echo "✓ Toate fișierele obligatorii sunt prezente"
+          else
+            echo "✗ $MISSING fișiere lipsesc"
+            exit 1
+          fi
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 6: Summary
+  # ═══════════════════════════════════════════════════════════════════════════
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [lint-bash, lint-python, validate-config, test, docs-check]
+    if: always()
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# CI Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint Bash | ${{ needs.lint-bash.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint Python | ${{ needs.lint-python.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate Config | ${{ needs.validate-config.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests | ${{ needs.test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Docs Check | ${{ needs.docs-check.result }} |" >> $GITHUB_STEP_SUMMARY

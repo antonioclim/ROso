@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 5: Scripting Bash Avansat | ASE București - CSIE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <style>
+        :root {
+            --r-heading-color: #58a6ff;
+            --r-link-color: #58a6ff;
+            --r-selection-background-color: #58a6ff;
+        }
+        .reveal h1, .reveal h2 { text-transform: none; }
+        .reveal pre { font-size: 0.55em; width: 100%; }
+        .reveal code { background: #1e1e1e; padding: 2px 8px; border-radius: 4px; }
+        .reveal pre code { padding: 15px; }
+        .good { color: #4caf50; }
+        .bad { color: #f44336; }
+        .warn { color: #ff9800; }
+        .highlight-box {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid #58a6ff;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .two-column { display: flex; gap: 20px; }
+        .two-column > div { flex: 1; }
+        .small { font-size: 0.7em; }
+        .fragment.current-visible.visible:not(.current-fragment) { display: none; }
+        table { font-size: 0.7em; }
+        th { background: #333; }
+        td, th { padding: 8px 15px !important; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- TITLE SLIDE -->
+<!-- ============================================================ -->
+<section>
+    <h1>Advanced Bash Scripting</h1>
+<p><strong>Observație din laborator:</strong> notează-ţi comenzi‑cheie şi output‑ul relevant (2–3 linii) pe măsură ce lucrezi. Te ajută la debug şi, sincer, la final îţi iese şi un README bun fără efort suplimentar.</p>
+
+    <h3>Funcții • Arrays • Robustețe</h3>
+    <p>Sisteme de Operare | ASE București - CSIE</p>
+    <p class="small">Seminar 5</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- AGENDA -->
+<!-- ============================================================ -->
+<section>
+    <h2>Agenda</h2>
+    <div class="highlight-box">
+        <ol>
+            <li><strong>Funcții Avansate</strong> - local, return, scope</li>
+            <li><strong>Arrays</strong> - indexate și asociative</li>
+            <li><strong>Robustețe</strong> - set -euo pipefail</li>
+            <li><strong>Error Handling</strong> - trap, cleanup</li>
+            <li><strong>Template Profesional</strong> - best practices</li>
+        </ol>
+    </div>
+    <p class="small">⏱️ ~100 minute + pauză</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- HOOK: FRAGIL VS ROBUST -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>HOOK: Un Script, Două Destine</h2>
+        <p>Care script ai prefera să rulezi în producție?</p>
+    </section>
+    
+    <section>
+        <h3 class="bad">Script Fragil</h3>
+        <pre><code class="bash">#!/bin/bash
+cd $BACKUP_DIR
+rm -rf *
+tar -czf backup.tar.gz /data
+echo "Done!"</code></pre>
+        <p class="fragment">Ce se întâmplă dacă <code>$BACKUP_DIR</code> e gol?</p>
+        <p class="fragment bad">💀 <code>rm -rf /*</code> - RIP sistem!</p>
+    </section>
+    
+    <section>
+        <h3 class="good">Script Robust</h3>
+        <pre><code class="bash">#!/bin/bash
+set -euo pipefail
+
+BACKUP_DIR="${BACKUP_DIR:?Error: BACKUP_DIR not set}"
+[[ -d "$BACKUP_DIR" ]] || { echo "Dir not found"; exit 1; }
+
+cd "$BACKUP_DIR"
+rm -rf ./*
+tar -czf backup.tar.gz /data
+echo "Done!"</code></pre>
+        <p class="fragment good">✓ Se oprește la prima problemă</p>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- PARTEA 1: FUNCȚII -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>1. Funcții Avansate</h2>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #1: Scope</h3>
+        <div class="highlight-box">
+            <p><strong>80% dintre studenți cred că variabilele în funcții sunt locale by default.</strong></p>
+            <p>În realitate, sunt <span class="bad">GLOBALE</span>!</p>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Demo: Variabile Globale</h3>
+        <pre><code class="bash">#!/bin/bash
+count=10
+
+increment() {
+    count=$((count + 1))  # Modifică GLOBAL!
+}
+
+increment
+echo $count  # Output: 11 (nu 10!)</code></pre>
+    </section>
+    
+    <section>
+        <h3 class="good">Soluția: <code>local</code></h3>
+        <pre><code class="bash">#!/bin/bash
+count=10
+
+increment() {
+    local count=0  # Variabilă LOCALĂ
+    count=$((count + 1))
+    echo "În funcție: $count"  # 1
+}
+
+increment
+echo "După funcție: $count"    # 10 (neschimbat!)</code></pre>
+        <p class="fragment">🔑 <strong>Regulă:</strong> ÎNTOTDEAUNA folosește <code>local</code> în funcții!</p>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #2: Return Values</h3>
+        <pre><code class="bash"># GREȘIT - return e doar pentru exit codes (0-255)
+get_sum() {
+    return $((100 + 200))  # 300 mod 256 = 44 😱
+}
+
+# CORECT - folosește echo
+get_sum() {
+    local a=$1 b=$2
+    echo $((a + b))  # "Returnează" prin stdout
+}
+result=$(get_sum 100 200)  # Capturează cu $()</code></pre>
+    </section>
+    
+    <section>
+        <h3>Peer Instruction: Q1</h3>
+        <pre><code class="bash">x=5
+modify() { x=10; }
+modify
+echo $x</code></pre>
+        <p>Ce afișează?</p>
+        <p>A) 5 &nbsp;&nbsp; B) 10 &nbsp;&nbsp; C) Eroare &nbsp;&nbsp; D) Nimic</p>
+        <p class="fragment">➡️ Discutați 2 minute cu colegul!</p>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- PARTEA 2: ARRAYS -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>2. Arrays</h2>
+    </section>
+    
+    <section>
+        <h3>Arrays Indexate</h3>
+        <pre><code class="bash"># Creare
+arr=("apple" "banana" "cherry")
+
+# Acces (începe de la 0!)
+echo ${arr[0]}    # apple
+echo ${arr[-1]}   # cherry (ultimul)
+
+# Toate elementele
+echo ${arr[@]}    # apple banana cherry
+
+# Lungime
+echo ${#arr[@]}   # 3</code></pre>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #3: Indexare</h3>
+        <div class="highlight-box">
+            <p><strong>55% dintre studenți</strong> cred că arrays încep de la 1.</p>
+            <p>În Bash, încep de la <span class="good">0</span>!</p>
+        </div>
+        <pre><code class="bash">arr=("first" "second" "third")
+echo ${arr[1]}  # second (NU first!)</code></pre>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #4: Ghilimele</h3>
+        <pre><code class="bash">files=("my file.txt" "doc.pdf")
+
+# GREȘIT - word splitting!
+for f in ${files[@]}; do echo "$f"; done
+# Output: my / file.txt / doc.pdf (4 iterații!)
+
+# CORECT - cu ghilimele
+for f in "${files[@]}"; do echo "$f"; done
+# Output: my file.txt / doc.pdf (2 iterații)</code></pre>
+        <p class="fragment bad">Fără ghilimele = BUG garantat cu spații!</p>
+    </section>
+    
+    <section>
+        <h3>Arrays Asociative (Hash)</h3>
+        <pre><code class="bash"># OBLIGATORIU: declare -A
+declare -A config
+
+config[host]="localhost"
+config[port]="8080"
+
+# Accesare
+echo ${config[host]}     # localhost
+echo ${!config[@]}       # host port (cheile)
+echo ${config[@]}        # localhost 8080 (valorile)</code></pre>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #5: declare -A</h3>
+        <pre><code class="bash"># GREȘIT - fără declare -A
+config[host]="localhost"
+config[port]="8080"
+echo ${!config[@]}  # Output: 0 (tratat ca array indexat!)
+
+# CORECT - cu declare -A
+declare -A config
+config[host]="localhost"
+echo ${!config[@]}  # Output: host port</code></pre>
+        <p class="fragment bad">70% uită <code>declare -A</code>!</p>
+    </section>
+    
+    <section>
+        <h3>Peer Instruction: Q2</h3>
+        <pre><code class="bash">arr=("a b" "c")
+for i in ${arr[@]}; do echo "[$i]"; done</code></pre>
+        <p>Câte linii se afișează?</p>
+        <p>A) 2 &nbsp;&nbsp; B) 3 &nbsp;&nbsp; C) 1 &nbsp;&nbsp; D) Eroare</p>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- PARTEA 3: ROBUSTEȚE -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>3. Robustețe: set -euo pipefail</h2>
+    </section>
+    
+    <section>
+        <h3>Triada Sfântă</h3>
+        <pre><code class="bash">#!/bin/bash
+set -e          # Exit la prima eroare
+set -u          # Eroare pentru variabile nedefinite
+set -o pipefail # Propagă erori în pipes
+
+# Sau compact:
+set -euo pipefail</code></pre>
+    </section>
+    
+    <section>
+        <h3>set -e: Oprește la Eroare</h3>
+        <div class="two-column">
+            <div>
+                <p class="bad">FĂRĂ set -e</p>
+                <pre><code class="bash">false
+echo "Continuă"
+# Output: Continuă</code></pre>
+            </div>
+            <div>
+                <p class="good">CU set -e</p>
+                <pre><code class="bash">set -e
+false
+echo "Nu ajunge"
+# Script se oprește!</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Misconceptie #6: Limitări set -e</h3>
+        <div class="highlight-box">
+            <p><strong>75%</strong> cred că set -e prinde ORICE eroare.</p>
+            <p>FALS! Nu funcționează în:</p>
+        </div>
+        <ul>
+            <li>Condiții <code>if/while/until</code></li>
+            <li>După <code>||</code> sau <code>&&</code></li>
+            <li>Funcții în context de test</li>
+            <li>Subshell-uri (fără shopt)</li>
+        </ul>
+    </section>
+    
+    <section>
+        <h3>Demo: Când set -e NU funcționează</h3>
+        <pre><code class="bash">set -e
+
+# NU oprește - e în if!
+if false; then echo "no"; fi
+echo "Continuă!"
+
+# NU oprește - are ||
+false || true
+echo "Continuă!"
+
+# NU oprește - funcție în if
+check() { false; }
+if check; then echo "no"; fi
+echo "Continuă!"</code></pre>
+    </section>
+    
+    <section>
+        <h3>set -o pipefail</h3>
+        <pre><code class="bash"># FĂRĂ pipefail
+false | true
+echo $?  # 0 (de la true) - eroarea e IGNORATĂ!
+
+# CU pipefail
+set -o pipefail
+false | true
+echo $?  # 1 (de la false) - eroarea e PROPAGATĂ</code></pre>
+    </section>
+    
+    <section>
+        <h3>Peer Instruction: Q3</h3>
+        <pre><code class="bash">set -e
+if false; then echo "yes"; fi
+echo "continued"</code></pre>
+        <p>Ce se întâmplă?</p>
+        <p>A) Se oprește la false &nbsp;&nbsp; B) Afișează "continued"</p>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- PARTEA 4: ERROR HANDLING -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>4. Error Handling & Cleanup</h2>
+    </section>
+    
+    <section>
+        <h3>trap EXIT - Cleanup Garantat</h3>
+        <pre><code class="bash">#!/bin/bash
+set -euo pipefail
+
+TEMP_FILE=""
+
+cleanup() {
+    local exit_code=$?
+    echo "Cleanup..."
+    [[ -f "$TEMP_FILE" ]] && rm -f "$TEMP_FILE"
+    exit $exit_code
+}
+
+trap cleanup EXIT  # Se execută MEREU la ieșire!
+
+TEMP_FILE=$(mktemp)
+# ... procesare ...
+# Cleanup se execută automat!</code></pre>
+    </section>
+    
+    <section>
+        <h3>trap pentru Semnale</h3>
+        <pre><code class="bash">#!/bin/bash
+
+# Prinde Ctrl+C
+trap 'echo "Interrupted!"; exit 130' INT TERM
+
+# Prinde erori cu context
+trap 'echo "Error at line $LINENO"' ERR
+
+echo "Working..."
+sleep 100
+# Ctrl+C → "Interrupted!" + exit 130</code></pre>
+    </section>
+    
+    <section>
+        <h3>Pattern: die()</h3>
+        <pre><code class="bash">die() {
+    echo "FATAL: $*" >&2
+    exit 1
+}
+
+# Utilizare
+[[ $# -ge 1 ]] || die "Usage: $0 <file>"
+[[ -f "$1" ]] || die "File not found: $1"
+command -v jq &>/dev/null || die "jq not installed"</code></pre>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- PARTEA 5: TEMPLATE -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>5. Template Profesional</h2>
+    </section>
+    
+    <section>
+        <h3>Structura Template</h3>
+        <pre><code class="bash" style="font-size: 0.45em;">#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+readonly SCRIPT_NAME=$(basename "$0")
+readonly VERSION="1.0.0"
+
+usage() { ... }
+die() { echo "FATAL: $*" >&2; exit 1; }
+log() { echo "[$(date '+%H:%M:%S')] $*"; }
+
+cleanup() {
+    local exit_code=$?
+    # cleanup code
+    exit $exit_code
+}
+trap cleanup EXIT
+
+parse_args() { ... }
+validate() { ... }
+main() {
+    parse_args "$@"
+    validate
+    # logic
+}
+
+main "$@"</code></pre>
+    </section>
+    
+    <section>
+        <h3>Checklist Pre-Commit</h3>
+        <table>
+            <tr><td>☐</td><td><code>set -euo pipefail</code></td></tr>
+            <tr><td>☐</td><td>Toate variabilele din funcții au <code>local</code></td></tr>
+            <tr><td>☐</td><td><code>declare -A</code> pentru arrays asociative</td></tr>
+            <tr><td>☐</td><td>Ghilimele în <code>"${arr[@]}"</code></td></tr>
+            <tr><td>☐</td><td><code>trap cleanup EXIT</code></td></tr>
+            <tr><td>☐</td><td>Validare argumente</td></tr>
+            <tr><td>☐</td><td>shellcheck fără warnings</td></tr>
+        </table>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- EXERCIȚII -->
+<!-- ============================================================ -->
+<section>
+    <section>
+        <h2>Sprint: Exerciții Practice</h2>
+    </section>
+    
+    <section>
+        <h3>Sprint 1: Funcții (5 min)</h3>
+        <p>Creează funcția <code>validate_email</code>:</p>
+        <pre><code class="bash">validate_email() {
+    # Returnează 0 dacă email valid, 1 altfel
+    # Valid = conține @ și .
+    ???
+}
+
+# Test
+validate_email "test@example.com" && echo "Valid"
+validate_email "invalid" || echo "Invalid"</code></pre>
+    </section>
+    
+    <section>
+        <h3>Sprint 2: Arrays (5 min)</h3>
+        <p>Numără cuvintele folosind array asociativ:</p>
+        <pre><code class="bash">declare -A word_count
+text="the cat sat on the mat"
+
+# TODO: Populează word_count
+for word in $text; do
+    ???
+done
+
+# Afișează rezultatul
+for word in "${!word_count[@]}"; do
+    echo "$word: ${word_count[$word]}"
+done</code></pre>
+    </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- RECAP -->
+<!-- ============================================================ -->
+<section>
+    <h2>Recap: Key Takeaways</h2>
+    <div class="highlight-box">
+        <ol>
+            <li><strong>local</strong> - ÎNTOTDEAUNA în funcții</li>
+            <li><strong>declare -A</strong> - OBLIGATORIU pentru hash</li>
+            <li><strong>"${arr[@]}"</strong> - MEREU cu ghilimele</li>
+            <li><strong>set -euo pipefail</strong> - La începutul scriptului</li>
+            <li><strong>trap EXIT</strong> - Pentru cleanup garantat</li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TEMĂ -->
+<!-- ============================================================ -->
+<section>
+    <h2>Temă</h2>
+    <div class="highlight-box">
+        <p><strong>Log Analyzer + Config Manager</strong></p>
+        <p>Detalii în: <code>teme/S05_01_TEMA.md</code></p>
+    </div>
+    <p>Resurse:</p>
+    <ul>
+        <li><code>docs/S05_02_MATERIAL_PRINCIPAL.md</code></li>
+        <li><code>scripts/templates/professional_script.sh</code></li>
+        <li><code>scripts/bash/S05_03_validator.sh</code></li>
+    </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- Q&A -->
+<!-- ============================================================ -->
+<section>
+    <h2>Întrebări?</h2>
+    <p class="small">Mulțumesc pentru atenție! 🎉</p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+        plugins: [ RevealHighlight ]
+    });
+</script>
+</body>
+</html>
