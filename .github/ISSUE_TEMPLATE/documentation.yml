@@ -1,0 +1,59 @@
+name: 📝 Problemă Documentație
+description: Raportează greșeli de tipar sau sugerează îmbunătățiri
+title: "[DOCS] "
+labels: ["documentation"]
+assignees:
+  - antonioclim
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipul Problemei
+      options:
+        - Greșeală de tipar / gramaticală
+        - Instrucțiuni neclare
+        - Informații lipsă
+        - Informații învechite
+        - Link stricat
+        - Eroare în exemplu de cod
+        - Traducere incompletă
+    validations:
+      required: true
+
+  - type: input
+    id: file
+    attributes:
+      label: Calea Fișierului
+      placeholder: "ex: SEM01/README.md sau README.md"
+    validations:
+      required: true
+
+  - type: input
+    id: line
+    attributes:
+      label: Linia (dacă e aplicabil)
+      placeholder: "ex: 142"
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Textul Actual
+      placeholder: "Copiază textul care conține eroarea..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Corecția Sugerată
+      placeholder: "Cum ar trebui să arate textul..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist Pre-submitere
+      options:
+        - label: Am verificat că nu este deja raportat
+          required: true
