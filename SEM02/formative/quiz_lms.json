@@ -1,0 +1,615 @@
+{
+  "metadata": {
+    "title": "Quiz Formativ - Seminarul 02: Operatori, Redirecționare, Filtre, Bucle",
+    "course": "Sisteme de Operare",
+    "institution": "ASE București - CSIE",
+    "version": "1.0",
+    "date": "2025-01",
+    "language": "ro",
+    "estimated_time_minutes": 25,
+    "total_questions": 25,
+    "points_per_question": 4,
+    "total_points": 100,
+    "bloom_distribution": {
+      "remember": 5,
+      "understand": 7,
+      "apply": 8,
+      "analyse": 4,
+      "evaluate": 1
+    },
+    "lms_compatibility": ["moodle", "canvas", "blackboard"]
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "operatori",
+      "points": 4,
+      "question_text": "Care operator execută a doua comandă DOAR dacă prima reușește (exit code 0)?",
+      "options": [
+        {"id": "A", "text": ";"},
+        {"id": "B", "text": "&&"},
+        {"id": "C", "text": "||"},
+        {"id": "D", "text": "&"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! Operatorul && (AND logic) execută comanda din dreapta DOAR dacă cea din stânga returnează exit code 0.",
+        "incorrect": {
+          "A": "Operatorul ; execută întotdeauna ambele comenzi, indiferent de rezultat.",
+          "C": "Operatorul || execută a doua comandă când prima EȘUEAZĂ.",
+          "D": "Operatorul & lansează comanda în background, nu verifică exit code."
+        }
+      }
+    },
+    {
+      "id": "q02",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "operatori",
+      "points": 4,
+      "question_text": "Ce face operatorul & plasat la sfârșitul unei comenzi?",
+      "options": [
+        {"id": "A", "text": "Execută comanda de două ori"},
+        {"id": "B", "text": "Lansează comanda în background"},
+        {"id": "C", "text": "Conectează stdout la stdin-ul altei comenzi"},
+        {"id": "D", "text": "Redirecționează stderr la stdout"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! & lansat la sfârșitul comenzii o trimite în background.",
+        "incorrect": {
+          "A": "Aceasta nu este funcția operatorului &.",
+          "C": "Acesta este operatorul pipe |.",
+          "D": "Aceasta este sintaxa 2>&1."
+        }
+      }
+    },
+    {
+      "id": "q03",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "operatori",
+      "points": 4,
+      "question_text": "```bash\nmkdir test && echo \"Creat\" || echo \"Eroare\"\n```\nDacă directorul `test` DEJA EXISTĂ, ce se afișează?",
+      "options": [
+        {"id": "A", "text": "Creat"},
+        {"id": "B", "text": "Eroare"},
+        {"id": "C", "text": "Creat și Eroare"},
+        {"id": "D", "text": "Nimic (comanda eșuează silențios)"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! mkdir eșuează când directorul există, && nu se execută, dar || SE execută.",
+        "incorrect": {
+          "A": "mkdir returnează eroare când directorul există deja.",
+          "C": "|| nu se execută întotdeauna după &&.",
+          "D": "Erorile se afișează implicit (fără 2>/dev/null)."
+        }
+      }
+    },
+    {
+      "id": "q04",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "operatori",
+      "points": 4,
+      "question_text": "```bash\nls /inexistent | wc -l\necho \"Exit code: $?\"\n```\nCe va fi exit code-ul afișat?",
+      "options": [
+        {"id": "A", "text": "Exit code-ul lui ls (non-zero, eroare)"},
+        {"id": "B", "text": "Exit code-ul lui wc (0, succes)"},
+        {"id": "C", "text": "Suma exit code-urilor"},
+        {"id": "D", "text": "Eroare de sintaxă"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! $? returnează doar exit code-ul ULTIMEI comenzi din pipeline.",
+        "incorrect": {
+          "A": "Pipe-ul nu transmite exit code-ul primei comenzi la $?.",
+          "C": "Nu există un mecanism de sumare a exit code-urilor.",
+          "D": "Sintaxa este corectă."
+        }
+      }
+    },
+    {
+      "id": "q05",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "operatori",
+      "points": 4,
+      "question_text": "```bash\nx=1\n{ x=2; echo \"În acolade: $x\"; }\necho \"După acolade: $x\"\n\ny=1\n( y=2; echo \"În paranteze: $y\"; )\necho \"După paranteze: $y\"\n```\nCare sunt valorile finale pentru x și y în shell-ul principal?",
+      "options": [
+        {"id": "A", "text": "x=2, y=2"},
+        {"id": "B", "text": "x=2, y=1"},
+        {"id": "C", "text": "x=1, y=2"},
+        {"id": "D", "text": "x=1, y=1"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! {} execută în shell-ul curent (x persistă), () execută în subshell (y se pierde).",
+        "incorrect": {
+          "A": "() creează subshell, modificările nu persistă.",
+          "C": "{} NU creează subshell, modificările persistă.",
+          "D": "{} execută în shell-ul curent, deci x=2."
+        }
+      }
+    },
+    {
+      "id": "q06",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "redirectare",
+      "points": 4,
+      "question_text": "Care operator adaugă text la SFÂRȘITUL unui fișier existent (fără a-l suprascrie)?",
+      "options": [
+        {"id": "A", "text": ">"},
+        {"id": "B", "text": ">>"},
+        {"id": "C", "text": "<"},
+        {"id": "D", "text": "2>"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! >> (append) adaugă la sfârșitul fișierului.",
+        "incorrect": {
+          "A": "> suprascrie fișierul complet.",
+          "C": "< redirecționează input, nu output.",
+          "D": "2> redirecționează stderr."
+        }
+      }
+    },
+    {
+      "id": "q07",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "redirectare",
+      "points": 4,
+      "question_text": "```bash\n# Varianta A:\nls /home /inexistent > out.txt 2>&1\n\n# Varianta B:\nls /home /inexistent 2>&1 > out.txt\n```\nCare variantă trimite AMBELE (stdout și stderr) în out.txt?",
+      "options": [
+        {"id": "A", "text": "Varianta A"},
+        {"id": "B", "text": "Varianta B"},
+        {"id": "C", "text": "Ambele variante"},
+        {"id": "D", "text": "Niciuna - trebuie &>"}
+      ],
+      "correct_answer": "A",
+      "feedback": {
+        "correct": "Corect! Redirecționările se evaluează stânga→dreapta. În A: stdout→fișier, apoi stderr→unde e stdout (fișier).",
+        "incorrect": {
+          "B": "În B: stderr→terminal (unde e stdout ACUM), apoi stdout→fișier. stderr rămâne pe terminal!",
+          "C": "Ordinea contează crucial la redirecționări.",
+          "D": "&> funcționează, dar A este echivalent și corect."
+        }
+      }
+    },
+    {
+      "id": "q08",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "redirectare",
+      "points": 4,
+      "question_text": "```bash\nls /inexistent 2>/dev/null\necho $?\n```\nCe valoare va avea $? (exit code)?",
+      "options": [
+        {"id": "A", "text": "0 (succes, pentru că eroarea a fost suprimată)"},
+        {"id": "B", "text": "Non-zero (eroare, pentru că directorul nu există)"},
+        {"id": "C", "text": "Nimic - $? nu e definit"},
+        {"id": "D", "text": "Eroare de sintaxă"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! 2>/dev/null suprimă doar OUTPUT-ul erorii, nu și exit code-ul!",
+        "incorrect": {
+          "A": "GREȘEALĂ FRECVENTĂ: suprimarea mesajului NU înseamnă succes.",
+          "C": "$? este întotdeauna definit după o comandă.",
+          "D": "Sintaxa este corectă."
+        }
+      }
+    },
+    {
+      "id": "q09",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "redirectare",
+      "points": 4,
+      "question_text": "Cum salvezi ATÂT stdout CÂT ȘI stderr într-un fișier log.txt folosind Bash?",
+      "options": [
+        {"id": "A", "text": "cmd > log.txt 2> log.txt"},
+        {"id": "B", "text": "cmd &> log.txt"},
+        {"id": "C", "text": "cmd 2> log.txt 1> log.txt"},
+        {"id": "D", "text": "cmd | tee log.txt"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! &> redirecționează ambele stream-uri în Bash. Echivalent cu: cmd > log.txt 2>&1",
+        "incorrect": {
+          "A": "Poate cauza probleme de suprascriere/concurență.",
+          "C": "Aceeași problemă ca A.",
+          "D": "tee nu capturează stderr."
+        }
+      }
+    },
+    {
+      "id": "q10",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "```bash\necho -e \"a\\nb\\na\\nb\" | uniq\n```\nCe afișează această comandă?",
+      "options": [
+        {"id": "A", "text": "a\\nb"},
+        {"id": "B", "text": "a\\nb\\na\\nb"},
+        {"id": "C", "text": "a\\na\\nb\\nb"},
+        {"id": "D", "text": "Eroare - uniq necesită fișier"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "CAPCANĂ CLASICĂ! uniq elimină doar duplicatele CONSECUTIVE. Niciuna nu e consecutivă, toate rămân.",
+        "incorrect": {
+          "A": "80% cred asta! uniq NU elimină toate duplicatele, doar pe cele consecutive.",
+          "C": "uniq nu sortează.",
+          "D": "uniq funcționează și cu pipe."
+        }
+      }
+    },
+    {
+      "id": "q11",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "```bash\necho \"one two three\" | cut -f2\n```\nCe afișează?",
+      "options": [
+        {"id": "A", "text": "two"},
+        {"id": "B", "text": "one two three"},
+        {"id": "C", "text": "Eroare"},
+        {"id": "D", "text": "(nimic/linie goală)"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! cut -f folosește TAB implicit. Fără TAB în string, returnează întreaga linie.",
+        "incorrect": {
+          "A": "cut -f NU împarte după spații implicit!",
+          "C": "Nu e eroare, doar nu găsește TAB.",
+          "D": "Returnează linia completă, nu nimic."
+        }
+      }
+    },
+    {
+      "id": "q12",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "Care comandă numără câte linii UNICE (fără duplicate) conține un fișier?",
+      "options": [
+        {"id": "A", "text": "wc -l fisier.txt"},
+        {"id": "B", "text": "sort fisier.txt | uniq | wc -l"},
+        {"id": "C", "text": "uniq fisier.txt | wc -l"},
+        {"id": "D", "text": "cat fisier.txt | wc -u"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! sort | uniq elimină toate duplicatele, apoi wc -l numără liniile rămase.",
+        "incorrect": {
+          "A": "wc -l numără TOATE liniile, inclusiv duplicate.",
+          "C": "uniq fără sort nu elimină duplicate non-consecutive.",
+          "D": "wc nu are flag -u."
+        }
+      }
+    },
+    {
+      "id": "q13",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "Cum extragi DOAR coloana 3 dintr-un fișier CSV (separator virgulă)?",
+      "options": [
+        {"id": "A", "text": "cut -f3 fisier.csv"},
+        {"id": "B", "text": "cut -d',' -f3 fisier.csv"},
+        {"id": "C", "text": "awk '{print $3}' fisier.csv"},
+        {"id": "D", "text": "grep -o ',[^,]*,' fisier.csv"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! -d',' setează delimitatorul la virgulă, -f3 selectează câmpul 3.",
+        "incorrect": {
+          "A": "cut implicit folosește TAB, nu virgulă.",
+          "C": "awk implicit folosește spații/tab-uri ca separator.",
+          "D": "Regex-ul nu extrage corect coloana."
+        }
+      }
+    },
+    {
+      "id": "q14",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "Care comandă afișează ultimele 20 de linii dintr-un fișier?",
+      "options": [
+        {"id": "A", "text": "head -20 fisier.txt"},
+        {"id": "B", "text": "tail -20 fisier.txt"},
+        {"id": "C", "text": "cat -n 20 fisier.txt"},
+        {"id": "D", "text": "less -20 fisier.txt"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! tail -N afișează ultimele N linii.",
+        "incorrect": {
+          "A": "head afișează PRIMELE linii.",
+          "C": "cat -n numerotează liniile, nu le limitează.",
+          "D": "less e pentru vizualizare interactivă."
+        }
+      }
+    },
+    {
+      "id": "q15",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "filtre",
+      "points": 4,
+      "question_text": "```bash\necho \"hello\" | tr 'a-z' 'A-Z'\n```\nCe afișează?",
+      "options": [
+        {"id": "A", "text": "hello"},
+        {"id": "B", "text": "HELLO"},
+        {"id": "C", "text": "Hello"},
+        {"id": "D", "text": "hELLO"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! tr 'a-z' 'A-Z' transformă toate literele mici în majuscule.",
+        "incorrect": {
+          "A": "tr realizează transformarea.",
+          "C": "tr transformă TOATE literele, nu doar prima.",
+          "D": "Toate literele sunt transformate, inclusiv h."
+        }
+      }
+    },
+    {
+      "id": "q16",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "bucle",
+      "points": 4,
+      "question_text": "```bash\nN=5\nfor i in {1..$N}; do\n    echo $i\ndone\n```\nCe afișează acest script?",
+      "options": [
+        {"id": "A", "text": "1 2 3 4 5 (pe linii separate)"},
+        {"id": "B", "text": "{1..5}"},
+        {"id": "C", "text": "Eroare de sintaxă"},
+        {"id": "D", "text": "Nimic (buclă goală)"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "CAPCANĂ! Brace expansion se face ÎNAINTE de variable expansion. {1..$N} rămâne literal.",
+        "incorrect": {
+          "A": "70% cred asta! Brace expansion nu funcționează cu variabile.",
+          "C": "Nu e eroare, doar nu expandează cum te aștepți.",
+          "D": "Bucla se execută o dată cu i=\"{1..5}\"."
+        }
+      }
+    },
+    {
+      "id": "q17",
+      "type": "multiple_choice",
+      "bloom_level": "analyse",
+      "category": "bucle",
+      "points": 4,
+      "question_text": "```bash\ncount=0\necho -e \"a\\nb\\nc\" | while read line; do\n    ((count++))\ndone\necho \"Count: $count\"\n```\nCe afișează?",
+      "options": [
+        {"id": "A", "text": "Count: 3"},
+        {"id": "B", "text": "Count: 0"},
+        {"id": "C", "text": "Count: 1"},
+        {"id": "D", "text": "Eroare - count nu e definit"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "SUBSHELL PROBLEM! while din pipe rulează în subshell. Modificările la count se pierd.",
+        "incorrect": {
+          "A": "65% cred asta! Pipe-ul creează subshell, variabilele nu persistă.",
+          "C": "Chiar dacă ar persista ceva, ar fi 3, nu 1.",
+          "D": "count e definit, dar în subshell."
+        }
+      }
+    },
+    {
+      "id": "q18",
+      "type": "multiple_choice",
+      "bloom_level": "understand",
+      "category": "bucle",
+      "points": 4,
+      "question_text": "```bash\nfor i in 1 2 3; do\n    if [ $i -eq 2 ]; then\n        break\n    fi\n    echo $i\ndone\necho \"După buclă\"\n```\nCe se afișează?",
+      "options": [
+        {"id": "A", "text": "1\\nDupă buclă"},
+        {"id": "B", "text": "1 (nimic mai mult - scriptul s-a oprit)"},
+        {"id": "C", "text": "1\\n2\\nDupă buclă"},
+        {"id": "D", "text": "1\\n2\\n3\\nDupă buclă"}
+      ],
+      "correct_answer": "A",
+      "feedback": {
+        "correct": "Corect! break iese doar din buclă, nu din script. Continuă cu 'După buclă'.",
+        "incorrect": {
+          "B": "break NU oprește scriptul, doar bucla. exit ar opri scriptul.",
+          "C": "La i=2, break se execută ÎNAINTE de echo.",
+          "D": "break oprește bucla la i=2."
+        }
+      }
+    },
+    {
+      "id": "q19",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "bucle",
+      "points": 4,
+      "question_text": "Care este modalitatea CORECTĂ de a itera prin fișierele .txt din directorul curent?",
+      "options": [
+        {"id": "A", "text": "for f in $(ls *.txt); do"},
+        {"id": "B", "text": "for f in *.txt; do"},
+        {"id": "C", "text": "for f in `cat *.txt`; do"},
+        {"id": "D", "text": "while f in *.txt; do"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! for f in *.txt folosește glob expansion care păstrează numele întregi.",
+        "incorrect": {
+          "A": "$(ls *.txt) se split-uiește greșit pe spații în nume fișiere.",
+          "C": "cat citește CONȚINUTUL fișierelor, nu numele.",
+          "D": "while nu are această sintaxă."
+        }
+      }
+    },
+    {
+      "id": "q20",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "bucle",
+      "points": 4,
+      "question_text": "Cum citești un fișier linie cu linie în Bash?",
+      "options": [
+        {"id": "A", "text": "for line in $(cat fisier.txt); do"},
+        {"id": "B", "text": "while read line; do ... done < fisier.txt"},
+        {"id": "C", "text": "cat fisier.txt | for line; do"},
+        {"id": "D", "text": "read fisier.txt line"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! while read ... done < fisier e pattern-ul standard.",
+        "incorrect": {
+          "A": "$(cat) split-uiește pe spații ȘI newlines.",
+          "C": "Sintaxă for invalidă.",
+          "D": "Sintaxă read invalidă."
+        }
+      }
+    },
+    {
+      "id": "q21",
+      "type": "multiple_choice",
+      "bloom_level": "analyse",
+      "category": "integrat",
+      "points": 4,
+      "question_text": "```bash\ncat access.log | grep \"404\" | cut -d' ' -f1 | sort | uniq -c | sort -rn | head -5\n```\nCe face acest pipeline?",
+      "options": [
+        {"id": "A", "text": "Afișează primele 5 linii cu erori 404"},
+        {"id": "B", "text": "Afișează top 5 IP-uri cu cele mai multe erori 404"},
+        {"id": "C", "text": "Numără total de erori 404 în log"},
+        {"id": "D", "text": "Sortează fișierul și afișează primele 5 linii"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! Pipeline: filtrează 404 → extrage IP → sortează → numără → top 5.",
+        "incorrect": {
+          "A": "uniq -c numără, nu doar afișează linii.",
+          "C": "Afișează top 5, nu totalul.",
+          "D": "grep filtrează doar 404-urile."
+        }
+      }
+    },
+    {
+      "id": "q22",
+      "type": "multiple_choice",
+      "bloom_level": "analyse",
+      "category": "integrat",
+      "points": 4,
+      "question_text": "Care comandă este echivalentă cu `cat file.txt | grep pattern`?",
+      "options": [
+        {"id": "A", "text": "grep pattern file.txt"},
+        {"id": "B", "text": "grep file.txt pattern"},
+        {"id": "C", "text": "pattern | grep file.txt"},
+        {"id": "D", "text": "file.txt | grep pattern"}
+      ],
+      "correct_answer": "A",
+      "feedback": {
+        "correct": "Corect! grep pattern file.txt e forma directă, fără cat inutil (UUOC).",
+        "incorrect": {
+          "B": "Ordinea: pattern APOI fișier.",
+          "C": "Nu poți pipe un pattern.",
+          "D": "Nu poți pipe un nume de fișier literal."
+        }
+      }
+    },
+    {
+      "id": "q23",
+      "type": "multiple_choice",
+      "bloom_level": "apply",
+      "category": "integrat",
+      "points": 4,
+      "question_text": "Cum rulezi o comandă în background și o faci imună la închiderea terminalului?",
+      "options": [
+        {"id": "A", "text": "cmd &"},
+        {"id": "B", "text": "nohup cmd &"},
+        {"id": "C", "text": "bg cmd"},
+        {"id": "D", "text": "daemon cmd"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! nohup face comanda imună la SIGHUP (signal de hangup).",
+        "incorrect": {
+          "A": "& singur nu protejează de închiderea terminalului.",
+          "C": "bg mută un job DEJA suspendat în background.",
+          "D": "daemon nu e o comandă standard."
+        }
+      }
+    },
+    {
+      "id": "q24",
+      "type": "multiple_choice",
+      "bloom_level": "remember",
+      "category": "integrat",
+      "points": 4,
+      "question_text": "Ce conține variabila specială $? în Bash?",
+      "options": [
+        {"id": "A", "text": "PID-ul procesului curent"},
+        {"id": "B", "text": "Exit code-ul ultimei comenzi executate"},
+        {"id": "C", "text": "Numărul de argumente primite"},
+        {"id": "D", "text": "Numele scriptului"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! $? conține exit code-ul ultimei comenzi.",
+        "incorrect": {
+          "A": "$$ e pentru PID-ul procesului curent.",
+          "C": "$# e pentru numărul de argumente.",
+          "D": "$0 e pentru numele scriptului."
+        }
+      }
+    },
+    {
+      "id": "q25",
+      "type": "multiple_choice",
+      "bloom_level": "evaluate",
+      "category": "integrat",
+      "points": 4,
+      "question_text": "Un coleg a scris:\n```bash\nfor f in $(find . -name \"*.log\"); do\n    rm \"$f\"\ndone\n```\nCare e cea mai bună practică pentru ștergerea fișierelor .log?",
+      "options": [
+        {"id": "A", "text": "Codul este corect și sigur"},
+        {"id": "B", "text": "find . -name '*.log' -delete"},
+        {"id": "C", "text": "rm *.log"},
+        {"id": "D", "text": "ls *.log | xargs rm"}
+      ],
+      "correct_answer": "B",
+      "feedback": {
+        "correct": "Corect! find -delete e sigur, eficient și gestionează corect spațiile în nume.",
+        "incorrect": {
+          "A": "$(find) cauzează probleme cu spații în nume fișiere.",
+          "C": "rm *.log nu e recursiv și poate eșua cu multe fișiere.",
+          "D": "ls | xargs are probleme cu caractere speciale."
+        }
+      }
+    }
+  ],
+  "scoring": {
+    "points_per_question": 4,
+    "total_maximum": 100,
+    "thresholds": {
+      "excellent": {"min": 90, "label": "Excelent", "grade": "A"},
+      "good": {"min": 75, "label": "Bine", "grade": "B"},
+      "satisfactory": {"min": 60, "label": "Satisfăcător", "grade": "C"},
+      "insufficient": {"min": 0, "label": "Insuficient", "grade": "F"}
+    },
+    "feedback_messages": {
+      "excellent": "Felicitări! Stăpânești foarte bine conceptele de shell scripting.",
+      "good": "Nivel bun! Revizuiește pipe-urile și subshell-urile pentru perfecționare.",
+      "satisfactory": "Progres bun! Practică mai mult cu redirecționare și bucle.",
+      "insufficient": "Necesită studiu suplimentar. Revizuiește materialul și exersează."
+    }
+  }
+}

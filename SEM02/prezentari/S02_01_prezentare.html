@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 Seminar 2: Operatori, Redirecționare, Filtre și Bucle | SO ASE-CSIE</title>
+    
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/night.min.css">
+    
+    <!-- Highlight.js for code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/monokai.min.css">
+    
+    <style>
+        /* Custom styles */
+        :root {
+            --r-main-font-size: 32px;
+            --r-heading1-size: 2.0em;
+            --r-heading2-size: 1.6em;
+            --r-heading3-size: 1.3em;
+        }
+        
+        .reveal {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        
+        .reveal pre {
+            width: 100%;
+            font-size: 0.7em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        .reveal code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            background: #2d2d2d;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .reveal pre code {
+            padding: 15px;
+            max-height: 500px;
+        }
+        
+        /* Colored boxes */
+        .box-green {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .box-blue {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3182ce;
+        }
+        
+        .box-orange {
+            background: linear-gradient(135deg, #5c3d1a 0%, #7c5a2d 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ed8936;
+        }
+        
+        .box-red {
+            background: linear-gradient(135deg, #5c1a1a 0%, #7c2d2d 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #e53e3e;
+        }
+        
+        .box-purple {
+            background: linear-gradient(135deg, #3d1a5c 0%, #553d7c 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9f7aea;
+        }
+        
+        /* Two columns */
+        .two-columns {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .two-columns > div {
+            flex: 1;
+        }
+        
+        /* Emoji sizing */
+        .emoji-large {
+            font-size: 3em;
+        }
+        
+        /* Tables */
+        .reveal table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 0.75em;
+        }
+        
+        .reveal table th {
+            background: #3182ce;
+            padding: 12px 15px;
+        }
+        
+        .reveal table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .reveal table tr:nth-child(even) {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Diagrams ASCII */
+        .ascii-diagram {
+            font-family: 'Courier New', monospace;
+            font-size: 0.65em;
+            text-align: left;
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.4;
+        }
+        
+        /* Progress indicator */
+        .progress-bar {
+            background: #2d3748;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            height: 100%;
+            transition: width 0.5s;
+        }
+        
+        /* Highlight fragments */
+        .highlight-current {
+            opacity: 0.5;
+        }
+        
+        .highlight-current.current-fragment {
+            opacity: 1;
+        }
+        
+        /* Quiz styling */
+        .quiz-option {
+            text-align: left;
+            padding: 10px 20px;
+            margin: 8px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        /* Slide specific */
+        .slide-title {
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Animation for code reveal */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        /* Print styles */
+        @media print {
+            .reveal .slides section {
+                page-break-after: always;
+            }
+        }
+        
+        /* Smaller text helper */
+        .small-text {
+            font-size: 0.7em;
+        }
+        
+        .tiny-text {
+            font-size: 0.55em;
+        }
+        
+        /* Warning box */
+        .warning {
+            background: linear-gradient(135deg, #744210 0%, #975a16 100%);
+            border-left: 5px solid #fbd38d;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        /* Success box */
+        .success {
+            background: linear-gradient(135deg, #22543d 0%, #276749 100%);
+            border-left: 5px solid #68d391;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        /* Command showcase */
+        .command-showcase {
+            display: inline-block;
+            background: #1e1e3f;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            border: 2px solid #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- ==================== SECTION 0: INTRO ==================== -->
+            
+            <!-- Slide 1: Title -->
+            <section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)">
+                <h1 class="slide-title">Seminar 2</h1>
+<p><strong>Observație din laborator:</strong> notează-ţi comenzi‑cheie şi output‑ul relevant (2–3 linii) pe măsură ce lucrezi. Te ajută la debug şi, sincer, la final îţi iese şi un README bun fără efort suplimentar.</p>
+
+                <h2>Operatori, Redirecționare, Filtre și Bucle</h2>
+                <p style="margin-top: 50px;">
+                    <strong>Sisteme de Operare</strong><br>
+                    <span class="small-text">Academia de Studii Economice București - CSIE</span>
+                </p>
+                <p style="margin-top: 30px;" class="tiny-text">
+                    Ianuarie 2025 | Press <kbd>Space</kbd> sau <kbd>→</kbd> pentru a continua
+                </p>
+            </section>
+            
+            <!-- Slide 2: Obiective -->
+            <section>
+                <h2>Obiective de Învățare</h2>
+                <div class="box-blue">
+                    <p>La finalul acestui seminar, vei putea:</p>
+                    <ol style="font-size: 0.8em;">
+                        <li class="fragment">Combina comenzi folosind operatorii <code>;</code>, <code>&&</code>, <code>||</code>, <code>&</code></li>
+                        <li class="fragment">Redirecționa I/O cu <code>&gt;</code>, <code>&gt;&gt;</code>, <code>&lt;</code>, <code>2&gt;&amp;1</code></li>
+                        <li class="fragment">Construi pipeline-uri eficiente cu <code>|</code></li>
+                        <li class="fragment">Utiliza filtre: <code>sort</code>, <code>uniq</code>, <code>cut</code>, <code>tr</code>, <code>wc</code></li>
+                        <li class="fragment">Scrie bucle <code>for</code>, <code>while</code>, <code>until</code></li>
+                    </ol>
+                </div>
+            </section>
+            
+            <!-- Slide 3: Agenda -->
+            <section>
+                <h2>Agenda (100 minute)</h2>
+                <table>
+                    <tr><th>Timp</th><th>Secțiune</th><th>Conținut</th></tr>
+                    <tr><td>0:00-0:05</td><td>🎬 Hook</td><td>Demo spectaculoasă cu pipes</td></tr>
+                    <tr><td>0:05-0:25</td><td>⚡ Operatori</td><td>Control flow: ; && || & |</td></tr>
+                    <tr><td>0:25-0:45</td><td>📂 Redirecționare</td><td>File descriptors, >, >>, 2>&1</td></tr>
+                    <tr><td>0:45-0:50</td><td>☕ Pauză</td><td>5 minute</td></tr>
+                    <tr><td>0:50-1:15</td><td>🔧 Filtre</td><td>sort, uniq, cut, tr, wc, tee</td></tr>
+                    <tr><td>1:15-1:35</td><td>🔄 Bucle</td><td>for, while, until, break</td></tr>
+                    <tr><td>1:35-1:40</td><td>📝 Wrap-up</td><td>Recapitulare și temă</td></tr>
+                </table>
+            </section>
+            
+            <!-- Slide 4: Recap SEM01-02 -->
+            <section>
+                <h2>Ce știm deja?</h2>
+                <div class="two-columns">
+                    <div class="box-green">
+                        <h3>Din SEM01-02</h3>
+                        <ul class="small-text">
+                            <li>Navigare: <code>cd</code>, <code>ls</code>, <code>pwd</code></li>
+                            <li>Fișiere: <code>cp</code>, <code>mv</code>, <code>rm</code></li>
+                            <li>Vizualizare: <code>cat</code>, <code>less</code></li>
+                            <li>Variabile: <code>$VAR</code>, <code>export</code></li>
+                            <li>Globbing: <code>*</code>, <code>?</code>, <code>[abc]</code></li>
+                        </ul>
+                    </div>
+                    <div class="box-purple">
+                        <h3>Azi vom învăța</h3>
+                        <ul class="small-text">
+                            <li>Operatori de control</li>
+                            <li>Redirecționare I/O</li>
+                            <li>Pipeline-uri</li>
+                            <li>Filtre de text</li>
+                            <li>Bucle</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ==================== SECTION 1: HOOK DEMO ==================== -->
+            
+            <!-- Slide 5: Hook Demo -->
+            <section data-background-gradient="linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)">
+                <h2>Puterea Pipeline-urilor</h2>
+                <p>Găsim cele mai mari 5 fișiere din sistem într-o singură comandă:</p>
+                <pre><code class="language-bash">find /usr -type f -printf '%s %p\n' 2>/dev/null | \
+    sort -rn | \
+    head -5 | \
+    while read size path; do
+        printf "%'.0f bytes → %s\n" "$size" "$path"
+    done</code></pre>
+                <div class="fragment box-green" style="margin-top: 20px;">
+                    <p class="small-text">
+                        🔥 <strong>O singură comandă</strong> care combină: căutare, sortare, limitare și formatare!
+                    </p>
+                </div>
+            </section>
+            
+            <!-- ==================== SECTION 2: OPERATORI ==================== -->
+            
+            <!-- Slide 6: Operatori - Intro -->
+            <section data-background-color="#1a365d">
+                <h1>MODULUL 1</h1>
+                <h2>Operatori de Control</h2>
+                <p class="small-text"><code>;</code> <code>&&</code> <code>||</code> <code>&</code> <code>|</code></p>
+            </section>
+            
+            <!-- Slide 7: Exit Codes -->
+            <section>
+                <h2>Exit Codes - Fundament</h2>
+                <div class="box-blue">
+                    <p>Fiecare comandă returnează un <strong>exit code</strong> (0-255)</p>
+                </div>
+                <div class="two-columns" style="margin-top: 20px;">
+                    <div>
+                        <h4 style="color: #68d391;">Succes: 0</h4>
+                        <pre><code class="language-bash">ls /home
+echo $?  # 0</code></pre>
+                    </div>
+                    <div>
+                        <h4 style="color: #fc8181;">Eroare: ≠0</h4>
+                        <pre><code class="language-bash">ls /inexistent
+echo $?  # 2</code></pre>
+                    </div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px;">
+                    💡 Variabila <code>$?</code> conține exit code-ul ultimei comenzi
+                </p>
+            </section>
+            
+            <!-- Slide 8: Operatorul ; -->
+            <section>
+                <h2>Operatorul Secvențial <code>;</code></h2>
+                <div class="box-orange">
+                    <p>Execută comenzi <strong>una după alta</strong>, indiferent de succes/eșec</p>
+                </div>
+                <pre><code class="language-bash"># Ambele comenzi se execută
+echo "Primul" ; echo "Al doilea"
+
+# Chiar dacă prima eșuează
+ls /inexistent ; echo "Continuă oricum"
+# Output: error + "Continuă oricum"</code></pre>
+                <div class="fragment warning" style="margin-top: 20px;">
+                    <p class="small-text">⚠️ <strong>Utilizare:</strong> Comenzi independente care nu depind una de alta</p>
+                </div>
+            </section>
+            
+            <!-- Slide 9: Operatorul && -->
+            <section>
+                <h2>Operatorul AND <code>&&</code></h2>
+                <div class="box-green">
+                    <p>Execută a doua comandă <strong>DOAR dacă</strong> prima a avut succes (exit 0)</p>
+                </div>
+                <pre><code class="language-bash"># mkdir reușește → cd se execută
+mkdir proiect && cd proiect && echo "Suntem în proiect"
+
+# mkdir eșuează → cd NU se execută
+mkdir /root/test && echo "Nu vei vedea asta"</code></pre>
+                <div class="fragment ascii-diagram" style="margin-top: 20px;">
+cmd1 ──→ exit=0? ──YES──→ cmd2 ──→ exit=0? ──YES──→ cmd3
+              │                         │
+              NO                        NO
+              ↓                         ↓
+           [STOP]                    [STOP]
+                </div>
+            </section>
+            
+            <!-- Slide 10: Operatorul || -->
+            <section>
+                <h2>Operatorul OR <code>||</code></h2>
+                <div class="box-red">
+                    <p>Execută a doua comandă <strong>DOAR dacă</strong> prima a eșuat (exit ≠0)</p>
+                </div>
+                <pre><code class="language-bash"># mkdir eșuează → echo se execută
+mkdir /root/test || echo "Nu s-a putut crea!"
+
+# mkdir reușește → echo NU se execută
+mkdir my_dir || echo "Nu vei vedea asta"</code></pre>
+                <div class="fragment success" style="margin-top: 20px;">
+                    <p class="small-text">💡 <strong>Pattern comun:</strong> Error handling simplu</p>
+                    <pre><code class="language-bash">cd /some/path || { echo "Eroare!"; exit 1; }</code></pre>
+                </div>
+            </section>
+            
+            <!-- Slide 11: Combinații && și || -->
+            <section>
+                <h2>Combinații: && și ||</h2>
+                <pre><code class="language-bash"># Pattern: cmd && success_msg || error_msg
+mkdir backup && echo "✓ Creat" || echo "✗ Eroare"</code></pre>
+                
+                <div class="fragment box-orange" style="margin-top: 20px;">
+                    <h4>Atenție la ordinea evaluării!</h4>
+                    <pre><code class="language-bash"># CORECT: structură clară
+[ -f config.txt ] && source config.txt || echo "Lipsește config"
+
+# GREȘIT: echo poate eșua și declanșa ||
+false && echo "OK" || echo "Eroare"  # Output: Eroare</code></pre>
+                </div>
+            </section>
+            
+            <!-- Slide 12: Peer Instruction Q1 -->
+            <section data-background-color="#2d3748">
+                <h2>PEER INSTRUCTION</h2>
+                <div class="box-purple">
+                    <pre><code class="language-bash">mkdir test && cd test && echo "În test" || echo "Eroare"</code></pre>
+                    <p>Dacă directorul <code>test</code> <strong>DEJA EXISTĂ</strong>, ce se afișează?</p>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="quiz-option">A) În test</div>
+                    <div class="quiz-option">B) Eroare</div>
+                    <div class="quiz-option">C) În test și Eroare</div>
+                    <div class="quiz-option">D) Nimic</div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px; color: #68d391;">
+                    ✅ Răspuns: <strong>B</strong> - mkdir eșuează când directorul există
+                </p>
+            </section>
+            
+            <!-- Slide 13: Operatorul & -->
+            <section>
+                <h2>Operatorul Background <code>&</code></h2>
+                <div class="box-blue">
+                    <p>Execută comanda în <strong>fundal</strong> și continuă imediat</p>
+                </div>
+                <pre><code class="language-bash"># Pornește în fundal
+sleep 10 &
+echo "Continuă imediat!"  # Se afișează instant
+
+# Verifică jobs în fundal
+jobs
+
+# Aduce în prim-plan
+fg %1</code></pre>
+                <table class="fragment small-text" style="margin-top: 20px;">
+                    <tr><th>Comandă</th><th>Acțiune</th></tr>
+                    <tr><td><code>jobs</code></td><td>Listează procesele din fundal</td></tr>
+                    <tr><td><code>fg %N</code></td><td>Aduce job N în prim-plan</td></tr>
+                    <tr><td><code>bg %N</code></td><td>Continuă job N în fundal</td></tr>
+                    <tr><td><code>Ctrl+Z</code></td><td>Suspendă procesul curent</td></tr>
+                </table>
+            </section>
+            
+            <!-- Slide 14: Pipe Operator -->
+            <section>
+                <h2>Operatorul Pipe <code>|</code></h2>
+                <div class="box-green">
+                    <p>Conectează <strong>stdout</strong> al primei comenzi la <strong>stdin</strong> al celei de-a doua</p>
+                </div>
+                <div class="ascii-diagram">
+┌─────────┐     stdout     ┌─────────┐     stdout     ┌─────────┐
+│  cmd1   │ ─────────────→ │  cmd2   │ ─────────────→ │  cmd3   │
+└─────────┘       |        └─────────┘       |        └─────────┘
+                pipe                       pipe
+                </div>
+                <pre class="fragment"><code class="language-bash"># Exemplu: Numără fișierele .txt
+ls -la | grep ".txt" | wc -l
+
+# Filtrează și sortează procese
+ps aux | grep python | sort -k4 -rn</code></pre>
+            </section>
+            
+            <!-- Slide 15: Gruparea comenzilor -->
+            <section>
+                <h2>Gruparea Comenzilor</h2>
+                <div class="two-columns">
+                    <div class="box-blue">
+                        <h4><code>{ cmd; }</code> - Grup inline</h4>
+                        <ul class="small-text">
+                            <li>Execută în shell-ul curent</li>
+                            <li>Variabilele persistă</li>
+                            <li>Necesită <code>;</code> și spații</li>
+                        </ul>
+                        <pre><code class="language-bash">{ cd /tmp; pwd; }
+# Rămânem în /tmp</code></pre>
+                    </div>
+                    <div class="box-orange">
+                        <h4><code>( cmd )</code> - Subshell</h4>
+                        <ul class="small-text">
+                            <li>Execută în subshell nou</li>
+                            <li>Variabilele NU persistă</li>
+                            <li>Izolat de shell-ul părinte</li>
+                        </ul>
+                        <pre><code class="language-bash">( cd /tmp; pwd )
+# Revenim la directorul inițial</code></pre>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ==================== SECTION 3: REDIRECȚIONARE ==================== -->
+            
+            <!-- Slide 16: Redirecționare - Intro -->
+            <section data-background-color="#22543d">
+                <h1>MODULUL 2</h1>
+                <h2>Redirecționare I/O</h2>
+                <p class="small-text"><code>&gt;</code> <code>&gt;&gt;</code> <code>&lt;</code> <code>2&gt;</code> <code>2&gt;&amp;1</code> <code>&lt;&lt;</code></p>
+            </section>
+            
+            <!-- Slide 17: File Descriptors -->
+            <section>
+                <h2>File Descriptors</h2>
+                <div class="ascii-diagram">
+┌──────────────────────────────────────────────────────────────┐
+│                         PROCES                               │
+│  ┌──────────┐                                                │
+│  │ FD 0     │ ← stdin  (keyboard/file)                       │
+│  │ (stdin)  │                                                │
+│  ├──────────┤                                                │
+│  │ FD 1     │ → stdout (terminal/file)                       │
+│  │ (stdout) │                                                │
+│  ├──────────┤                                                │
+│  │ FD 2     │ → stderr (terminal/file)                       │
+│  │ (stderr) │                                                │
+│  └──────────┘                                                │
+└──────────────────────────────────────────────────────────────┘
+                </div>
+                <table class="fragment small-text">
+                    <tr><th>FD</th><th>Nume</th><th>Descriere</th><th>Default</th></tr>
+                    <tr><td>0</td><td>stdin</td><td>Standard input</td><td>Tastatură</td></tr>
+                    <tr><td>1</td><td>stdout</td><td>Standard output</td><td>Terminal</td></tr>
+                    <tr><td>2</td><td>stderr</td><td>Standard error</td><td>Terminal</td></tr>
+                </table>
+            </section>
+            
+            <!-- Slide 18: Output Redirection -->
+            <section>
+                <h2>Redirecționare Output</h2>
+                <div class="two-columns">
+                    <div class="box-blue">
+                        <h4><code>&gt;</code> Suprascrie</h4>
+                        <pre><code class="language-bash"># Creează/suprascrie
+echo "Linia 1" > out.txt
+echo "Linia 2" > out.txt
+cat out.txt
+# Output: Linia 2</code></pre>
+                    </div>
+                    <div class="box-green">
+                        <h4><code>&gt;&gt;</code> Adaugă</h4>
+                        <pre><code class="language-bash"># Adaugă la final
+echo "Linia 1" > out.txt
+echo "Linia 2" >> out.txt
+cat out.txt
+# Output: Linia 1
+#         Linia 2</code></pre>
+                    </div>
+                </div>
+                <div class="fragment warning" style="margin-top: 20px;">
+                    <p class="small-text">⚠️ <code>&gt;</code> șterge conținutul existent fără avertisment!</p>
+                </div>
+            </section>
+            
+            <!-- Slide 19: Stderr Redirection -->
+            <section>
+                <h2>Redirecționare stderr</h2>
+                <pre><code class="language-bash"># stderr separat
+ls /inexistent 2> erori.txt
+
+# stdout și stderr în fișiere diferite
+command > output.txt 2> errors.txt
+
+# Combină stdout și stderr
+command > all.txt 2>&1
+
+# Sintaxă scurtă (bash 4+)
+command &> all.txt</code></pre>
+                
+                <div class="fragment box-red" style="margin-top: 20px;">
+                    <h4>Ordinea contează!</h4>
+                    <pre><code class="language-bash"># CORECT: mai întâi stdout, apoi 2>&1
+cmd > file 2>&1
+
+# GREȘIT: 2>&1 punctează către terminal (stdout original)
+cmd 2>&1 > file</code></pre>
+                </div>
+            </section>
+            
+            <!-- Slide 20: Input Redirection -->
+            <section>
+                <h2>Redirecționare Input</h2>
+                <pre><code class="language-bash"># Din fișier
+wc -l < /etc/passwd
+
+# Echivalent (dar cu proces extra)
+cat /etc/passwd | wc -l</code></pre>
+                
+                <div class="fragment box-green" style="margin-top: 20px;">
+                    <h4>De ce <code>&lt;</code> e mai eficient?</h4>
+                    <table class="tiny-text">
+                        <tr><th>Metodă</th><th>Procese</th><th>Eficiență</th></tr>
+                        <tr><td><code>wc -l < file</code></td><td>1 proces</td><td>⭐⭐⭐</td></tr>
+                        <tr><td><code>cat file | wc</code></td><td>2 procese + pipe</td><td>⭐⭐</td></tr>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Slide 21: Here Document -->
+            <section>
+                <h2>Here Document <code>&lt;&lt;</code></h2>
+                <div class="box-blue">
+                    <p>Trimite text multi-linie direct în stdin</p>
+                </div>
+                <pre><code class="language-bash"># Crează fișier cu conținut
+cat > config.txt << 'EOF'
+# Configurație aplicație
+HOST=localhost
+PORT=8080
+DEBUG=true
+EOF
+
+# Folosire în script
+mysql << EOF
+SELECT * FROM users;
+SHOW TABLES;
+EOF</code></pre>
+                <p class="fragment small-text">💡 <code>&lt;&lt; 'EOF'</code> (cu ghilimele) dezactivează expandarea variabilelor</p>
+            </section>
+            
+            <!-- Slide 22: Here String -->
+            <section>
+                <h2>Here String <code>&lt;&lt;&lt;</code></h2>
+                <div class="box-orange">
+                    <p>Trimite un <strong>string</strong> direct în stdin (o singură linie)</p>
+                </div>
+                <pre><code class="language-bash"># În loc de echo + pipe
+echo "hello world" | tr 'a-z' 'A-Z'
+
+# Mai eficient cu here string
+tr 'a-z' 'A-Z' <<< "hello world"
+
+# Cu variabilă
+name="Ion Popescu"
+cut -d' ' -f1 <<< "$name"  # Output: Ion</code></pre>
+            </section>
+            
+            <!-- Slide 23: /dev/null -->
+            <section>
+                <h2>Gaura Neagră: <code>/dev/null</code></h2>
+                <div class="box-purple">
+                    <p>Device special care <strong>înghite</strong> tot ce primește</p>
+                </div>
+                <pre><code class="language-bash"># Suprimă erori
+find / -name "*.txt" 2>/dev/null
+
+# Suprimă tot output-ul
+command > /dev/null 2>&1
+
+# Verifică doar exit code
+if grep -q "pattern" file 2>/dev/null; then
+    echo "Găsit!"
+fi</code></pre>
+                <p class="fragment small-text">💡 <code>grep -q</code> = quiet mode, doar exit code</p>
+            </section>
+            
+            <!-- Slide 24: tee Command -->
+            <section>
+                <h2>Comanda <code>tee</code></h2>
+                <div class="box-green">
+                    <p>Trimite output-ul simultan în fișier ȘI pe ecran</p>
+                </div>
+                <div class="ascii-diagram">
+                        ┌─────────────┐
+stdin ───→ tee ───┬───→ │   stdout    │ ───→ terminal
+                  │     └─────────────┘
+                  │     ┌─────────────┐
+                  └───→ │   file.txt  │
+                        └─────────────┘
+                </div>
+                <pre><code class="language-bash"># Salvează și afișează simultan
+make 2>&1 | tee build.log
+
+# Adaugă la fișier (-a = append)
+echo "Log entry" | tee -a app.log</code></pre>
+            </section>
+            
+            <!-- Slide 25: Peer Instruction Q2 -->
+            <section data-background-color="#2d3748">
+                <h2>PEER INSTRUCTION</h2>
+                <div class="box-purple">
+                    <pre><code class="language-bash">ls /home /nonexistent 2>&1 > output.txt</code></pre>
+                    <p>Ce conține <code>output.txt</code>?</p>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="quiz-option">A) Doar listarea lui /home</div>
+                    <div class="quiz-option">B) Doar eroarea pentru /nonexistent</div>
+                    <div class="quiz-option">C) Ambele (listare + eroare)</div>
+                    <div class="quiz-option">D) Fișier gol</div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px; color: #68d391;">
+                    ✅ Răspuns: <strong>A</strong> - Ordinea contează! 2>&1 se aplică înainte de > 
+                </p>
+            </section>
+            
+            <!-- ==================== SECTION 4: FILTRE ==================== -->
+            
+            <!-- Slide 26: Filtre - Intro -->
+            <section data-background-color="#553c9a">
+                <h1>MODULUL 3</h1>
+                <h2>Filtre de Text</h2>
+                <p class="small-text"><code>sort</code> <code>uniq</code> <code>cut</code> <code>tr</code> <code>wc</code> <code>head</code> <code>tail</code></p>
+            </section>
+            
+            <!-- Slide 27: Filozofia Unix -->
+            <section>
+                <h2>Filozofia Unix: Filtre</h2>
+                <div class="box-blue">
+                    <p><em>"Do one thing and do it well"</em></p>
+                </div>
+                <div class="ascii-diagram">
+┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
+│  Input  │ ──→ │ Filter1 │ ──→ │ Filter2 │ ──→ │ Output  │
+│ (stdin) │     │ (sort)  │     │ (uniq)  │     │(stdout) │
+└─────────┘     └─────────┘     └─────────┘     └─────────┘
+                </div>
+                <p class="fragment" style="margin-top: 20px;">
+                    🎯 Fiecare filtru face <strong>UN</strong> lucru → le combinăm cu <code>|</code>
+                </p>
+            </section>
+            
+            <!-- Slide 28: sort -->
+            <section>
+                <h2>Comanda <code>sort</code></h2>
+                <table class="small-text">
+                    <tr><th>Opțiune</th><th>Efect</th><th>Exemplu</th></tr>
+                    <tr><td><code>-n</code></td><td>Numeric</td><td><code>sort -n</code></td></tr>
+                    <tr><td><code>-r</code></td><td>Reverse</td><td><code>sort -rn</code></td></tr>
+                    <tr><td><code>-k N</code></td><td>După coloana N</td><td><code>sort -k2</code></td></tr>
+                    <tr><td><code>-t 'C'</code></td><td>Delimitator</td><td><code>sort -t: -k3</code></td></tr>
+                    <tr><td><code>-u</code></td><td>Unique</td><td><code>sort -u</code></td></tr>
+                    <tr><td><code>-h</code></td><td>Human-readable</td><td><code>du -h | sort -h</code></td></tr>
+                </table>
+                <pre class="fragment"><code class="language-bash"># Top 5 directoare după dimensiune
+du -sh /var/* 2>/dev/null | sort -rh | head -5
+
+# Sortare /etc/passwd după UID
+sort -t: -k3 -n /etc/passwd | head</code></pre>
+            </section>
+            
+            <!-- Slide 29: uniq IMPORTANT -->
+            <section>
+                <h2>Comanda <code>uniq</code></h2>
+                <div class="box-red" style="margin-bottom: 20px;">
+                    <p>⚠️ <strong>CRITICĂ:</strong> uniq elimină doar duplicate <strong>CONSECUTIVE</strong>!</p>
+                </div>
+                <div class="two-columns">
+                    <div>
+                        <h4 style="color: #fc8181;">Greșit</h4>
+                        <pre><code class="language-bash">echo -e "a\nb\na" | uniq
+# Output:
+# a
+# b
+# a  ← încă există!</code></pre>
+                    </div>
+                    <div>
+                        <h4 style="color: #68d391;">Corect</h4>
+                        <pre><code class="language-bash">echo -e "a\nb\na" | sort | uniq
+# Output:
+# a
+# b</code></pre>
+                    </div>
+                </div>
+                <table class="fragment small-text" style="margin-top: 20px;">
+                    <tr><th>Opțiune</th><th>Efect</th></tr>
+                    <tr><td><code>-c</code></td><td>Numără aparițiile</td></tr>
+                    <tr><td><code>-d</code></td><td>Afișează DOAR duplicatele</td></tr>
+                    <tr><td><code>-u</code></td><td>Afișează DOAR unicatele</td></tr>
+                </table>
+            </section>
+            
+            <!-- Slide 30: cut -->
+            <section>
+                <h2>Comanda <code>cut</code></h2>
+                <div class="box-blue">
+                    <p>Extrage coloane sau caractere din fiecare linie</p>
+                </div>
+                <table class="small-text">
+                    <tr><th>Opțiune</th><th>Efect</th><th>Exemplu</th></tr>
+                    <tr><td><code>-d 'C'</code></td><td>Delimitator</td><td><code>-d:</code></td></tr>
+                    <tr><td><code>-f N</code></td><td>Câmpul N</td><td><code>-f1,3</code> sau <code>-f1-3</code></td></tr>
+                    <tr><td><code>-c N</code></td><td>Caracterul N</td><td><code>-c1-10</code></td></tr>
+                </table>
+                <pre class="fragment"><code class="language-bash"># Extrage username și shell din /etc/passwd
+cut -d: -f1,7 /etc/passwd
+
+# Primele 20 caractere din fiecare linie
+cut -c1-20 /etc/passwd
+
+# Câmpuri multiple
+echo "a:b:c:d" | cut -d: -f2,4  # b:d</code></pre>
+            </section>
+            
+            <!-- Slide 31: tr -->
+            <section>
+                <h2>Comanda <code>tr</code></h2>
+                <div class="box-orange">
+                    <p>Translate/Delete <strong>CARACTERE</strong> (nu stringuri!)</p>
+                </div>
+                <pre><code class="language-bash"># Transformă lowercase → uppercase
+echo "hello" | tr 'a-z' 'A-Z'  # HELLO
+
+# Înlocuiește spații cu newline
+echo "one two three" | tr ' ' '\n'
+
+# Șterge caractere (-d)
+echo "Hello123World" | tr -d '0-9'  # HelloWorld
+
+# Squeeze repetitions (-s)
+echo "hellooooo" | tr -s 'o'  # hello</code></pre>
+                <div class="fragment warning">
+                    <p class="small-text">⚠️ <code>tr</code> NU înlocuiește stringuri! Pentru asta folosește <code>sed</code></p>
+                </div>
+            </section>
+            
+            <!-- Slide 32: wc -->
+            <section>
+                <h2>Comanda <code>wc</code></h2>
+                <div class="box-green">
+                    <p>Word Count - numără linii, cuvinte, bytes</p>
+                </div>
+                <table class="small-text">
+                    <tr><th>Opțiune</th><th>Numără</th><th>Exemplu</th></tr>
+                    <tr><td><code>-l</code></td><td>Linii</td><td><code>wc -l file</code></td></tr>
+                    <tr><td><code>-w</code></td><td>Cuvinte</td><td><code>wc -w file</code></td></tr>
+                    <tr><td><code>-c</code></td><td>Bytes</td><td><code>wc -c file</code></td></tr>
+                    <tr><td><code>-m</code></td><td>Caractere</td><td><code>wc -m file</code></td></tr>
+                </table>
+                <pre class="fragment"><code class="language-bash"># Câte linii în /etc/passwd?
+wc -l < /etc/passwd
+
+# Câți utilizatori sunt logați?
+who | wc -l
+
+# Câte fișiere .txt?
+ls *.txt 2>/dev/null | wc -l</code></pre>
+            </section>
+            
+            <!-- Slide 33: head și tail -->
+            <section>
+                <h2>Comenzile <code>head</code> și <code>tail</code></h2>
+                <div class="two-columns">
+                    <div class="box-blue">
+                        <h4><code>head</code> - Începutul</h4>
+                        <pre><code class="language-bash"># Primele 10 linii (default)
+head file.txt
+
+# Primele N linii
+head -n 5 file.txt
+
+# Primele N bytes
+head -c 100 file.txt</code></pre>
+                    </div>
+                    <div class="box-green">
+                        <h4><code>tail</code> - Sfârșitul</h4>
+                        <pre><code class="language-bash"># Ultimele 10 linii
+tail file.txt
+
+# Ultimele N linii
+tail -n 5 file.txt
+
+# LIVE monitoring! (-f)
+tail -f /var/log/syslog</code></pre>
+                    </div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px;">
+                    🔥 <code>tail -f</code> = urmărește fișierul în timp real (foarte util pentru logs!)
+                </p>
+            </section>
+            
+            <!-- Slide 34: Pipeline Complex -->
+            <section>
+                <h2>Pipeline Complex: Exemplu Practic</h2>
+                <p>Găsește top 5 cele mai comune comenzi din history:</p>
+                <pre><code class="language-bash">history | \
+    awk '{print $2}' | \
+    sort | \
+    uniq -c | \
+    sort -rn | \
+    head -5</code></pre>
+                <div class="fragment ascii-diagram" style="font-size: 0.55em;">
+history → extrage → sortează → numără    → sortează → limitează
+          cmd       alfab.     duplicate   descr.     top 5
+
+ 1 ls    →  ls   →   ls    →  45 ls    →  45 ls   →  45 ls
+ 2 cd       cd       cd       32 cd       32 cd      32 cd
+ 3 ls       ls       git      28 git      28 git     28 git
+ 4 git      cat      cat      15 cat      22 pwd     22 pwd
+ 5 cat      pwd      pwd      22 pwd      15 cat     15 cat
+                </div>
+            </section>
+            
+            <!-- Slide 35: Peer Instruction Q3 -->
+            <section data-background-color="#2d3748">
+                <h2>PEER INSTRUCTION</h2>
+                <div class="box-purple">
+                    <pre><code class="language-bash">echo -e "rosu\nverde\nrosu\nalbastru\nverde\nrosu" | uniq | wc -l</code></pre>
+                    <p>Ce număr se afișează?</p>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="quiz-option">A) 3 (culori unice)</div>
+                    <div class="quiz-option">B) 5</div>
+                    <div class="quiz-option">C) 6 (toate liniile)</div>
+                    <div class="quiz-option">D) 1</div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px; color: #68d391;">
+                    ✅ Răspuns: <strong>B</strong> - uniq elimină doar duplicate consecutive!<br>
+                    <span class="tiny-text">rosu, verde, rosu, albastru, verde → 5 linii (lipsește sort!)</span>
+                </p>
+            </section>
+            
+            <!-- ==================== SECTION 5: BUCLE ==================== -->
+            
+            <!-- Slide 36: Bucle - Intro -->
+            <section data-background-color="#744210">
+                <h1>MODULUL 4</h1>
+                <h2>Bucle în Bash</h2>
+                <p class="small-text"><code>for</code> <code>while</code> <code>until</code> <code>break</code> <code>continue</code></p>
+            </section>
+            
+            <!-- Slide 37: for - Lista -->
+            <section>
+                <h2>Bucla <code>for</code> - Lista</h2>
+                <pre><code class="language-bash"># Sintaxa de bază
+for variabila in lista; do
+    comenzi
+done
+
+# Exemplu cu listă explicită
+for culoare in rosu verde albastru; do
+    echo "Culoarea: $culoare"
+done
+
+# Exemplu cu globbing
+for fisier in *.txt; do
+    echo "Procesez: $fisier"
+    wc -l "$fisier"
+done</code></pre>
+            </section>
+            
+            <!-- Slide 38: for - Brace Expansion -->
+            <section>
+                <h2>Bucla <code>for</code> - Brace Expansion</h2>
+                <pre><code class="language-bash"># Secvență de numere
+for i in {1..5}; do
+    echo "Numărul: $i"
+done
+
+# Cu pas
+for i in {0..10..2}; do
+    echo $i  # 0, 2, 4, 6, 8, 10
+done
+
+# Litere
+for letter in {a..z}; do
+    echo -n "$letter "
+done</code></pre>
+                <div class="fragment box-red" style="margin-top: 20px;">
+                    <h4>CAPCANĂ IMPORTANTĂ!</h4>
+                    <pre><code class="language-bash"># NU FUNCȚIONEAZĂ cu variabile!
+N=5
+for i in {1..$N}; do echo $i; done
+# Output: {1..5} (literal!)</code></pre>
+                    <p class="small-text">Brace expansion se face la <strong>parse time</strong>, înainte de expandarea variabilelor!</p>
+                </div>
+            </section>
+            
+            <!-- Slide 39: Soluții pentru {1..$N} -->
+            <section>
+                <h2>Soluții pentru <code>{1..$N}</code></h2>
+                <div class="two-columns">
+                    <div class="box-green">
+                        <h4>Metoda 1: <code>seq</code></h4>
+                        <pre><code class="language-bash">N=5
+for i in $(seq 1 $N); do
+    echo $i
+done</code></pre>
+                    </div>
+                    <div class="box-blue">
+                        <h4>Metoda 2: C-style</h4>
+                        <pre><code class="language-bash">N=5
+for ((i=1; i<=N; i++)); do
+    echo $i
+done</code></pre>
+                    </div>
+                </div>
+                <div class="box-orange fragment" style="margin-top: 20px;">
+                    <h4>Metoda 3: <code>while</code></h4>
+                    <pre><code class="language-bash">N=5; i=1
+while [ $i -le $N ]; do
+    echo $i
+    ((i++))
+done</code></pre>
+                </div>
+            </section>
+            
+            <!-- Slide 40: while -->
+            <section>
+                <h2>Bucla <code>while</code></h2>
+                <pre><code class="language-bash"># Sintaxa
+while condiție; do
+    comenzi
+done
+
+# Exemplu: countdown
+count=5
+while [ $count -gt 0 ]; do
+    echo "T minus $count"
+    ((count--))
+    sleep 1
+done
+echo "LAUNCH!"
+
+# Bucla infinită (util pentru daemons)
+while true; do
+    echo "Running..."
+    sleep 60
+done</code></pre>
+            </section>
+            
+            <!-- Slide 41: while read - IMPORTANT -->
+            <section>
+                <h2>Pattern: <code>while read</code></h2>
+                <div class="box-green">
+                    <p>Citește un fișier linie cu linie</p>
+                </div>
+                <pre><code class="language-bash"># CORECT: cu redirecționare
+while IFS= read -r line; do
+    echo "Linia: $line"
+done < input.txt
+
+# IFS= păstrează spațiile de început/final
+# -r dezactivează interpretarea backslash</code></pre>
+                <div class="fragment box-red" style="margin-top: 20px;">
+                    <h4>CAPCANĂ: Pipe creează SUBSHELL!</h4>
+                    <pre><code class="language-bash"># GREȘIT - variabilele NU persistă!
+count=0
+cat file.txt | while read line; do
+    ((count++))
+done
+echo $count  # 0 - subshell problem!</code></pre>
+                </div>
+            </section>
+            
+            <!-- Slide 42: until -->
+            <section>
+                <h2>Bucla <code>until</code></h2>
+                <div class="box-orange">
+                    <p>Opusul lui <code>while</code>: execută <strong>PÂNĂ când</strong> condiția devine adevărată</p>
+                </div>
+                <pre><code class="language-bash"># Așteaptă până când fișierul există
+until [ -f /tmp/ready.flag ]; do
+    echo "Aștept..."
+    sleep 5
+done
+echo "Fișierul e gata!"
+
+# Echivalent cu while NOT
+while [ ! -f /tmp/ready.flag ]; do
+    echo "Aștept..."
+    sleep 5
+done</code></pre>
+                <p class="fragment small-text">💡 Util pentru wait-for-condition patterns</p>
+            </section>
+            
+            <!-- Slide 43: break și continue -->
+            <section>
+                <h2>⏹️ Control Flow: <code>break</code> și <code>continue</code></h2>
+                <div class="two-columns">
+                    <div class="box-red">
+                        <h4><code>break</code></h4>
+                        <p class="small-text">Iese din bucla curentă</p>
+                        <pre><code class="language-bash">for i in {1..10}; do
+    if [ $i -eq 5 ]; then
+        break
+    fi
+    echo $i
+done
+# Output: 1 2 3 4</code></pre>
+                    </div>
+                    <div class="box-blue">
+                        <h4><code>continue</code></h4>
+                        <p class="small-text">Sare la iterația următoare</p>
+                        <pre><code class="language-bash">for i in {1..5}; do
+    if [ $i -eq 3 ]; then
+        continue
+    fi
+    echo $i
+done
+# Output: 1 2 4 5</code></pre>
+                    </div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px;">
+                    💡 <code>break N</code> și <code>continue N</code> afectează N niveluri de bucle
+                </p>
+            </section>
+            
+            <!-- Slide 44: Peer Instruction Q4 -->
+            <section data-background-color="#2d3748">
+                <h2>PEER INSTRUCTION</h2>
+                <div class="box-purple">
+                    <pre><code class="language-bash">total=0
+cat numbers.txt | while read num; do
+    ((total += num))
+done
+echo $total</code></pre>
+                    <p>Dacă numbers.txt conține 1, 2, 3 (pe linii separate), ce afișează?</p>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="quiz-option">A) 6</div>
+                    <div class="quiz-option">B) 0</div>
+                    <div class="quiz-option">C) 3</div>
+                    <div class="quiz-option">D) Eroare</div>
+                </div>
+                <p class="fragment small-text" style="margin-top: 20px; color: #68d391;">
+                    ✅ Răspuns: <strong>B</strong> - while-ul rulează în subshell, $total nu persistă!
+                </p>
+            </section>
+            
+            <!-- ==================== SECTION 6: EXERCIȚII ==================== -->
+            
+            <!-- Slide 45: Sprint Exercise -->
+            <section data-background-color="#1a365d">
+                <h2>SPRINT: Pipeline Master (10 min)</h2>
+                <div class="box-green">
+                    <p><strong>PAIR PROGRAMMING</strong> - Switch la minutul 5!</p>
+                </div>
+                <div class="warning" style="margin-top: 20px; text-align: left;">
+                    <h4>Cerințe:</h4>
+                    <ol class="small-text">
+                        <li>Găsește toți utilizatorii cu shell <code>/bin/bash</code> din <code>/etc/passwd</code></li>
+                        <li>Sortează-i alfabetic</li>
+                        <li>Afișează doar username-urile (prima coloană)</li>
+                        <li>Salvează rezultatul în <code>bash_users.txt</code></li>
+                    </ol>
+                </div>
+                <pre class="fragment"><code class="language-bash"># Soluție:
+grep "/bin/bash$" /etc/passwd | cut -d: -f1 | sort > bash_users.txt</code></pre>
+            </section>
+            
+            <!-- Slide 46: Script Integrat -->
+            <section>
+                <h2>Exemplu: Script Integrat</h2>
+                <pre><code class="language-bash">#!/bin/bash
+# system_report.sh - Raport sistem
+
+REPORT="report_$(date +%Y%m%d_%H%M%S).txt"
+
+{
+    echo "=== SYSTEM REPORT ==="
+    echo "Generated: $(date)"
+    echo "Hostname: $(hostname)"
+    echo ""
+    
+    echo "--- TOP 5 BY MEMORY ---"
+    ps aux --sort=-%mem | head -6
+    echo ""
+    
+    echo "--- DISK USAGE ---"
+    df -h | grep -v tmpfs
+    
+} | tee "$REPORT"
+
+echo -e "\n✓ Raport salvat în: $REPORT"</code></pre>
+            </section>
+            
+            <!-- ==================== SECTION 7: WRAP-UP ==================== -->
+            
+            <!-- Slide 47: Cheat Sheet Rezumat -->
+            <section>
+                <h2>Cheat Sheet Rapid</h2>
+                <div class="two-columns tiny-text">
+                    <div>
+                        <h4>Operatori</h4>
+                        <table>
+                            <tr><td><code>;</code></td><td>Secvențial</td></tr>
+                            <tr><td><code>&&</code></td><td>AND (dacă succes)</td></tr>
+                            <tr><td><code>||</code></td><td>OR (dacă eșec)</td></tr>
+                            <tr><td><code>&</code></td><td>Background</td></tr>
+                            <tr><td><code>|</code></td><td>Pipe</td></tr>
+                        </table>
+                        <h4 style="margin-top: 15px;">Redirecționare</h4>
+                        <table>
+                            <tr><td><code>&gt;</code></td><td>Suprascrie</td></tr>
+                            <tr><td><code>&gt;&gt;</code></td><td>Append</td></tr>
+                            <tr><td><code>2&gt;</code></td><td>stderr</td></tr>
+                            <tr><td><code>&amp;&gt;</code></td><td>all</td></tr>
+                            <tr><td><code>&lt;</code></td><td>Input</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4>Filtre</h4>
+                        <table>
+                            <tr><td><code>sort</code></td><td>Sortează</td></tr>
+                            <tr><td><code>uniq</code></td><td>Duplicate (consecutive!)</td></tr>
+                            <tr><td><code>cut</code></td><td>Extrage coloane</td></tr>
+                            <tr><td><code>tr</code></td><td>Translate caractere</td></tr>
+                            <tr><td><code>wc</code></td><td>Numără</td></tr>
+                        </table>
+                        <h4 style="margin-top: 15px;">Bucle</h4>
+                        <table>
+                            <tr><td><code>for x in list</code></td><td>Iterează listă</td></tr>
+                            <tr><td><code>for ((;;))</code></td><td>C-style</td></tr>
+                            <tr><td><code>while cond</code></td><td>Cât timp true</td></tr>
+                            <tr><td><code>until cond</code></td><td>Până când true</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Slide 48: Capcane de Evitat -->
+            <section>
+                <h2>Capcane de Evitat</h2>
+                <div class="box-red">
+                    <ol class="small-text" style="text-align: left;">
+                        <li class="fragment"><strong><code>uniq</code> fără <code>sort</code></strong> - elimină DOAR duplicate consecutive</li>
+                        <li class="fragment"><strong><code>{1..$N}</code></strong> - brace expansion NU funcționează cu variabile</li>
+                        <li class="fragment"><strong><code>cat file | while read</code></strong> - subshell problem, variabilele nu persistă</li>
+                        <li class="fragment"><strong><code>2>&1 > file</code></strong> - ordinea contează! Corect: <code>> file 2>&1</code></li>
+                        <li class="fragment"><strong><code>tr</code> pentru stringuri</strong> - tr lucrează pe caractere, nu stringuri</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <!-- Slide 49: Tema -->
+            <section data-background-gradient="linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%)">
+                <h2>Tema Seminar 2</h2>
+                <div class="box-blue" style="text-align: left;">
+                    <h4>Pipeline Master</h4>
+                    <p class="small-text">Consultă <code>teme/S02_01_TEMA.md</code> pentru:</p>
+                    <ul class="small-text">
+                        <li>Exerciții operatori (20%)</li>
+                        <li>Exerciții redirecționare (20%)</li>
+                        <li>Exerciții filtre (25%)</li>
+                        <li>Exerciții bucle (25%)</li>
+                        <li>Proiect integrat (10%)</li>
+                    </ul>
+                </div>
+                <p style="margin-top: 30px;">
+                    <strong>Deadline:</strong> Seminarului următor<br>
+                    <span class="small-text">Generează structura cu: <code>./S02_02_creeaza_tema.sh "Nume" Grupa</code></span>
+                </p>
+            </section>
+            
+            <!-- Slide 50: Resurse -->
+            <section>
+                <h2>Resurse Adiționale</h2>
+                <div class="two-columns small-text">
+                    <div class="box-blue">
+                        <h4>Documentație</h4>
+                        <ul>
+                            <li><code>man bash</code></li>
+                            <li><a href="https://www.gnu.org/software/bash/manual/">GNU Bash Manual</a></li>
+                            <li><a href="https://tldp.org/LDP/abs/html/">Advanced Bash Scripting Guide</a></li>
+                        </ul>
+                    </div>
+                    <div class="box-green">
+                        <h4>Practice</h4>
+                        <ul>
+                            <li><a href="https://overthewire.org/wargames/bandit/">OverTheWire: Bandit</a></li>
+                            <li><a href="https://cmdchallenge.com/">Command Challenge</a></li>
+                            <li><a href="https://explainshell.com/">ExplainShell</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Slide 51: Final -->
+            <section data-background-gradient="linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)">
+                <h1>Mulțumesc!</h1>
+                <h3>Întrebări?</h3>
+                <p style="margin-top: 50px;">
+                    <span class="emoji-large">🐧</span>
+                </p>
+                <p class="small-text" style="margin-top: 30px;">
+                    Seminar 2 | Sisteme de Operare<br>
+                    ASE București - CSIE
+                </p>
+            </section>
+            
+        </div>
+    </div>
+    
+    <!-- Reveal.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/markdown/markdown.min.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t',
+            progress: true,
+            center: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            
+            // Aspect ratio
+            width: 1920,
+            height: 1080,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            plugins: [
+                RevealHighlight,
+                RevealNotes,
+                RevealMarkdown
+            ]
+        });
+        
+        // Keyboard shortcuts
+        Reveal.addKeyBinding({keyCode: 66, key: 'B'}, function() {
+            document.body.classList.toggle('blackout');
+        });
+    </script>
+</body>
+</html>
