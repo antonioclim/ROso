@@ -1,0 +1,91 @@
+name: 🏛️ Cerere Licență Instituțională
+description: Solicită licență pentru uz instituțional
+title: "[LICENCE] Aplicație Instituțională — "
+labels: ["licence"]
+assignees:
+  - antonioclim
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Cerere Licență Instituțională
+        
+        Conform licenței restrictive a materialelor ROso, utilizarea 
+        în cadrul altor instituții necesită aprobare explicită în scris.
+        
+        **Important:** Materialele NU pot fi reproduse, adaptate sau 
+        publicate în alte lucrări sau repository-uri, nici măcar parțial.
+
+  - type: input
+    id: institution
+    attributes:
+      label: Numele Instituției
+      placeholder: "ex: Universitatea din București"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Tipul Instituției
+      options:
+        - Universitate de stat
+        - Universitate privată
+        - Colegiu tehnic
+        - Liceu
+        - Furnizor training
+    validations:
+      required: true
+
+  - type: input
+    id: country
+    attributes:
+      label: Țara
+      placeholder: "ex: România"
+    validations:
+      required: true
+
+  - type: input
+    id: contact_name
+    attributes:
+      label: Nume Persoană de Contact
+      placeholder: "ex: Prof. Dr. Ion Popescu"
+    validations:
+      required: true
+
+  - type: input
+    id: contact_position
+    attributes:
+      label: Funcția / Poziția
+      placeholder: "ex: Șef Catedră Informatică"
+    validations:
+      required: true
+
+  - type: textarea
+    id: intended_use
+    attributes:
+      label: Utilizare Planificată
+      placeholder: |
+        Descrie cum intenționezi să folosești materialele:
+        - Număr estimat de studenți
+        - Cursuri/discipline
+        - Perioadă de utilizare
+        - Modul de utilizare (predare directă, referință, etc.)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: agreements
+    attributes:
+      label: Acorduri
+      options:
+        - label: Sunt autorizat să fac această cerere în numele instituției
+          required: true
+        - label: Am citit și înțeles termenii licenței restrictive
+          required: true
+        - label: Înțeleg că materialele NU pot fi redistribuite
+          required: true
+        - label: Înțeleg că materialele NU pot fi reproduse sau adaptate în alte lucrări publicate
+          required: true
+        - label: Înțeleg că fork-urile și mirror-urile sunt interzise
+          required: true
