@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500" width="700" height="500">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #212529; }
+      .label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #212529; }
+      .code { font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; fill: #495057; }
+      .perm-r { fill: #4caf50; }
+      .perm-w { fill: #ff9800; }
+      .perm-x { fill: #2196f3; }
+      .perm-none { fill: #e0e0e0; }
+      .cell { stroke: #bdbdbd; stroke-width: 1; }
+      .header { fill: #f5f5f5; stroke: #bdbdbd; stroke-width: 1; }
+      .section { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #757575; }
+      .value { font-family: 'Consolas', monospace; font-size: 16px; font-weight: bold; fill: white; }
+      .octal { font-family: 'Consolas', monospace; font-size: 24px; font-weight: bold; fill: #212529; }
+    </style>
+  </defs>
+  
+  <!-- Title -->
+  <text x="350" y="30" text-anchor="middle" class="title">Permisiuni Unix: rwx în Octal</text>
+  
+  <!-- Permission grid header -->
+  <rect x="100" y="60" width="100" height="40" class="header"/>
+  <text x="150" y="85" text-anchor="middle" class="label" font-weight="bold">Categorie</text>
+  
+  <rect x="200" y="60" width="60" height="40" class="header"/>
+  <text x="230" y="85" text-anchor="middle" class="label">r (4)</text>
+  
+  <rect x="260" y="60" width="60" height="40" class="header"/>
+  <text x="290" y="85" text-anchor="middle" class="label">w (2)</text>
+  
+  <rect x="320" y="60" width="60" height="40" class="header"/>
+  <text x="350" y="85" text-anchor="middle" class="label">x (1)</text>
+  
+  <rect x="380" y="60" width="80" height="40" class="header"/>
+  <text x="420" y="85" text-anchor="middle" class="label">Total</text>
+  
+  <rect x="460" y="60" width="140" height="40" class="header"/>
+  <text x="530" y="85" text-anchor="middle" class="label">Simbolic</text>
+  
+  <!-- Owner row (7 = rwx) -->
+  <rect x="100" y="100" width="100" height="50" class="cell" fill="#fff3e0"/>
+  <text x="150" y="130" text-anchor="middle" class="label" font-weight="bold">Owner (u)</text>
+  
+  <rect x="200" y="100" width="60" height="50" class="cell perm-r"/>
+  <text x="230" y="132" text-anchor="middle" class="value">r</text>
+  
+  <rect x="260" y="100" width="60" height="50" class="cell perm-w"/>
+  <text x="290" y="132" text-anchor="middle" class="value">w</text>
+  
+  <rect x="320" y="100" width="60" height="50" class="cell perm-x"/>
+  <text x="350" y="132" text-anchor="middle" class="value">x</text>
+  
+  <rect x="380" y="100" width="80" height="50" class="cell" fill="white"/>
+  <text x="420" y="132" text-anchor="middle" class="octal">7</text>
+  
+  <rect x="460" y="100" width="140" height="50" class="cell" fill="white"/>
+  <text x="530" y="132" text-anchor="middle" class="code">rwx</text>
+  
+  <!-- Group row (5 = r-x) -->
+  <rect x="100" y="150" width="100" height="50" class="cell" fill="#e3f2fd"/>
+  <text x="150" y="180" text-anchor="middle" class="label" font-weight="bold">Group (g)</text>
+  
+  <rect x="200" y="150" width="60" height="50" class="cell perm-r"/>
+  <text x="230" y="182" text-anchor="middle" class="value">r</text>
+  
+  <rect x="260" y="150" width="60" height="50" class="cell perm-none"/>
+  <text x="290" y="182" text-anchor="middle" class="code">-</text>
+  
+  <rect x="320" y="150" width="60" height="50" class="cell perm-x"/>
+  <text x="350" y="182" text-anchor="middle" class="value">x</text>
+  
+  <rect x="380" y="150" width="80" height="50" class="cell" fill="white"/>
+  <text x="420" y="182" text-anchor="middle" class="octal">5</text>
+  
+  <rect x="460" y="150" width="140" height="50" class="cell" fill="white"/>
+  <text x="530" y="182" text-anchor="middle" class="code">r-x</text>
+  
+  <!-- Others row (5 = r-x) -->
+  <rect x="100" y="200" width="100" height="50" class="cell" fill="#f3e5f5"/>
+  <text x="150" y="230" text-anchor="middle" class="label" font-weight="bold">Others (o)</text>
+  
+  <rect x="200" y="200" width="60" height="50" class="cell perm-r"/>
+  <text x="230" y="232" text-anchor="middle" class="value">r</text>
+  
+  <rect x="260" y="200" width="60" height="50" class="cell perm-none"/>
+  <text x="290" y="232" text-anchor="middle" class="code">-</text>
+  
+  <rect x="320" y="200" width="60" height="50" class="cell perm-x"/>
+  <text x="350" y="232" text-anchor="middle" class="value">x</text>
+  
+  <rect x="380" y="200" width="80" height="50" class="cell" fill="white"/>
+  <text x="420" y="232" text-anchor="middle" class="octal">5</text>
+  
+  <rect x="460" y="200" width="140" height="50" class="cell" fill="white"/>
+  <text x="530" y="232" text-anchor="middle" class="code">r-x</text>
+  
+  <!-- Result box -->
+  <rect x="200" y="280" width="300" height="60" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="350" y="310" text-anchor="middle" class="label">Permisiuni complete:</text>
+  <text x="350" y="330" text-anchor="middle" class="code" font-size="18">chmod 755 = rwxr-xr-x</text>
+  
+  <!-- Legend -->
+  <text x="100" y="380" class="label" font-weight="bold">Legendă valori:</text>
+  
+  <rect x="100" y="395" width="30" height="20" class="perm-r"/>
+  <text x="140" y="410" class="code">r = 4 (read)</text>
+  
+  <rect x="250" y="395" width="30" height="20" class="perm-w"/>
+  <text x="290" y="410" class="code">w = 2 (write)</text>
+  
+  <rect x="420" y="395" width="30" height="20" class="perm-x"/>
+  <text x="460" y="410" class="code">x = 1 (execute)</text>
+  
+  <!-- Common examples -->
+  <text x="100" y="450" class="label" font-weight="bold">Exemple comune:</text>
+  <text x="100" y="470" class="code">644 = rw-r--r--  (fișiere text)</text>
+  <text x="350" y="470" class="code">755 = rwxr-xr-x  (scripturi)</text>
+  <text x="100" y="490" class="code">700 = rwx------  (privat)</text>
+  <text x="350" y="490" class="code">777 = rwxrwxrwx  (EVITĂ!)</text>
+</svg>

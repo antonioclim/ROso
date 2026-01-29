@@ -1,0 +1,603 @@
+{
+  "$schema": "https://raw.githubusercontent.com/moodle/moodle/master/question/format/json/schema.json",
+  "metadata": {
+    "title": "Seminarul 03: System Administration",
+    "description": "Quiz formativ pentru find, xargs, getopts, permisiuni Unix, CRON",
+    "course": "Sisteme de Operare",
+    "institution": "ASE București - CSIE",
+    "version": "1.0",
+    "created": "2025-01",
+    "language": "ro",
+    "estimated_time_minutes": 25,
+    "passing_grade": 60,
+    "bloom_distribution": {
+      "remember": "20%",
+      "understand": "25%",
+      "apply": "35%",
+      "analyse": "15%",
+      "evaluate": "5%"
+    }
+  },
+  "quiz_settings": {
+    "shuffle_questions": true,
+    "shuffle_answers": true,
+    "time_limit_minutes": 30,
+    "attempts_allowed": 2,
+    "grading_method": "highest",
+    "show_correct_answers": "after_close",
+    "review_options": {
+      "during_attempt": ["feedback"],
+      "immediately_after": ["feedback", "marks"],
+      "later_while_open": ["feedback", "marks", "correct_answers"],
+      "after_close": ["feedback", "marks", "correct_answers", "general_feedback"]
+    }
+  },
+  "questions": [
+    {
+      "id": "q01",
+      "type": "multichoice",
+      "category": "find și xargs",
+      "bloom_level": "remember",
+      "points": 6,
+      "question_text": "Care opțiune a comenzii `find` specifică tipul de fișier căutat?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "-type",
+          "fraction": 100,
+          "feedback": "Corect! `-type f` pentru fișiere, `-type d` pentru directoare, `-type l` pentru symlink-uri."
+        },
+        {
+          "text": "-name",
+          "fraction": 0,
+          "feedback": "Incorect. `-name` caută după numele fișierului (pattern matching), nu după tip."
+        },
+        {
+          "text": "-size",
+          "fraction": 0,
+          "feedback": "Incorect. `-size` caută după dimensiunea fișierului."
+        },
+        {
+          "text": "-mtime",
+          "fraction": 0,
+          "feedback": "Incorect. `-mtime` caută după data ultimei modificări."
+        }
+      ],
+      "general_feedback": "Opțiunea `-type` specifică tipul: `f` pentru fișiere, `d` pentru directoare, `l` pentru symlink-uri.",
+      "tags": ["find", "syntax", "remember"]
+    },
+    {
+      "id": "q02",
+      "type": "multichoice",
+      "category": "find și xargs",
+      "bloom_level": "understand",
+      "points": 7,
+      "question_text": "Tocmai ai creat un fișier nou: `touch ~/test.txt`\nImediat rulezi: `locate test.txt`\n\nCe se întâmplă?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "Găsește fișierul instant",
+          "fraction": 0,
+          "feedback": "Incorect. `locate` folosește o bază de date pre-indexată, nu caută în timp real."
+        },
+        {
+          "text": "Nu găsește fișierul (baza de date nu e actualizată)",
+          "fraction": 100,
+          "feedback": "Corect! Baza de date se actualizează periodic (de regulă noaptea). Folosește `sudo updatedb` sau `find` pentru căutări imediate."
+        },
+        {
+          "text": "Eroare - locate nu caută în home",
+          "fraction": 0,
+          "feedback": "Incorect. `locate` caută în toate directoarele indexate, inclusiv home."
+        },
+        {
+          "text": "Găsește toate fișierele test.txt, inclusiv cel nou",
+          "fraction": 0,
+          "feedback": "Incorect. Fișierul nou nu a fost încă indexat în baza de date."
+        }
+      ],
+      "general_feedback": "`locate` folosește o bază de date pre-indexată pentru căutări rapide. Pentru fișiere noi, folosește `find` sau rulează `sudo updatedb` mai întâi.",
+      "tags": ["find", "locate", "understand"]
+    },
+    {
+      "id": "q03",
+      "type": "multichoice",
+      "category": "find și xargs",
+      "bloom_level": "apply",
+      "points": 8,
+      "question_text": "Vrei să găsești toate fișierele `.log` mai mari de 10MB modificate în ultimele 7 zile. Care comandă e corectă?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "find . -name '*.log' -size +10M -mtime -7",
+          "fraction": 100,
+          "feedback": "Corect! `-name '*.log'` cu ghilimele, `-size +10M` (+ = mai mare), `-mtime -7` (- = în ultimele N zile)."
+        },
+        {
+          "text": "find . -name '*.log' -size 10M -mtime 7",
+          "fraction": 0,
+          "feedback": "Incorect. Lipsește `+` la size (exact 10M, nu mai mare) și `-` la mtime (exact 7 zile, nu ultimele 7)."
+        },
+        {
+          "text": "find . -type f '*.log' -size +10M -mtime -7",
+          "fraction": 0,
+          "feedback": "Incorect. Sintaxă greșită: `-type f` nu ia pattern direct, trebuie `-name '*.log'`."
+        },
+        {
+          "text": "find . -name *.log -size +10M -mtime -7",
+          "fraction": 0,
+          "feedback": "Incorect. Lipsesc ghilimelele: shell-ul va expanda `*.log` prematur în directorul curent."
+        }
+      ],
+      "general_feedback": "Semnele `+`/`-` la `-size` și `-mtime` sunt critice: `+` = mai mare/mai vechi, `-` = mai mic/mai recent, fără semn = exact.",
+      "tags": ["find", "apply", "syntax"]
+    },
+    {
+      "id": "q04",
+      "type": "multichoice",
+      "category": "find și xargs",
+      "bloom_level": "understand",
+      "points": 7,
+      "question_text": "Ce returnează această comandă?\n\n```bash\nfind . -type f -name \"*.txt\" -o -name \"*.md\"\n```",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "Toate fișierele .txt și toate fișierele .md",
+          "fraction": 0,
+          "feedback": "Incorect. AND are precedență mai mare decât OR în find."
+        },
+        {
+          "text": "Toate FIȘIERELE .txt și ORICE (fișier sau director) .md",
+          "fraction": 100,
+          "feedback": "Corect! Se interpretează: `(-type f AND -name \"*.txt\") OR (-name \"*.md\")`. Pentru ambele tipuri fișier, folosește paranteze."
+        },
+        {
+          "text": "Eroare de sintaxă",
+          "fraction": 0,
+          "feedback": "Incorect. Sintaxa e validă, doar rezultatul nu e cel așteptat."
+        },
+        {
+          "text": "Nimic - condițiile se exclud reciproc",
+          "fraction": 0,
+          "feedback": "Incorect. OR combină condițiile, nu le exclude."
+        }
+      ],
+      "general_feedback": "Soluția corectă: `find . -type f \\( -name \"*.txt\" -o -name \"*.md\" \\)` - parantezele grupează OR.",
+      "tags": ["find", "operators", "understand"]
+    },
+    {
+      "id": "q05",
+      "type": "multichoice",
+      "category": "find și xargs",
+      "bloom_level": "apply",
+      "points": 8,
+      "question_text": "Ai fișiere cu spații în nume. Care combinație e sigură?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "find . -name '*.txt' | xargs rm",
+          "fraction": 0,
+          "feedback": "Incorect. xargs implicit separă după spații: \"document important.txt\" devine 2 argumente separate."
+        },
+        {
+          "text": "find . -name '*.txt' -print0 | xargs -0 rm",
+          "fraction": 50,
+          "feedback": "Corect, dar nu e singura soluție. `-print0` și `-0` folosesc null ca separator."
+        },
+        {
+          "text": "find . -name '*.txt' -exec rm {} +",
+          "fraction": 50,
+          "feedback": "Corect, dar nu e singura soluție. `-exec {} +` pasează argumentele direct, fără probleme cu spații."
+        },
+        {
+          "text": "Atât B cât și C sunt corecte",
+          "fraction": 100,
+          "feedback": "Corect! Ambele metode gestionează corect fișierele cu spații în nume."
+        }
+      ],
+      "general_feedback": "Pentru fișiere cu caractere speciale: folosește `-print0 | xargs -0` sau `-exec {} +`. Niciodată `| xargs` simplu!",
+      "tags": ["find", "xargs", "apply", "security"]
+    },
+    {
+      "id": "q06",
+      "type": "multichoice",
+      "category": "getopts și parametri",
+      "bloom_level": "remember",
+      "points": 6,
+      "question_text": "Care variabilă conține numărul de argumente pasate unui script?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "$#",
+          "fraction": 100,
+          "feedback": "Corect! `$#` returnează numărul de argumente (count)."
+        },
+        {
+          "text": "$@",
+          "fraction": 0,
+          "feedback": "Incorect. `$@` conține toate argumentele ca listă separată."
+        },
+        {
+          "text": "$*",
+          "fraction": 0,
+          "feedback": "Incorect. `$*` conține toate argumentele ca un singur string."
+        },
+        {
+          "text": "$0",
+          "fraction": 0,
+          "feedback": "Incorect. `$0` conține numele scriptului."
+        }
+      ],
+      "general_feedback": "Variabile speciale: `$#` = count, `$@` = listă, `$*` = string, `$0` = script name, `$1-$9` = argumente individuale.",
+      "tags": ["bash", "variables", "remember"]
+    },
+    {
+      "id": "q07",
+      "type": "multichoice",
+      "category": "getopts și parametri",
+      "bloom_level": "understand",
+      "points": 7,
+      "question_text": "Script apelat cu: `./script.sh \"Hello World\" Test`\n\nCâte elemente iterează `for arg in \"$@\"`?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "1 element",
+          "fraction": 0,
+          "feedback": "Incorect. Sunt 2 argumente distincte."
+        },
+        {
+          "text": "2 elemente",
+          "fraction": 100,
+          "feedback": "Corect! \"Hello World\" e un singur argument (datorită ghilimelelor), Test e al doilea."
+        },
+        {
+          "text": "3 elemente",
+          "fraction": 0,
+          "feedback": "Incorect. Ar fi 3 doar fără ghilimele: \"$@\" păstrează argumentele originale."
+        },
+        {
+          "text": "4 elemente",
+          "fraction": 0,
+          "feedback": "Incorect. $0 (numele scriptului) nu e inclus în $@."
+        }
+      ],
+      "general_feedback": "Cu ghilimele duble, `\"$@\"` păstrează argumentele așa cum au fost pasate. Fără ghilimele, ar resepara după spații.",
+      "tags": ["bash", "variables", "understand"]
+    },
+    {
+      "id": "q08",
+      "type": "multichoice",
+      "category": "getopts și parametri",
+      "bloom_level": "apply",
+      "points": 8,
+      "question_text": "Pentru a parsa `-v` (flag) și `-f FILE` (cu argument), care e corect?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "while getopts \"vf\" opt; do",
+          "fraction": 0,
+          "feedback": "Incorect. Nici `-v` nici `-f` nu vor primi argument."
+        },
+        {
+          "text": "while getopts \"v:f:\" opt; do",
+          "fraction": 0,
+          "feedback": "Incorect. Ambele primesc argument, dar `-v` e doar un flag simplu."
+        },
+        {
+          "text": "while getopts \"vf:\" opt; do",
+          "fraction": 100,
+          "feedback": "Corect! `v` = flag simplu, `f:` = opțiune cu argument obligatoriu (`:` după literă)."
+        },
+        {
+          "text": "while getopts \":vf\" opt; do",
+          "fraction": 0,
+          "feedback": "Incorect. `:` la început activează silent error mode, nu rezolvă problema argumentului."
+        }
+      ],
+      "general_feedback": "În getopts, `:` după literă = necesită argument. `\":vf:\"` = silent mode + v flag + f cu argument.",
+      "tags": ["getopts", "apply", "arguments"]
+    },
+    {
+      "id": "q09",
+      "type": "multichoice",
+      "category": "permisiuni Unix",
+      "bloom_level": "remember",
+      "points": 6,
+      "question_text": "Ce permisiuni reprezintă valoarea octală `755`?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "rwxr-xr-x",
+          "fraction": 100,
+          "feedback": "Corect! 7=rwx (4+2+1), 5=r-x (4+0+1), 5=r-x (4+0+1)."
+        },
+        {
+          "text": "rwxrwxrwx",
+          "fraction": 0,
+          "feedback": "Incorect. Aceasta e 777."
+        },
+        {
+          "text": "rw-r--r--",
+          "fraction": 0,
+          "feedback": "Incorect. Aceasta e 644."
+        },
+        {
+          "text": "rwx------",
+          "fraction": 0,
+          "feedback": "Incorect. Aceasta e 700."
+        }
+      ],
+      "general_feedback": "Calcul: r=4, w=2, x=1. 755 = (4+2+1)(4+0+1)(4+0+1) = rwxr-xr-x. Tipic pentru executabile.",
+      "tags": ["permissions", "octal", "remember"]
+    },
+    {
+      "id": "q10",
+      "type": "multichoice",
+      "category": "permisiuni Unix",
+      "bloom_level": "understand",
+      "points": 7,
+      "question_text": "Un fișier are permisiunile `rw-r--r--`. După `chmod g+w file`, ce permisiuni are?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "rw-rw-r--",
+          "fraction": 100,
+          "feedback": "Corect! `g+w` adaugă write pentru group: r-- devine rw-."
+        },
+        {
+          "text": "rwxrw-r--",
+          "fraction": 0,
+          "feedback": "Incorect. `g+w` adaugă doar write la group, nu x la owner."
+        },
+        {
+          "text": "rw-r--rw-",
+          "fraction": 0,
+          "feedback": "Incorect. Confunzi `g` (group) cu `o` (others)."
+        },
+        {
+          "text": "rw-rwxr--",
+          "fraction": 0,
+          "feedback": "Incorect. `+w` adaugă doar write, nu și execute."
+        }
+      ],
+      "general_feedback": "Notație simbolică: u=user/owner, g=group, o=others, a=all. +/- adaugă/elimină permisiuni.",
+      "tags": ["permissions", "chmod", "understand"]
+    },
+    {
+      "id": "q11",
+      "type": "multichoice",
+      "category": "permisiuni Unix",
+      "bloom_level": "analyse",
+      "points": 9,
+      "question_text": "Un script `backup.sh` are permisiunile `rw-r--r--`.\nRulezi `./backup.sh` și primești \"Permission denied\".\n\nCare e problema și soluția?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "Lipsește permisiunea execute; soluție: chmod +x backup.sh",
+          "fraction": 100,
+          "feedback": "Corect! Pentru `./script.sh` ai nevoie de x. Alternativ: `bash backup.sh` (nu necesită x)."
+        },
+        {
+          "text": "Lipsește permisiunea read; soluție: chmod +r backup.sh",
+          "fraction": 0,
+          "feedback": "Incorect. Read există (r--), problema e lipsa execute."
+        },
+        {
+          "text": "Fișierul e owned de root; soluție: sudo ./backup.sh",
+          "fraction": 0,
+          "feedback": "Incorect. Ownership nu e menționat și sudo nu rezolvă lipsa permisiunii x."
+        },
+        {
+          "text": "Shebang-ul e greșit; soluție: verifică prima linie",
+          "fraction": 0,
+          "feedback": "Incorect. Shebang afectează interpretorul, nu permisiunile de execuție."
+        }
+      ],
+      "general_feedback": "rw-r--r-- = 644 nu include execute. Soluții: `chmod +x` sau `chmod 755` sau `bash script.sh`.",
+      "tags": ["permissions", "debugging", "analyse"]
+    },
+    {
+      "id": "q12",
+      "type": "multichoice",
+      "category": "permisiuni Unix",
+      "bloom_level": "apply",
+      "points": 8,
+      "question_text": "Vrei ca un script să ruleze cu permisiunile owner-ului, nu ale celui care îl execută. Ce faci?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "chmod u+s script.sh",
+          "fraction": 100,
+          "feedback": "Corect! SUID (Set User ID) face scriptul să ruleze cu UID-ul owner-ului. ATENȚIE: SUID pe scripturi e ignorat în majoritatea sistemelor moderne!"
+        },
+        {
+          "text": "chmod g+s script.sh",
+          "fraction": 0,
+          "feedback": "Incorect. SGID (g+s) rulează cu GID-ul grupului, nu al owner-ului."
+        },
+        {
+          "text": "chmod +t script.sh",
+          "fraction": 0,
+          "feedback": "Incorect. Sticky bit (+t) protejează ștergerea fișierelor în directoare publice."
+        },
+        {
+          "text": "chmod 777 script.sh",
+          "fraction": 0,
+          "feedback": "Incorect. 777 dă permisiuni tuturor, dar nu schimbă identitatea procesului."
+        }
+      ],
+      "general_feedback": "SUID/SGID sunt biți speciali de permisiuni. SUID pe scripturi shell e dezactivat din motive de securitate.",
+      "tags": ["permissions", "suid", "apply"]
+    },
+    {
+      "id": "q13",
+      "type": "multichoice",
+      "category": "CRON",
+      "bloom_level": "remember",
+      "points": 6,
+      "question_text": "Care e ordinea câmpurilor într-o linie crontab?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "minut oră zi_lună lună zi_săptămână comandă",
+          "fraction": 100,
+          "feedback": "Corect! m h dom mon dow command (minute, hour, day of month, month, day of week)."
+        },
+        {
+          "text": "oră minut zi_lună lună zi_săptămână comandă",
+          "fraction": 0,
+          "feedback": "Incorect. Minutul vine primul, nu ora."
+        },
+        {
+          "text": "minut oră lună zi_lună zi_săptămână comandă",
+          "fraction": 0,
+          "feedback": "Incorect. Zi_lună vine înaintea lunii."
+        },
+        {
+          "text": "zi_săptămână lună zi_lună oră minut comandă",
+          "fraction": 0,
+          "feedback": "Incorect. Ordinea e complet inversată."
+        }
+      ],
+      "general_feedback": "Mnemonic: \"Minute Hour Day-of-month Month Day-of-week\" (de la mic la mare în timp).",
+      "tags": ["cron", "syntax", "remember"]
+    },
+    {
+      "id": "q14",
+      "type": "multichoice",
+      "category": "CRON",
+      "bloom_level": "understand",
+      "points": 7,
+      "question_text": "Ce face această linie crontab?\n\n```\n30 2 * * 1 /home/user/backup.sh\n```",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "Rulează backup.sh în fiecare luni la 2:30 AM",
+          "fraction": 100,
+          "feedback": "Corect! 30=min, 2=oră, *=orice zi, *=orice lună, 1=luni (Monday)."
+        },
+        {
+          "text": "Rulează backup.sh pe 2 ale fiecărei luni la 00:30",
+          "fraction": 0,
+          "feedback": "Incorect. Confunzi poziția orei (2) cu ziua lunii."
+        },
+        {
+          "text": "Rulează backup.sh în fiecare zi la 2:30 AM",
+          "fraction": 0,
+          "feedback": "Incorect. Câmpul 5 (zi_săptămână=1) restricționează la luni."
+        },
+        {
+          "text": "Rulează backup.sh o dată pe lună, luni",
+          "fraction": 0,
+          "feedback": "Incorect. Rulează în FIECARE luni, nu o dată pe lună."
+        }
+      ],
+      "general_feedback": "Câmpul 5: 0 și 7 = duminică, 1 = luni, ..., 6 = sâmbătă.",
+      "tags": ["cron", "interpret", "understand"]
+    },
+    {
+      "id": "q15",
+      "type": "multichoice",
+      "category": "CRON",
+      "bloom_level": "apply",
+      "points": 8,
+      "question_text": "Vrei să rulezi un script la fiecare 15 minute. Care linie e corectă?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "*/15 * * * * /path/script.sh",
+          "fraction": 100,
+          "feedback": "Corect! `*/15` = step value, rulează la minutele 0, 15, 30, 45."
+        },
+        {
+          "text": "15 * * * * /path/script.sh",
+          "fraction": 0,
+          "feedback": "Incorect. Rulează doar la minutul 15 al fiecărei ore, nu la fiecare 15 minute."
+        },
+        {
+          "text": "0-15 * * * * /path/script.sh",
+          "fraction": 0,
+          "feedback": "Incorect. Range 0-15 = rulează în minutele 0, 1, 2, ..., 15 (de 16 ori pe oră!)."
+        },
+        {
+          "text": "0,15,30,45 * * * * /path/script.sh",
+          "fraction": 80,
+          "feedback": "Funcțional corect, dar `*/15` e mai elegant și ușor de citit."
+        }
+      ],
+      "general_feedback": "Sintaxă: `*/n` = step value (la fiecare n), `n-m` = range, `n,m,o` = listă.",
+      "tags": ["cron", "apply", "interval"]
+    },
+    {
+      "id": "q16",
+      "type": "multichoice",
+      "category": "CRON",
+      "bloom_level": "analyse",
+      "points": 9,
+      "question_text": "Un cron job nu rulează. Scriptul funcționează manual.\nLinia crontab: `0 3 * * * backup.sh`\n\nCare e cea mai probabilă cauză?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "Lipsește calea absolută către script",
+          "fraction": 100,
+          "feedback": "Corect! Cron rulează cu PATH minimal. Folosește `/home/user/backup.sh` sau setează PATH în crontab."
+        },
+        {
+          "text": "Ora 3 nu există (daylight saving)",
+          "fraction": 0,
+          "feedback": "Incorect. DST e o problemă rară și nu prima de verificat."
+        },
+        {
+          "text": "Cron daemon nu rulează",
+          "fraction": 0,
+          "feedback": "Incorect. Dacă scriptul rulează manual din terminal, sistemul funcționează."
+        },
+        {
+          "text": "Permisiuni insuficiente pe crontab",
+          "fraction": 0,
+          "feedback": "Incorect. Eroarea de permisiuni ar fi diferită (crontab: permission denied)."
+        }
+      ],
+      "general_feedback": "Probleme comune cron: PATH minimal, variabile de mediu lipsă, output neredirectat. Testează cu `* * * * *` pentru debugging.",
+      "tags": ["cron", "debugging", "analyse"]
+    },
+    {
+      "id": "q17",
+      "type": "multichoice",
+      "category": "Evaluare generală",
+      "bloom_level": "evaluate",
+      "points": 10,
+      "question_text": "Trebuie să procesezi 10,000 de fișiere .log, ștergând liniile goale.\nCare abordare e cea mai eficientă?",
+      "question_format": "markdown",
+      "answers": [
+        {
+          "text": "for f in *.log; do sed -i '/^$/d' \"$f\"; done",
+          "fraction": 20,
+          "feedback": "Funcționează, dar pornește 10,000 procese sed - foarte lent."
+        },
+        {
+          "text": "find . -name '*.log' -exec sed -i '/^$/d' {} \\;",
+          "fraction": 20,
+          "feedback": "Funcționează, dar `\\;` pornește un sed per fișier - la fel de lent."
+        },
+        {
+          "text": "find . -name '*.log' -exec sed -i '/^$/d' {} +",
+          "fraction": 100,
+          "feedback": "Corect! `+` grupează fișierele și minimizează numărul de procese fork-ate."
+        },
+        {
+          "text": "find . -name '*.log' | xargs sed -i '/^$/d'",
+          "fraction": 40,
+          "feedback": "Aproape corect, dar probleme cu spații în nume. Ar trebui `-print0 | xargs -0`."
+        }
+      ],
+      "general_feedback": "Pentru procesare batch: `-exec {} +` sau `-print0 | xargs -0` sunt cele mai eficiente și sigure.",
+      "tags": ["performance", "evaluate", "best-practice"]
+    }
+  ],
+  "export_info": {
+    "format_version": "1.0",
+    "compatible_with": ["Moodle 4.x", "Canvas LMS", "Blackboard"],
+    "import_instructions": "Import as GIFT or JSON format in your LMS quiz bank."
+  }
+}

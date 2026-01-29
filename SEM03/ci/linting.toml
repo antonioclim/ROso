@@ -1,0 +1,153 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Configurare Linting — Seminarul 03
+# Sisteme de Operare | ASE București - CSIE
+# ═══════════════════════════════════════════════════════════════════════════════
+# Fișier: ci/linting.toml
+# Conține configurări pentru shellcheck și ruff
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# RUFF - Python Linter
+# ═══════════════════════════════════════════════════════════════════════════════
+# Documentație: https://docs.astral.sh/ruff/configuration/
+# Utilizare: ruff check scripts/python/*.py
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tool.ruff]
+# Versiunea Python țintă
+target-version = "py311"
+
+# Lungimea maximă a liniei
+line-length = 100
+
+# Directoare de exclus
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    ".eggs",
+    "*.egg-info",
+    "build",
+    "dist",
+]
+
+# Directoare sursă
+src = ["scripts/python"]
+
+[tool.ruff.lint]
+# Reguli activate
+# E = pycodestyle errors
+# F = Pyflakes
+# W = pycodestyle warnings
+# I = isort
+# N = pep8-naming
+# D = pydocstyle
+# UP = pyupgrade
+# B = flake8-bugbear
+# C4 = flake8-comprehensions
+# SIM = flake8-simplify
+select = [
+    "E",      # pycodestyle errors
+    "F",      # Pyflakes
+    "W",      # pycodestyle warnings
+    "I",      # isort (import sorting)
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "SIM",    # flake8-simplify
+]
+
+# Reguli ignorate
+ignore = [
+    "D100",   # Missing docstring in public module
+    "D104",   # Missing docstring in public package
+    "D107",   # Missing docstring in __init__
+    "E501",   # Line too long (handled by line-length)
+    "B008",   # Do not perform function calls in argument defaults
+    "B905",   # `zip()` without explicit `strict=`
+    "SIM108", # Use ternary operator instead of if-else
+]
+
+# Reguli fixabile automat
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.per-file-ignores]
+# Ignoră anumite reguli în fișiere de test
+"**/test_*.py" = ["D", "S101"]
+"**/*_test.py" = ["D", "S101"]
+
+[tool.ruff.lint.isort]
+# Configurare sortare import-uri
+known-first-party = ["scripts"]
+force-single-line = false
+lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+# Stil docstring
+convention = "google"
+
+[tool.ruff.format]
+# Stil formatare
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SHELLCHECK - Bash Linter
+# ═══════════════════════════════════════════════════════════════════════════════
+# Documentație: https://www.shellcheck.net/wiki/
+# Utilizare: shellcheck -f gcc scripts/bash/*.sh
+# 
+# Notă: Shellcheck nu folosește TOML nativ, dar suportă directive în cod.
+# Aceste setări sunt pentru referință și pot fi aplicate via argumente CLI.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[tool.shellcheck]
+# Shell implicit
+shell = "bash"
+
+# Nivel severitate: error, warning, info, style
+severity = "warning"
+
+# Coduri de exclus global
+# SC1090 - Can't follow non-constant source
+# SC1091 - Not following sourced file
+# SC2034 - Variable appears unused
+# SC2086 - Double quote to prevent globbing (uneori intenționat)
+exclude = [
+    "SC1090",
+    "SC1091",
+]
+
+# Format output
+format = "tty"  # sau: gcc, json, checkstyle, diff
+
+# Directive comune pentru a adăuga în scripturi:
+# shellcheck disable=SC2086  # pentru o linie
+# shellcheck source=./lib.sh  # pentru source
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EXEMPLE UTILIZARE
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Ruff:
+#   ruff check scripts/python/           # Verificare
+#   ruff check scripts/python/ --fix     # Auto-fix
+#   ruff format scripts/python/          # Formatare
+#
+# Shellcheck:
+#   shellcheck scripts/bash/*.sh         # Verificare
+#   shellcheck -f gcc scripts/bash/*.sh  # Format GCC (pentru IDE)
+#   shellcheck -x scripts/bash/*.sh      # Urmărește surse externe
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PYPROJECT.TOML SNIPPET
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dacă preferi pyproject.toml, copiază secțiunile [tool.ruff.*] acolo.
+# ═══════════════════════════════════════════════════════════════════════════════
