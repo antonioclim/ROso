@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar 6: CAPSTONE Projects | Sisteme de Operare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai.min.css">
+    <style>
+        :root {
+            --r-main-font-size: 32px;
+            --r-heading1-size: 2.2em;
+            --r-heading2-size: 1.6em;
+            --r-heading3-size: 1.3em;
+            --r-code-font: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+        .reveal pre { width: 100%; font-size: 0.55em; }
+        .reveal code { font-family: var(--r-code-font); }
+        .reveal ul { display: block; margin-left: 1em; }
+        .reveal li { margin-bottom: 0.5em; }
+        .two-columns { display: flex; gap: 2em; }
+        .two-columns > * { flex: 1; }
+        .highlight-box { background: rgba(100, 100, 255, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #6366f1; }
+        .warning-box { background: rgba(255, 150, 50, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #f59e0b; }
+        .success-box { background: rgba(50, 200, 100, 0.2); padding: 1em; border-radius: 10px; border-left: 4px solid #10b981; }
+        .architecture-diagram { background: #1a1a2e; padding: 1.5em; border-radius: 10px; font-family: monospace; font-size: 0.7em; line-height: 1.4; }
+        .file-tree { text-align: left; font-family: monospace; font-size: 0.65em; background: #0d1117; padding: 1em; border-radius: 8px; }
+        .badge { display: inline-block; padding: 0.3em 0.8em; border-radius: 20px; font-size: 0.7em; margin: 0.2em; }
+        .badge-monitor { background: #3b82f6; }
+        .badge-backup { background: #10b981; }
+        .badge-deployer { background: #f59e0b; }
+        .progress-bar { height: 8px; background: #333; border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+        .metric-card { background: rgba(255,255,255,0.05); padding: 1em; border-radius: 8px; text-align: center; }
+        .metric-value { font-size: 2em; font-weight: bold; color: #6366f1; }
+        .reveal .slides section .fragment.fade-in-then-semi-out.visible:not(.current-fragment) { opacity: 0.3; }
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============== TITLE SLIDE ============== -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)">
+    <h1>CAPSTONE Projects</h1>
+<p><strong>Observație din laborator:</strong> nu aştepta „finalul” ca să faci deploy. Un deployment urât, dar funcţional, în săptămâna 1–2 bate de obicei un deployment perfect încercat în ultima seară. Fă-l devreme şi iterează.</p>
+
+    <h3>Seminar 6: Integrare Cunoștințe SO</h3>
+    <p style="margin-top: 2em; opacity: 0.7;">
+        Sisteme de Operare • ASE București CSIE<br>
+        <small>Proiecte practice: Monitor • Backup • Deployer</small>
+    </p>
+    <div style="margin-top: 2em;">
+        <span class="badge badge-monitor">🔍 Monitor</span>
+        <span class="badge badge-backup">💾 Backup</span>
+        <span class="badge badge-deployer">🚀 Deployer</span>
+    </div>
+</section>
+
+<!-- ============== OBIECTIVE ============== -->
+<section>
+    <section data-background-color="#1e1e3f">
+        <h2>Obiective de Învățare</h2>
+        <p>Ce veți stăpâni la finalul acestui modul</p>
+    </section>
+    
+    <section>
+        <h3>Competențe Tehnice</h3>
+        <div class="two-columns">
+            <div>
+                <h4 style="color: #6366f1;">Hard Skills</h4>
+                <ul>
+                    <li class="fragment">Scripting Bash avansat</li>
+                    <li class="fragment">Arhitectură modulară</li>
+                    <li class="fragment">Error handling robust</li>
+                    <li class="fragment">Testing & automation</li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #8b5cf6;">Concepte SO</h4>
+                <ul>
+                    <li class="fragment">Procese și resurse</li>
+                    <li class="fragment">Sistemul de fișiere</li>
+                    <li class="fragment">Pipes și redirectări</li>
+                    <li class="fragment">Scheduling & cron</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Taxonomia Bloom - Nivel Aplicat</h3>
+        <div style="display: flex; align-items: center; gap: 2em;">
+            <div style="flex: 1;">
+                <div class="metric-card fragment">
+                    <div style="font-size: 1.5em;">📖</div>
+                    <div>Cunoaștere</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="metric-card fragment">
+                    <div style="font-size: 1.5em;">🔍</div>
+                    <div>Înțelegere</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="metric-card fragment">
+                    <div style="font-size: 1.5em;">⚙️</div>
+                    <div>Aplicare</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="metric-card fragment">
+                    <div style="font-size: 1.5em;">📊</div>
+                    <div>Analiză</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="metric-card fragment">
+                    <div style="font-size: 1.5em;">🎯</div>
+                    <div>Sinteză</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<!-- ============== PROIECTE OVERVIEW ============== -->
+<section>
+    <section data-background-color="#1a365d">
+        <h2>Cele 3 Proiecte CAPSTONE</h2>
+        <p>Suite completă de instrumente DevOps</p>
+    </section>
+    
+    <section>
+        <h3><span class="badge badge-monitor">🔍 Monitor</span> System Monitor</h3>
+        <div class="two-columns">
+            <div>
+                <div class="highlight-box">
+                    <strong>Scop:</strong> Monitorizare resurse sistem în timp real
+                </div>
+                <ul style="margin-top: 1em;">
+                    <li>CPU, memorie, disk I/O</li>
+                    <li>Procese și servicii</li>
+                    <li>Alerting cu threshold-uri</li>
+                    <li>Export metrici (JSON/CSV)</li>
+                </ul>
+            </div>
+            <div>
+                <pre><code class="language-bash"># Exemplu utilizare
+./monitor.sh --cpu --memory \
+    --threshold-cpu=80 \
+    --alert-email=admin@example.com
+
+# Output
+CPU: 45% [████████░░] OK
+MEM: 72% [██████████████░░] WARN</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3><span class="badge badge-backup">💾 Backup</span> Backup Manager</h3>
+        <div class="two-columns">
+            <div>
+                <div class="highlight-box">
+                    <strong>Scop:</strong> Backup automatizat cu strategii multiple
+                </div>
+                <ul style="margin-top: 1em;">
+                    <li>Full & incremental backups</li>
+                    <li>Compresie multi-algoritm</li>
+                    <li>Verificare integritate</li>
+                    <li>Rotație automată</li>
+                </ul>
+            </div>
+            <div>
+                <pre><code class="language-bash"># Exemplu utilizare
+./backup.sh --source=/var/www \
+    --dest=/backup \
+    --type=incremental \
+    --compress=zstd \
+    --keep=7
+
+# Output
+[INFO] Starting incremental backup
+[INFO] Files changed: 42
+[INFO] Compressed: 850MB → 120MB
+[OK] Backup complete: backup_20240115.tar.zst</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <h3><span class="badge badge-deployer">🚀 Deployer</span> Application Deployer</h3>
+        <div class="two-columns">
+            <div>
+                <div class="highlight-box">
+                    <strong>Scop:</strong> Deployment automat cu rollback
+                </div>
+                <ul style="margin-top: 1em;">
+                    <li>Rolling / Blue-Green / Canary</li>
+                    <li>Health checks automate</li>
+                    <li>Hooks pre/post deploy</li>
+                    <li>Rollback instant</li>
+                </ul>
+            </div>
+            <div>
+                <pre><code class="language-bash"># Exemplu utilizare
+./deploy.sh --app=myapp \
+    --version=2.1.0 \
+    --strategy=blue-green \
+    --health-check=/api/health
+
+# Output
+[DEPLOY] Deploying myapp v2.1.0
+[CHECK] Health check: OK (200ms)
+[SWITCH] Traffic → green environment
+[SUCCESS] Deployment complete!</code></pre>
+            </div>
+        </div>
+    </section>
+</section>
+
+<!-- ============== ARHITECTURĂ ============== -->
+<section>
+    <section data-background-color="#1e3a1e">
+        <h2>Arhitectură Modulară</h2>
+        <p>Design patterns pentru scripturi Bash profesionale</p>
+    </section>
+    
+    <section>
+        <h3>Structura unui Proiect CAPSTONE</h3>
+        <div class="file-tree">
+<pre>
+project/
+├── 📄 main.sh              # Entry point - orchestrare
+├── 📁 core/
+│   ├── project_core.sh     # Logică principală
+│   ├── project_utils.sh    # Funcții utilitare  
+│   └── project_config.sh   # Gestiune configurație
+├── 📁 lib/
+│   ├── logging.sh          # Framework logging
+│   ├── validation.sh       # Validare input
+│   └── common.sh           # Funcții comune
+├── 📁 config/
+│   ├── default.conf        # Configurație implicită
+│   └── project.conf        # Configurație specifică
+├── 📁 tests/
+│   ├── unit/               # Teste unitare
+│   └── integration/        # Teste integrare
+└── 📄 README.md            # Documentație
+</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Separarea Responsabilităților</h3>
+        <div class="architecture-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                      ENTRY POINT                            │
+│                       main.sh                               │
+│         (Argument parsing, orchestration, UI)               │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+        ┌─────────────┼─────────────┐
+        ▼             ▼             ▼
+┌───────────────┐ ┌───────────────┐ ┌───────────────┐
+│   CORE LOGIC  │ │   UTILITIES   │ │    CONFIG     │
+│   *_core.sh   │ │   *_utils.sh  │ │  *_config.sh  │
+│               │ │               │ │               │
+│ • Business    │ │ • Helpers     │ │ • Load/Save   │
+│   logic       │ │ • Formatting  │ │ • Validate    │
+│ • Algorithms  │ │ • I/O ops     │ │ • Defaults    │
+└───────┬───────┘ └───────────────┘ └───────────────┘
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    SHARED LIBRARIES                         │
+│           logging.sh │ validation.sh │ common.sh            │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Pattern: Source Chain</h3>
+        <pre><code class="language-bash">#!/bin/bash
+# main.sh - Entry point cu source chain
+
+# Determină directorul scriptului
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source dependencies în ordinea corectă
+source "${SCRIPT_DIR}/lib/common.sh"      # 1. Funcții comune
+source "${SCRIPT_DIR}/lib/logging.sh"     # 2. Logging (depinde de common)
+source "${SCRIPT_DIR}/lib/validation.sh"  # 3. Validare
+source "${SCRIPT_DIR}/core/config.sh"     # 4. Configurație
+source "${SCRIPT_DIR}/core/utils.sh"      # 5. Utilitare specifice
+source "${SCRIPT_DIR}/core/core.sh"       # 6. Logică principală
+
+# Entry point
+main() {
+    parse_arguments "$@"
+    load_configuration
+    validate_environment
+    execute_command
+}
+
+main "$@"</code></pre>
+    </section>
+</section>
+
+<!-- ============== CONCEPTE CHEIE ============== -->
+<section>
+    <section data-background-color="#3d1a1a">
+        <h2>Concepte Fundamentale</h2>
+        <p>Elemente esențiale pentru proiecte robuste</p>
+    </section>
+    
+    <section>
+        <h3>1. Error Handling Defensiv</h3>
+        <pre><code class="language-bash">#!/bin/bash
+set -euo pipefail  # Fail fast
+
+# Trap pentru cleanup la erori
+cleanup() {
+    local exit_code=$?
+    rm -rf "${TEMP_DIR:-}"
+    exit $exit_code
+}
+trap cleanup EXIT ERR
+
+# Error handler cu context
+error_handler() {
+    local line=$1 cmd=$2 code=$3
+    log_error "Command '$cmd' failed at line $line (exit: $code)"
+    # Stack trace
+    local frame=0
+    while caller $frame; do
+        ((frame++))
+    done
+}</code></pre>
+    </section>
+    
+    <section>
+        <h3>2. Logging Multi-nivel</h3>
+        <pre><code class="language-bash"># Nivele de logging
+declare -A LOG_LEVELS=(
+    [TRACE]=0 [DEBUG]=1 [INFO]=2 
+    [WARN]=3 [ERROR]=4 [FATAL]=5
+)
+
+log() {
+    local level=$1; shift
+    local msg="$*"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    
+    # Culori pentru terminal
+    case $level in
+        INFO)  color="\e[32m" ;;  # Verde
+        WARN)  color="\e[33m" ;;  # Galben
+        ERROR) color="\e[31m" ;;  # Roșu
+        *)     color="\e[0m"  ;;
+    esac
+    
+    printf "${color}[%s] [%-5s] %s\e[0m\n" \
+        "$timestamp" "$level" "$msg" >&2
+}</code></pre>
+    </section>
+    
+    <section>
+        <h3>3. Validare Input</h3>
+        <pre><code class="language-bash"># Validare cu mesaje descriptive
+validate_path() {
+    local path=$1 type=$2
+    
+    [[ -z "$path" ]] && {
+        log_error "Path cannot be empty"
+        return 1
+    }
+    
+    case $type in
+        file)
+            [[ -f "$path" ]] || {
+                log_error "File not found: $path"
+                return 1
+            }
+            [[ -r "$path" ]] || {
+                log_error "File not readable: $path"
+                return 1
+            }
+            ;;
+        directory)
+            [[ -d "$path" ]] || {
+                log_error "Directory not found: $path"
+                return 1
+            }
+            ;;
+    esac
+    return 0
+}</code></pre>
+    </section>
+    
+    <section>
+        <h3>4. Gestiune Configurație</h3>
+        <pre><code class="language-bash"># Încărcare configurație cu defaults
+load_config() {
+    local config_file=${1:-"$DEFAULT_CONFIG"}
+    
+    # Setează defaults
+    declare -g MAX_RETRIES=3
+    declare -g TIMEOUT=30
+    declare -g LOG_LEVEL="INFO"
+    
+    # Override din fișier dacă există
+    if [[ -f "$config_file" ]]; then
+        # Validează și încarcă
+        while IFS='=' read -r key value; do
+            [[ "$key" =~ ^[[:space:]]*# ]] && continue  # Skip comments
+            [[ -z "$key" ]] && continue                  # Skip empty
+            
+            # Sanitize și setează
+            key=$(echo "$key" | tr -d '[:space:]')
+            declare -g "$key"="$value"
+        done < "$config_file"
+    fi
+}</code></pre>
+    </section>
+</section>
+
+<!-- ============== WORKFLOW DEZVOLTARE ============== -->
+<section>
+    <section data-background-color="#1a2d3d">
+        <h2>Workflow de Dezvoltare</h2>
+        <p>Proces iterativ pentru proiecte de calitate</p>
+    </section>
+    
+    <section>
+        <h3>Ciclul TDD pentru Bash</h3>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 1em;">
+            <div class="metric-card" style="background: rgba(239,68,68,0.2);">
+                <div style="font-size: 2em;">🔴</div>
+                <div><strong>RED</strong></div>
+                <div style="font-size: 0.8em;">Scrie test<br>care pică</div>
+            </div>
+            <div style="font-size: 2em;">→</div>
+            <div class="metric-card" style="background: rgba(34,197,94,0.2);">
+                <div style="font-size: 2em;">🟢</div>
+                <div><strong>GREEN</strong></div>
+                <div style="font-size: 0.8em;">Implementează<br>minimal</div>
+            </div>
+            <div style="font-size: 2em;">→</div>
+            <div class="metric-card" style="background: rgba(59,130,246,0.2);">
+                <div style="font-size: 2em;">🔵</div>
+                <div><strong>REFACTOR</strong></div>
+                <div style="font-size: 0.8em;">Îmbunătățește<br>codul</div>
+            </div>
+            <div style="font-size: 2em;">↺</div>
+        </div>
+    </section>
+    
+    <section>
+        <h3>Test Framework Exemplu</h3>
+        <pre><code class="language-bash">#!/bin/bash
+# test_backup.sh
+
+source ./test_helpers.sh
+
+test_backup_creates_archive() {
+    # Arrange
+    local src=$(mktemp -d)
+    echo "test data" > "$src/file.txt"
+    local dest=$(mktemp -d)
+    
+    # Act
+    ./backup.sh --source="$src" --dest="$dest" --type=full
+    
+    # Assert
+    assert_file_exists "$dest"/*.tar.gz
+    assert_archive_contains "$dest"/*.tar.gz "file.txt"
+    
+    # Cleanup
+    rm -rf "$src" "$dest"
+}
+
+test_backup_validates_source() {
+    # Arrange
+    local invalid_path="/nonexistent/path"
+    
+    # Act & Assert
+    assert_fails ./backup.sh --source="$invalid_path"
+    assert_output_contains "not found"
+}
+
+run_tests</code></pre>
+    </section>
+    
+    <section>
+        <h3>Demo Scripts - Învățare Interactivă</h3>
+        <div class="highlight-box">
+            <p>Fiecare proiect include <strong>demo scripts</strong> interactive:</p>
+        </div>
+        <pre><code class="language-bash"># Rulare demo Monitor
+./demo_monitor.sh
+
+# Output interactiv:
+╔══════════════════════════════════════════╗
+║     🔍 MONITOR - Demo Interactiv         ║
+╠══════════════════════════════════════════╣
+║  1. Demo CPU Monitoring                  ║
+║  2. Demo Memory Monitoring               ║
+║  3. Demo Disk Monitoring                 ║
+║  4. Demo Alert System                    ║
+║  5. Demo Export Metrics                  ║
+║  6. Run All Demos                        ║
+║  0. Exit                                 ║
+╚══════════════════════════════════════════╝
+Selectați opțiunea: _</code></pre>
+    </section>
+</section>
+
+<!-- ============== KIT EDUCAȚIONAL ============== -->
+<section>
+    <section data-background-color="#2d1a3d">
+        <h2>Kitul Educațional Complet</h2>
+        <p>Tot ce aveți nevoie pentru a începe</p>
+    </section>
+    
+    <section>
+        <h3>Structura Kitului</h3>
+        <div class="file-tree">
+<pre>
+SEM11-12_COMPLET/
+├── 📁 scripts/
+│   ├── 📁 projects/
+│   │   ├── 📁 monitor/      # ~2500 linii
+│   │   ├── 📁 backup/       # ~2500 linii  
+│   │   └── 📁 deployer/     # ~2600 linii
+│   ├── demo_monitor.sh      # Demo interactiv
+│   ├── demo_backup.sh       # Demo interactiv
+│   ├── demo_deployer.sh     # Demo interactiv
+│   ├── install.sh           # Instalare automată
+│   ├── uninstall.sh         # Dezinstalare
+│   └── check_dependencies.sh # Verificare sistem
+├── 📁 docs/
+│   ├── S06_00_Introducere.md
+│   ├── S06_01_Arhitectura.md
+│   └── ... (9 documente)
+├── 📁 presentations/
+│   └── *.html (Reveal.js)
+└── 📄 README.md
+</pre>
+        </div>
+        <p style="margin-top: 1em;"><strong>Total:</strong> ~15,000+ linii de cod și documentație</p>
+    </section>
+    
+    <section>
+        <h3>Quick Start</h3>
+        <pre><code class="language-bash"># 1. Clonare/Download kit
+cd ~/SEM11-12_COMPLET
+
+# 2. Verificare dependențe
+./scripts/check_dependencies.sh
+
+# 3. Instalare proiecte
+./scripts/install.sh --all
+
+# 4. Rulare demo-uri pentru învățare
+./scripts/demo_monitor.sh
+./scripts/demo_backup.sh
+./scripts/demo_deployer.sh
+
+# 5. Start dezvoltare proprie
+cd scripts/projects/monitor
+./monitor.sh --help</code></pre>
+    </section>
+</section>
+
+<!-- ============== EVALUARE ============== -->
+<section>
+    <section data-background-color="#3d2d1a">
+        <h2>Criterii de Evaluare</h2>
+        <p>Cum va fi evaluat proiectul vostru</p>
+    </section>
+    
+    <section>
+        <h3>Rubrica de Evaluare</h3>
+        <table style="font-size: 0.7em;">
+            <thead>
+                <tr>
+                    <th>Criteriu</th>
+                    <th>Punctaj</th>
+                    <th>Descriere</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="fragment">
+                    <td><strong>Funcționalitate</strong></td>
+                    <td>30%</td>
+                    <td>Implementare corectă a cerințelor</td>
+                </tr>
+                <tr class="fragment">
+                    <td><strong>Arhitectură</strong></td>
+                    <td>25%</td>
+                    <td>Modularitate, separare responsabilități</td>
+                </tr>
+                <tr class="fragment">
+                    <td><strong>Error Handling</strong></td>
+                    <td>15%</td>
+                    <td>Gestionare robustă a erorilor</td>
+                </tr>
+                <tr class="fragment">
+                    <td><strong>Testing</strong></td>
+                    <td>15%</td>
+                    <td>Teste unitare și de integrare</td>
+                </tr>
+                <tr class="fragment">
+                    <td><strong>Documentație</strong></td>
+                    <td>10%</td>
+                    <td>README, comentarii, help</td>
+                </tr>
+                <tr class="fragment">
+                    <td><strong>Bonus</strong></td>
+                    <td>+5%</td>
+                    <td>Features extra, optimizări</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</section>
+
+<!-- ============== NEXT STEPS ============== -->
+<section data-background-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)">
+    <h2>Următorii Pași</h2>
+    <div class="two-columns">
+        <div class="highlight-box">
+            <h4>Seminarul Acesta</h4>
+            <ol style="font-size: 0.9em;">
+                <li>Setup mediu de lucru</li>
+                <li>Alegere proiect (sau toate 3)</li>
+                <li>Explorare cod sursă</li>
+                <li>Rulare demo-uri</li>
+            </ol>
+        </div>
+        <div class="success-box">
+            <h4>Până Data Viitoare</h4>
+            <ol style="font-size: 0.9em;">
+                <li>Studiați arhitectura</li>
+                <li>Implementați un feature</li>
+                <li>Scrieți teste</li>
+                <li>Pregătiți întrebări</li>
+            </ol>
+        </div>
+    </div>
+    <p style="margin-top: 2em;">
+        <strong>Întrebări?</strong> 🤔
+    </p>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/notes/notes.min.js"></script>
+<script>
+Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    showSlideNumber: 'all',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    plugins: [RevealHighlight, RevealNotes],
+    highlight: {
+        highlightOnLoad: true
+    }
+});
+</script>
+</body>
+</html>

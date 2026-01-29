@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <style>
+      .box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; rx: 8; }
+      .box-highlight { fill: #bbdefb; stroke: #1565c0; stroke-width: 3; rx: 8; }
+      .arrow { fill: none; stroke: #424242; stroke-width: 2; marker-end: url(#arrowhead); }
+      .text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #212121; }
+      .text-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #1565c0; }
+      .text-small { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #616161; }
+      .comment { font-family: 'Courier New', monospace; font-size: 10px; fill: #757575; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#424242"/>
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="text-title">Structura Standard Script Bash - CAPSTONE</text>
+  
+  <!-- SHEBANG -->
+  <rect x="300" y="50" width="200" height="45" class="box-highlight"/>
+  <text x="400" y="72" text-anchor="middle" class="text">#!/bin/bash</text>
+  <text x="400" y="88" text-anchor="middle" class="text-small">set -euo pipefail</text>
+  
+  <line x1="400" y1="95" x2="400" y2="115" class="arrow"/>
+  
+  <!-- SETUP -->
+  <rect x="300" y="115" width="200" height="50" class="box"/>
+  <text x="400" y="140" text-anchor="middle" class="text">SETUP_SI_VALIDARE</text>
+  <text x="400" y="158" text-anchor="middle" class="text-small">SCRIPT_DIR, variabile globale</text>
+  
+  <line x1="400" y1="165" x2="400" y2="185" class="arrow"/>
+  
+  <!-- SOURCE LIBS -->
+  <rect x="300" y="185" width="200" height="50" class="box"/>
+  <text x="400" y="210" text-anchor="middle" class="text">INCARCA_BIBLIOTECI</text>
+  <text x="400" y="228" text-anchor="middle" class="text-small">source lib/core.sh, etc.</text>
+  
+  <line x1="400" y1="235" x2="400" y2="255" class="arrow"/>
+  
+  <!-- PARSE ARGS -->
+  <rect x="300" y="255" width="200" height="50" class="box"/>
+  <text x="400" y="280" text-anchor="middle" class="text">PARSEAZA_ARGUMENTE</text>
+  <text x="400" y="298" text-anchor="middle" class="text-small">getopts, validare input</text>
+  
+  <line x1="400" y1="305" x2="400" y2="325" class="arrow"/>
+  
+  <!-- DEFINE FUNCTIONS -->
+  <rect x="300" y="325" width="200" height="50" class="box"/>
+  <text x="400" y="350" text-anchor="middle" class="text">DEFINIRE_FUNCTII</text>
+  <text x="400" y="368" text-anchor="middle" class="text-small">funcții locale specifice</text>
+  
+  <line x1="400" y1="375" x2="400" y2="395" class="arrow"/>
+  
+  <!-- MAIN PROCESSING -->
+  <rect x="300" y="395" width="200" height="50" class="box-highlight"/>
+  <text x="400" y="420" text-anchor="middle" class="text">PROCESARE_PRINCIPALA</text>
+  <text x="400" y="438" text-anchor="middle" class="text-small">logica de business</text>
+  
+  <line x1="400" y1="445" x2="400" y2="465" class="arrow"/>
+  
+  <!-- OUTPUT -->
+  <rect x="300" y="465" width="200" height="50" class="box"/>
+  <text x="400" y="490" text-anchor="middle" class="text">AFISARE_REZULTATE</text>
+  <text x="400" y="508" text-anchor="middle" class="text-small">output, logging, cleanup</text>
+  
+  <!-- Side annotations -->
+  <text x="520" y="75" class="comment"># Error handling strict</text>
+  <text x="520" y="140" class="comment"># Determină locația scriptului</text>
+  <text x="520" y="210" class="comment"># Ordinea contează!</text>
+  <text x="520" y="280" class="comment"># -h, --help, validări</text>
+  <text x="520" y="350" class="comment"># După biblioteci, înainte de main</text>
+  <text x="520" y="420" class="comment"># Aici se întâmplă magia</text>
+  <text x="520" y="490" class="comment"># Exit code corect</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="540" width="20" height="15" class="box-highlight"/>
+  <text x="80" y="552" class="text-small">Secțiuni critice</text>
+  
+  <rect x="180" y="540" width="20" height="15" class="box"/>
+  <text x="210" y="552" class="text-small">Secțiuni standard</text>
+  
+  <!-- Footer -->
+  <text x="400" y="585" text-anchor="middle" class="text-small">SEM06 CAPSTONE - Sisteme de Operare | ASE București</text>
+</svg>

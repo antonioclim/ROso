@@ -1,0 +1,400 @@
+{
+  "quiz": {
+    "title": "CAPSTONE: Proiecte Integrate Bash",
+    "description": "Quiz formativ pentru Seminarul 6 - Sisteme de Operare",
+    "metadata": {
+      "course": "Sisteme de Operare",
+      "institution": "ASE București - CSIE",
+      "semester": "2024-2025",
+      "seminar": 6,
+      "version": "1.0.0",
+      "language": "ro",
+      "time_limit_minutes": 25,
+      "passing_score": 60,
+      "total_points": 100,
+      "bloom_distribution": {
+        "remember": 3,
+        "understand": 5,
+        "apply": 6,
+        "analyse": 2,
+        "evaluate": 2
+      }
+    },
+    "settings": {
+      "shuffle_questions": false,
+      "shuffle_answers": true,
+      "show_correct_answers": true,
+      "show_explanations": true,
+      "allow_backtrack": true,
+      "one_question_per_page": false
+    },
+    "questions": [
+      {
+        "id": "q01",
+        "type": "multiple_choice",
+        "bloom_level": "remember",
+        "points": 5,
+        "topic": "Error handling",
+        "question_text": "Care comandă setează comportamentul strict în Bash pentru a opri execuția la prima eroare, variabile nedefinite și erori în pipe?",
+        "answers": [
+          {"id": "a", "text": "set -e", "correct": false},
+          {"id": "b", "text": "set -euo pipefail", "correct": true},
+          {"id": "c", "text": "set -x", "correct": false},
+          {"id": "d", "text": "set -v", "correct": false}
+        ],
+        "explanation": "`set -euo pipefail` combină: -e (oprește la prima eroare), -u (eroare la variabile nedefinite), -o pipefail (pipe-ul returnează eroarea primei comenzi care eșuează).",
+        "feedback": {
+          "a": "Doar -e oprește la erori, dar nu detectează variabile nedefinite",
+          "c": "-x activează debug mode (print comenzi), nu error handling",
+          "d": "-v afișează liniile citite, nu gestionează erori"
+        }
+      },
+      {
+        "id": "q02",
+        "type": "multiple_choice",
+        "bloom_level": "remember",
+        "points": 5,
+        "topic": "Trap și semnale",
+        "question_text": "Care semnal este trimis unui proces când utilizatorul apasă Ctrl+C?",
+        "answers": [
+          {"id": "a", "text": "SIGTERM", "correct": false},
+          {"id": "b", "text": "SIGKILL", "correct": false},
+          {"id": "c", "text": "SIGINT", "correct": true},
+          {"id": "d", "text": "SIGHUP", "correct": false}
+        ],
+        "explanation": "SIGINT (Signal Interrupt) este trimis de terminal când utilizatorul apasă Ctrl+C. Poate fi capturat cu `trap` pentru cleanup.",
+        "feedback": {
+          "a": "SIGTERM este semnalul default al comenzii kill, nu Ctrl+C",
+          "b": "SIGKILL nu poate fi capturat și termină imediat procesul",
+          "d": "SIGHUP este trimis când terminalul se închide"
+        }
+      },
+      {
+        "id": "q03",
+        "type": "multiple_choice",
+        "bloom_level": "remember",
+        "points": 5,
+        "topic": "Exit codes",
+        "question_text": "Ce exit code indică execuție reușită în convenția Unix?",
+        "answers": [
+          {"id": "a", "text": "1", "correct": false},
+          {"id": "b", "text": "-1", "correct": false},
+          {"id": "c", "text": "0", "correct": true},
+          {"id": "d", "text": "255", "correct": false}
+        ],
+        "explanation": "Convenția Unix: exit code 0 = succes, orice altceva = eroare. Verifici cu `$?` sau direct în condiții.",
+        "feedback": {
+          "a": "1 indică eroare generică",
+          "b": "Exit codes sunt 0-255, -1 nu e valid",
+          "d": "255 indică eroare, nu succes"
+        }
+      },
+      {
+        "id": "q04",
+        "type": "multiple_choice",
+        "bloom_level": "understand",
+        "points": 6,
+        "topic": "Arhitectură modulară",
+        "question_text": "De ce separăm codul în lib/core.sh, lib/utils.sh, lib/config.sh în loc să scriem totul într-un singur fișier?",
+        "answers": [
+          {"id": "a", "text": "Pentru că Bash nu permite fișiere mai mari de 1000 linii", "correct": false},
+          {"id": "b", "text": "Pentru reutilizare, testare izolată și mentenanță ușoară", "correct": true},
+          {"id": "c", "text": "Pentru că `source` funcționează doar cu fișiere mici", "correct": false},
+          {"id": "d", "text": "Pentru a face scriptul mai greu de înțeles de alții", "correct": false}
+        ],
+        "explanation": "Arhitectura modulară oferă: reutilizare, testare independentă, mentenanță ușoară și claritate a responsabilităților.",
+        "feedback": {
+          "a": "Bash nu are limite de dimensiune pentru fișiere",
+          "c": "`source` funcționează cu fișiere de orice dimensiune",
+          "d": "Modularizarea crește claritatea, nu o reduce"
+        }
+      },
+      {
+        "id": "q05",
+        "type": "multiple_choice",
+        "bloom_level": "understand",
+        "points": 6,
+        "topic": "Backup incremental",
+        "question_text": "Cum funcționează un backup incremental față de unul full?",
+        "answers": [
+          {"id": "a", "text": "Copiază toate fișierele la fiecare rulare", "correct": false},
+          {"id": "b", "text": "Copiază doar fișierele modificate de la ultimul backup", "correct": true},
+          {"id": "c", "text": "Comprimă fișierele mai mult decât backup-ul full", "correct": false},
+          {"id": "d", "text": "Șterge fișierele vechi automat", "correct": false}
+        ],
+        "explanation": "Backup incremental folosește `find -newer` pentru a găsi fișierele modificate. Economisește timp și spațiu copiind doar schimbările.",
+        "feedback": {
+          "a": "Aceasta e definiția backup-ului full",
+          "c": "Compresia nu definește tipul de backup",
+          "d": "Rotația/ștergerea e separată de tipul de backup"
+        }
+      },
+      {
+        "id": "q06",
+        "type": "multiple_choice",
+        "bloom_level": "understand",
+        "points": 6,
+        "topic": "Health checks",
+        "question_text": "Ce verifică un health check HTTP pentru o aplicație web?",
+        "answers": [
+          {"id": "a", "text": "Dacă portul 22 SSH este deschis", "correct": false},
+          {"id": "b", "text": "Dacă aplicația răspunde cu cod 2xx la un endpoint specific", "correct": true},
+          {"id": "c", "text": "Dacă CPU-ul serverului este sub 50%", "correct": false},
+          {"id": "d", "text": "Dacă utilizatorul admin poate face login", "correct": false}
+        ],
+        "explanation": "Health check HTTP trimite request GET la un endpoint (/health) și verifică răspuns HTTP 2xx. Este diferit de monitorizarea resurselor.",
+        "feedback": {
+          "a": "SSH e pentru administrare, nu pentru health check aplicație",
+          "c": "Monitorizarea CPU e separată de health check-ul aplicației",
+          "d": "Autentificarea e funcționalitate, nu health check"
+        }
+      },
+      {
+        "id": "q07",
+        "type": "multiple_choice",
+        "bloom_level": "understand",
+        "points": 6,
+        "topic": "Logging",
+        "question_text": "Care este ordinea corectă a nivelurilor de logging de la cel mai puțin sever la cel mai sever?",
+        "answers": [
+          {"id": "a", "text": "ERROR, WARN, INFO, DEBUG", "correct": false},
+          {"id": "b", "text": "DEBUG, INFO, WARN, ERROR", "correct": true},
+          {"id": "c", "text": "INFO, DEBUG, ERROR, WARN", "correct": false},
+          {"id": "d", "text": "WARN, ERROR, DEBUG, INFO", "correct": false}
+        ],
+        "explanation": "Ordinea standard: DEBUG < INFO < WARN < ERROR < FATAL. DEBUG pentru detalii, INFO pentru evenimente normale, WARN pentru situații neașteptate, ERROR pentru erori.",
+        "feedback": {
+          "a": "Ordinea este inversată",
+          "c": "DEBUG este mai puțin sever decât INFO",
+          "d": "Ordinea este complet incorectă"
+        }
+      },
+      {
+        "id": "q08",
+        "type": "multiple_choice",
+        "bloom_level": "understand",
+        "points": 6,
+        "topic": "Deployment strategies",
+        "question_text": "Care este avantajul principal al strategiei Blue-Green deployment?",
+        "answers": [
+          {"id": "a", "text": "Necesită mai puțină memorie decât Rolling deployment", "correct": false},
+          {"id": "b", "text": "Permite rollback instant prin switch de traffic", "correct": true},
+          {"id": "c", "text": "Nu necesită load balancer", "correct": false},
+          {"id": "d", "text": "Funcționează fără downtime niciodată", "correct": false}
+        ],
+        "explanation": "Blue-Green: două medii identice, deploy pe Green, switch instant de traffic, rollback = switch înapoi la Blue.",
+        "feedback": {
+          "a": "Blue-Green necesită dublul resurselor",
+          "c": "Switch-ul de traffic necesită load balancer sau DNS",
+          "d": "Switch-ul în sine poate cauza micro-downtime"
+        }
+      },
+      {
+        "id": "q09",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Trap cleanup",
+        "question_text": "Care este sintaxa corectă pentru a executa funcția `cleanup` la terminarea scriptului (normal sau prin Ctrl+C)?",
+        "answers": [
+          {"id": "a", "text": "trap cleanup EXIT SIGINT", "correct": false},
+          {"id": "b", "text": "trap 'cleanup' EXIT INT", "correct": true},
+          {"id": "c", "text": "on_exit cleanup", "correct": false},
+          {"id": "d", "text": "finally { cleanup }", "correct": false}
+        ],
+        "explanation": "Sintaxa corectă: `trap 'comandă' SEMNALE...`. EXIT pentru terminare normală, INT pentru SIGINT (fără prefix SIG).",
+        "feedback": {
+          "a": "SIGINT nu e valid în trap, se folosește INT",
+          "c": "on_exit nu există în Bash standard",
+          "d": "finally e din alte limbaje, nu Bash"
+        }
+      },
+      {
+        "id": "q10",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Find cu timestamp",
+        "question_text": "Care comandă găsește fișierele modificate după timestamp.txt?",
+        "answers": [
+          {"id": "a", "text": "find /data -newer timestamp.txt -type f", "correct": true},
+          {"id": "b", "text": "find /data -mtime +timestamp.txt", "correct": false},
+          {"id": "c", "text": "find /data --after timestamp.txt", "correct": false},
+          {"id": "d", "text": "find /data -modified > timestamp.txt", "correct": false}
+        ],
+        "explanation": "`find -newer` compară mtime al fișierelor cu fișierul de referință. Returnează fișierele modificate DUPĂ referință.",
+        "feedback": {
+          "b": "-mtime folosește zile, nu fișier de referință",
+          "c": "--after nu e opțiune validă pentru find",
+          "d": "Sintaxă invalidă, redirecționare greșită"
+        }
+      },
+      {
+        "id": "q11",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Funcții cu return",
+        "question_text": "Cum returnezi o valoare numerică dintr-o funcție Bash?",
+        "answers": [
+          {"id": "a", "text": "return $valoare unde valoare e 0-255", "correct": false},
+          {"id": "b", "text": "echo $valoare și capturezi cu $(funcție)", "correct": false},
+          {"id": "c", "text": "Ambele metode sunt corecte, pentru scopuri diferite", "correct": true},
+          {"id": "d", "text": "export RESULT=$valoare", "correct": false}
+        ],
+        "explanation": "Bash oferă două metode: `return N` pentru exit code (0-255), `echo valoare` pentru output capturat cu $(). Folosește return pentru status, echo pentru valori.",
+        "feedback": {
+          "a": "Corect dar incomplet - funcționează doar pentru 0-255",
+          "b": "Corect dar incomplet - doar pentru valori, nu status",
+          "d": "Export modifică environment, nu e pattern pentru return"
+        }
+      },
+      {
+        "id": "q12",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Verificare HTTP",
+        "question_text": "Care comandă verifică dacă un server web răspunde cu succes?",
+        "answers": [
+          {"id": "a", "text": "ping localhost:8080", "correct": false},
+          {"id": "b", "text": "curl -sf http://localhost:8080/health", "correct": true},
+          {"id": "c", "text": "wget --check localhost:8080", "correct": false},
+          {"id": "d", "text": "nc -z localhost 8080", "correct": false}
+        ],
+        "explanation": "`curl -sf`: -s pentru silent, -f pentru fail pe erori HTTP. Verifică răspuns HTTP real, nu doar conexiune TCP.",
+        "feedback": {
+          "a": "ping verifică ICMP, nu HTTP, și nu acceptă port",
+          "c": "--check nu e opțiune validă wget",
+          "d": "nc -z verifică doar port TCP deschis, nu HTTP"
+        }
+      },
+      {
+        "id": "q13",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Arrays în Bash",
+        "question_text": "Care sintaxă iterează corect peste elementele unui array?",
+        "answers": [
+          {"id": "a", "text": "for item in $ARRAY; do", "correct": false},
+          {"id": "b", "text": "for item in ${ARRAY[@]}; do", "correct": false},
+          {"id": "c", "text": "for item in \"${ARRAY[@]}\"; do", "correct": true},
+          {"id": "d", "text": "foreach item in ARRAY; do", "correct": false}
+        ],
+        "explanation": "`\"${ARRAY[@]}\"` - [@] expandează toate elementele, ghilimelele duble păstrează elementele cu spații ca unități.",
+        "feedback": {
+          "a": "$ARRAY fără [@] returnează doar primul element",
+          "b": "Fără ghilimele, spațiile din elemente cauzează probleme",
+          "d": "foreach nu există în Bash"
+        }
+      },
+      {
+        "id": "q14",
+        "type": "multiple_choice",
+        "bloom_level": "apply",
+        "points": 6,
+        "topic": "Checksum verificare",
+        "question_text": "Care comandă verifică integritatea unui backup folosind checksum?",
+        "answers": [
+          {"id": "a", "text": "md5sum -c backup.md5", "correct": true},
+          {"id": "b", "text": "sha256sum backup.tar.gz", "correct": false},
+          {"id": "c", "text": "diff backup.md5 backup.tar.gz", "correct": false},
+          {"id": "d", "text": "cmp --checksum backup.tar.gz", "correct": false}
+        ],
+        "explanation": "`md5sum -c file.md5`: -c (check) citește fișierul cu hash-uri și verifică fiecare. Returnează exit code 0 dacă toate trec.",
+        "feedback": {
+          "b": "Calculează hash, nu verifică unul existent",
+          "c": "diff compară conținut, nu verifică checksum",
+          "d": "--checksum nu e opțiune validă pentru cmp"
+        }
+      },
+      {
+        "id": "q15",
+        "type": "multiple_choice",
+        "bloom_level": "analyse",
+        "points": 8,
+        "topic": "Debug script",
+        "question_text": "Un script de backup afișează \"Backup completed\" dar fișierul arhivă este gol. Care e cea mai probabilă cauză?\n\n```bash\ntar czf \"$BACKUP_FILE\" \"$SOURCE_DIR\" 2>/dev/null\necho \"Backup completed\"\n```",
+        "answers": [
+          {"id": "a", "text": "Comanda tar a eșuat dar eroarea a fost suprimată", "correct": true},
+          {"id": "b", "text": "echo nu funcționează după tar", "correct": false},
+          {"id": "c", "text": "BACKUP_FILE nu e definit", "correct": false},
+          {"id": "d", "text": "SOURCE_DIR conține doar directoare goale", "correct": false}
+        ],
+        "explanation": "`2>/dev/null` suprimă stderr, ascunzând erorile tar. Fix: elimină redirecționarea sau verifică $? după tar.",
+        "feedback": {
+          "b": "echo funcționează independent de comenzile anterioare",
+          "c": "BACKUP_FILE nedefinit ar cauza eroare la tar, nu arhivă goală",
+          "d": "tar ar include directoarele, chiar goale"
+        }
+      },
+      {
+        "id": "q16",
+        "type": "multiple_choice",
+        "bloom_level": "analyse",
+        "points": 8,
+        "topic": "Race condition",
+        "question_text": "De ce acest pattern pentru PID file poate cauza probleme?\n\n```bash\nif [[ ! -f \"$PID_FILE\" ]]; then\n    echo $$ > \"$PID_FILE\"\nfi\n```",
+        "answers": [
+          {"id": "a", "text": "$$ nu conține PID-ul corect", "correct": false},
+          {"id": "b", "text": "Două instanțe pot verifica simultan și ambele scriu", "correct": true},
+          {"id": "c", "text": "PID_FILE trebuie să fie în /var/run", "correct": false},
+          {"id": "d", "text": "Echo nu poate scrie în fișiere", "correct": false}
+        ],
+        "explanation": "Race condition (TOCTOU): între verificare și scriere, altă instanță poate trece. Fix: folosește `flock` pentru locking atomic.",
+        "feedback": {
+          "a": "$$ conține corect PID-ul procesului curent",
+          "c": "Locația nu afectează race condition",
+          "d": "echo poate scrie în fișiere cu redirecționare"
+        }
+      },
+      {
+        "id": "q17",
+        "type": "multiple_choice",
+        "bloom_level": "evaluate",
+        "points": 8,
+        "topic": "Deployment strategy",
+        "question_text": "Pentru o aplicație care necesită zero downtime și rollback instant, dar ai resurse limitate (nu poți dubla infrastructura), care strategie e cea mai potrivită?",
+        "answers": [
+          {"id": "a", "text": "Blue-Green deployment", "correct": false},
+          {"id": "b", "text": "Rolling deployment", "correct": true},
+          {"id": "c", "text": "Recreate deployment", "correct": false},
+          {"id": "d", "text": "Big bang deployment", "correct": false}
+        ],
+        "explanation": "Rolling deployment: înlocuiește instanțele una câte una, nu necesită dublul resurselor, zero downtime. Trade-off: rollback mai lent.",
+        "feedback": {
+          "a": "Blue-Green necesită dublul infrastructurii",
+          "c": "Recreate oprește totul înainte de deploy - downtime",
+          "d": "Big bang nu oferă zero downtime"
+        }
+      },
+      {
+        "id": "q18",
+        "type": "multiple_choice",
+        "bloom_level": "evaluate",
+        "points": 8,
+        "topic": "Alegere compresie",
+        "question_text": "Pentru backup-uri zilnice pe un server cu CPU limitat dar spațiu de stocare suficient, care algoritm de compresie alegi?",
+        "answers": [
+          {"id": "a", "text": "xz (cel mai bun ratio de compresie)", "correct": false},
+          {"id": "b", "text": "gzip (echilibru viteză/compresie)", "correct": false},
+          {"id": "c", "text": "zstd (rapid cu compresie bună)", "correct": true},
+          {"id": "d", "text": "Fără compresie (cel mai rapid)", "correct": false}
+        ],
+        "explanation": "zstd oferă cel mai bun trade-off: viteză comparabilă sau mai bună ca gzip, compresie superioară, CPU usage mult mai mic decât xz.",
+        "feedback": {
+          "a": "xz e lent și consumă mult CPU",
+          "b": "gzip e ok dar zstd e superior în ambele aspecte",
+          "d": "Fără compresie risipește spațiu inutil"
+        }
+      }
+    ]
+  },
+  "export_info": {
+    "format_version": "1.0",
+    "compatible_with": ["Moodle 3.9+", "Canvas", "Blackboard"],
+    "export_date": "2025-01-27",
+    "generator": "SEM06 Quiz Generator"
+  }
+}

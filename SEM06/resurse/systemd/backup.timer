@@ -1,0 +1,30 @@
+# Systemd Timer Template pentru Backup
+# Salvează ca: /etc/systemd/system/backup.timer
+#
+# Instalare:
+#   sudo cp backup.service /etc/systemd/system/
+#   sudo cp backup.timer /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable backup.timer
+#   sudo systemctl start backup.timer
+#
+
+[Unit]
+Description=Daily Backup Timer
+Documentation=man:backup(1)
+
+[Timer]
+# Rulează zilnic la 3:00 AM
+OnCalendar=*-*-* 03:00:00
+
+# Rulează imediat dacă a fost ratat (system off)
+Persistent=true
+
+# Randomizare ±30 minute pentru a evita load spikes
+RandomizedDelaySec=1800
+
+# Acuratețea timerului
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target
