@@ -1,0 +1,124 @@
+name: 🐛 Raport Bug
+description: Raportează o eroare în scripturi, exerciții sau fișiere de configurare
+title: "[BUG] "
+labels: ["bug"]
+assignees:
+  - antonioclim
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mulțumim că îți faci timp să raportezi această problemă.
+        Completează toate câmpurile pentru a ne ajuta să investigăm.
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Modulul Afectat
+      description: Care modul sau seminar este afectat?
+      options:
+        - 000SUPPL (Materiale Suplimentare)
+        - 001initialSTEPs (Setup VirtualBox/WSL)
+        - 002initialSTEPs (Ghid Student)
+        - 003initialSTEPs (Ghiduri Scripting)
+        - SEM01 (Seminar 1)
+        - SEM02 (Seminar 2)
+        - SEM03 (Seminar 3)
+        - SEM04 (Seminar 4)
+        - SEM05 (Seminar 5)
+        - SEM06 (Seminar 6)
+        - SEM-PROJ (Proiecte)
+        - SO_curs01 (Curs 1)
+        - SO_curs02 (Curs 2)
+        - SO_curs03 (Curs 3)
+        - SO_curs04 (Curs 4)
+        - SO_curs05 (Curs 5)
+        - SO_curs06 (Curs 6)
+        - SO_curs07 (Curs 7)
+        - SO_curs08 (Curs 8)
+        - SO_curs09 (Curs 9)
+        - SO_curs10 (Curs 10)
+        - SO_curs11 (Curs 11)
+        - SO_curs12 (Curs 12)
+        - SO_curs13 (Curs 13)
+        - SO_curs14 (Curs 14)
+        - Multiple module
+        - General/Repository-wide
+    validations:
+      required: true
+
+  - type: input
+    id: file
+    attributes:
+      label: Fișier(e) Afectat(e)
+      placeholder: "ex: SEM02/scripts/demo_pipes.sh"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrierea Bug-ului
+      placeholder: "Descrie problema în detaliu..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportament Așteptat
+      placeholder: "Ce ar trebui să se întâmple..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportament Real
+      placeholder: "Ce se întâmplă de fapt..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pași pentru Reproducere
+      placeholder: |
+        1. Navighează la...
+        2. Rulează comanda...
+        3. Observă eroarea...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Mesaj de Eroare
+      description: Copiază output-ul exact al erorii
+      render: shell
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Mediu de Lucru
+      options:
+        - WSL2 + Ubuntu 24.04
+        - WSL2 + Ubuntu 22.04
+        - VirtualBox + Ubuntu 24.04
+        - VirtualBox + Ubuntu 22.04
+        - Linux nativ
+        - Altul (specifică în descriere)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist Pre-submitere
+      options:
+        - label: Am verificat ghidul de troubleshooting
+          required: true
+        - label: Am căutat în issues existente
+          required: true
+        - label: Am actualizat sistemul (sudo apt update && upgrade)
+          required: false
