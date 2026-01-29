@@ -1,0 +1,162 @@
+# C10_05_EVALUARE_FORMATIVA.yaml
+# Curs 10: Memoria Virtuală (TLB, Belady)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 10
+  subiect: "Memoria Virtuală (TLB, Belady)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este memoria virtuală?"
+    optiuni:
+      - "Memorie RAM suplimentară"
+      - "Tehnica de a folosi disk-ul pentru a extinde memoria aparentă disponibilă proceselor"
+      - "Memorie cache"
+      - "Memorie ROM"
+    corect: 1
+    explicatie: "Memoria virtuală permite proceselor să folosească mai multă memorie decât RAM-ul fizic disponibil."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce este TLB (Translation Lookaside Buffer)?"
+    optiuni:
+      - "Un tip de RAM"
+      - "Cache hardware pentru traduceri recente pagină→frame"
+      - "Un algoritm de înlocuire"
+      - "O structură de date software"
+    corect: 1
+    explicatie: "TLB = cache asociativ rapid pentru PTE-uri frecvent accesate, evitând accesul la page table."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un page fault?"
+    optiuni:
+      - "O eroare de programare"
+      - "Accesul la o pagină care nu este în memoria fizică"
+      - "Un virus"
+      - "O eroare de disk"
+    corect: 1
+    explicatie: "Page fault = pagina cerută nu e în RAM; SO-ul trebuie să o aducă de pe disk."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "De ce TLB miss este costisitor?"
+    optiuni:
+      - "Nu este costisitor"
+      - "Necesită accese suplimentare la memorie pentru a parcurge page table-ul"
+      - "Consumă energie"
+      - "Șterge memoria"
+    corect: 1
+    explicatie: "TLB miss: 1+ accese la memorie pentru PT (pe lângă accesul la date), încetinind semnificativ."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este anomalia lui Belady?"
+    optiuni:
+      - "O eroare de hardware"
+      - "Mai multe frame-uri pot cauza mai multe page faults pentru FIFO"
+      - "Un algoritm optimal"
+      - "O tehnică de optimizare"
+    corect: 1
+    explicatie: "Belady: FIFO poate avea mai multe faults cu mai multe frame-uri. LRU nu are această anomalie."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "De ce algoritmul OPT (Optimal) nu este folosit în practică?"
+    optiuni:
+      - "Este prea lent"
+      - "Necesită cunoașterea viitorului (ce pagini vor fi accesate)"
+      - "Consumă prea multă memorie"
+      - "Nu funcționează"
+    corect: 1
+    explicatie: "OPT înlocuiește pagina care va fi folosită cel mai târziu în viitor - imposibil de știut."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "Cum aproximează LRU algoritmul OPT?"
+    optiuni:
+      - "Alege aleator"
+      - "Presupune că paginile recent folosite vor fi folosite curând (localitate temporală)"
+      - "Alege prima pagină"
+      - "Nu aproximează"
+    corect: 1
+    explicatie: "LRU se bazează pe localitatea temporală: pagina nefolosită cel mai mult timp probabil nu va fi folosită curând."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este thrashing?"
+    optiuni:
+      - "O tehnică de optimizare"
+      - "Sistem care petrece mai mult timp swapping decât executând cod util"
+      - "Un algoritm de sortare"
+      - "O eroare de rețea"
+    corect: 1
+    explicatie: "Thrashing: prea puține frame-uri → page faults continue → performanță dezastruoasă."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Secvența de referințe: 1,2,3,4,1,2,5,1,2,3,4,5. Cu 3 frame-uri și FIFO, câte page faults?"
+    optiuni:
+      - "6"
+      - "9"
+      - "10"
+      - "12"
+    corect: 1
+    explicatie: "FIFO cu 3 frame-uri: faults la 1,2,3,4,5,3,4,5,1 = 9 page faults."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "De ce working set model ajută la prevenirea thrashing-ului?"
+    optiuni:
+      - "Șterge paginile"
+      - "Alocă procesului suficiente frame-uri pentru paginile active recente"
+      - "Crește viteza CPU"
+      - "Nu ajută"
+    corect: 1
+    explicatie: "Working set = paginile folosite în ultimele Δ referințe. Alocând WS, evităm page faults excesive."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Care este trade-off-ul pentru implementarea LRU exact vs aproximativ (clock)?"
+    optiuni:
+      - "Nu există trade-off"
+      - "LRU exact: precizie dar overhead (timestamps/stack). Clock: mai puțin overhead, aproximație suficient de bună"
+      - "Clock este mai precis"
+      - "LRU exact este mai rapid"
+    corect: 1
+    explicatie: "LRU exact necesită actualizare la fiecare acces; clock folosește doar un reference bit, mai simplu."
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Un sistem are 100MB RAM și 50 de procese. Fiecare proces are working set de 3MB. Ce se întâmplă?"
+    optiuni:
+      - "Totul funcționează normal"
+      - "Thrashing: 50×3MB=150MB > 100MB, sistemul swappează continuu"
+      - "Procesele primesc mai multă memorie"
+      - "Disk-ul devine mai rapid"
+    corect: 1
+    explicatie: "Cerințe WS (150MB) > RAM disponibil (100MB) → page faults continue, performanță degradată."

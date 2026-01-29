@@ -1,0 +1,60 @@
+@startuml sectiunea_critica
+!include ../../diagrame_common/skin.puml
+title Secțiunea Critică - Structură și Proprietăți
+
+skinparam activity {
+    BackgroundColor #FAFAFA
+    DiamondBackgroundColor #FFF9C4
+}
+
+start
+
+:while (true) {;
+
+partition "**ENTRY SECTION**" #E3F2FD {
+    :acquire(lock)
+    sau wait(mutex);
+    note right
+    Cerere acces
+    Poate **bloca**
+    end note
+}
+
+partition "**CRITICAL SECTION**" #FFCDD2 {
+    :Accesează resursa
+    partajată
+    (ex: counter++);
+    note right #FFCDD2
+    ⚠️ **MAXIM UN PROCES**
+    la un moment dat!
+    end note
+}
+
+partition "**EXIT SECTION**" #C8E6C9 {
+    :release(lock)
+    sau signal(mutex);
+    note right
+    Eliberează
+    accesul
+    end note
+}
+
+partition "**REMAINDER SECTION**" #FFFFFF {
+    :Cod care nu accesează
+    resursa partajată;
+}
+
+:} // end while;
+
+stop
+
+legend right
+**Cele 3 Proprietăți Necesare:**
+
+|= Proprietate |= Descriere |
+| **Mutual Exclusion** | Un singur proces în CS |
+| **Progress** | Dacă CS e liberă, cineva intră |
+| **Bounded Waiting** | Limită pe cât așteaptă |
+endlegend
+
+@enduml
