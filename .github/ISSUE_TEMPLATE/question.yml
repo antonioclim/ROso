@@ -1,0 +1,48 @@
+name: ❓ Întrebare
+description: Pune o întrebare despre materiale
+title: "[QUESTION] "
+labels: ["question"]
+body:
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Subiectul Întrebării
+      options:
+        - Înțelegerea unui exercițiu
+        - Clarificare documentație
+        - Bune practici Bash/Linux
+        - Bune practici Python
+        - Concepte teoretice SO
+        - Altele
+    validations:
+      required: true
+
+  - type: input
+    id: module
+    attributes:
+      label: Modulul Relevant (dacă e cazul)
+      placeholder: "ex: SEM03 sau SO_curs05"
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Întrebarea Ta
+      placeholder: "Formulează întrebarea clar și complet..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context Adițional
+      placeholder: "Ce ai încercat deja? Ce ai citit?"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist Pre-submitere
+      options:
+        - label: Am căutat în documentație
+          required: true
+        - label: Am verificat issues existente
+          required: true
