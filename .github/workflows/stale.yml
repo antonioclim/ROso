@@ -1,0 +1,46 @@
+name: Manage Stale Issues
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Luni la 09:00 UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Mark and Close Stale Issues
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Manage Stale Issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          stale-issue-message: |
+            Acest issue a fost marcat ca **stale** (inactiv) deoarece 
+            nu a avut activitate în ultimele 120 de zile.
+            
+            Dacă problema este încă relevantă, te rugăm să adaugi un 
+            comentariu pentru a-l menține deschis.
+          
+          stale-issue-label: 'stale'
+          days-before-issue-stale: 120
+          days-before-issue-close: 30
+          
+          stale-pr-label: 'stale'
+          days-before-pr-stale: 90
+          days-before-pr-close: 30
+          
+          exempt-issue-labels: 'licence,pinned,security,in-progress'
+          remove-stale-when-updated: true
+          
+          close-issue-message: |
+            Acest issue a fost închis automat din cauza inactivității.
+            
+            Dacă problema persistă, poți deschide un nou issue.
+          
+          operations-per-run: 30
