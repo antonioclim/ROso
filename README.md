@@ -1,291 +1,265 @@
-# ROso — Operating Systems: Complete Educational Kit
+# ROso — Sisteme de Operare: Kit Educațional Complet
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
 │  🐧 LINUX    Ubuntu 24.04+    │  📋 BASH 5.0+   │  🐍 PYTHON 3.12+  │  📦 GIT 2.40+    │
 ├─────────────────────────────────────────────────────────────────────────────────────────┤
-│  LICENCE         RESTRICTIVE    │  UNITS              14      │  EST. HOURS         60+   │
-│  VERSION              5.3.1     │  SEMINARS            7      │  PROJECTS           23    │
-│  STATUS              ACTIVE     │  PNG DIAGRAMS       27      │  SCRIPTS          180+    │
+│  LICENȚĂ         RESTRICTIVĂ    │  UNITĂȚI           14      │  ORE ESTIMATE       60+   │
+│  VERSIUNE             4.0.0     │  SEMINARII          6      │  PROIECTE           23    │
+│  STATUS               ACTIV     │  DIAGRAME PNG      27      │  SCRIPTURI        100+    │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**by ing. dr. Antonio Clim** | Bucharest University of Economic Studies — CSIE  
-Year I, Semester 2 | 2017-2030
+**by ing. dr. Antonio Clim** | Academia de Studii Economice București — CSIE  
+Anul I, Semestrul 2 | 2017-2027
 
 ---
 
-## What's New in v5.3
+## Ce Găsești Aici
 
-This release focuses on quality-of-life improvements for both students and instructors:
+Kit-ul conține materialele pentru cursul de Sisteme de Operare: 14 unități de curs, 6 seminarii cu exerciții practice, și 23 de proiecte la trei niveluri de dificultate. Totul structurat pentru a putea lucra independent sau în laborator.
 
-- **Print stylesheets** for HTML presentations — all slides can now be printed cleanly for offline study or handouts
-- **Link checking** integrated into the CI pipeline — automated validation catches broken documentation links before they reach students
-- **Expanded test suite** for shared utilities — the lib/ modules now have over 80% test coverage
-- **lib/ documentation** with usage examples — proper documentation for the Python utilities that power autograders and randomisation
+Bash-ul pare simplu la prima vedere — comenzi scurte, output instant — dar când încerci să automatizezi ceva real, brusc descoperi că `$?` nu face ce crezi, că pipe-urile pierd variabile, și că un spațiu greșit în `[ $var ]` îți strică tot scriptul. Am trecut prin asta cu fiecare generație de studenți, și kit-ul reflectă exact problemele pe care le-am văzut în practică.
 
----
-
-## Quick Navigation
-
-| Looking for... | Go to... |
-|----------------|----------|
-| Setup guide | [Step 0: Choose Your Installation](#step-0-choose-your-installation-option) |
-| Seminar materials | `SEM01/` through `SEM07/` |
-| Projects | `04_PROJECTS/` |
-| Lecture support | `05_LECTURES/` |
-| Quick reference | `NAVIGATION.md` |
-| Shared utilities | `lib/README.md` |
-| Developer tools | [PART VII: Developer Tools](#part-vii-developer-tools) |
-| Troubleshooting | [PART VI: Troubleshooting](#part-vi-troubleshooting) |
+O observație după câțiva ani de predat: studenții care-și notează comenzile și output-ul pe parcurs ajung mult mai repede la soluții funcționale. Nu pentru că ar fi mai deștepți, ci pentru că pot să revină la ce a funcționat și să compare cu ce nu merge. E o practică banală dar surprinzător de eficientă.
 
 ---
 
-## What You Will Find Here
+## Ce Vei Putea Face După Acest Curs
 
-This kit contains the materials for the Operating Systems course: 14 course units, 7 seminars with practical exercises and 23 projects at three difficulty levels. Everything is structured so you can work independently or in the laboratory.
+La final, vei avea o înțelegere solidă a modului în care funcționează un sistem de operare — nu doar ce butoane să apeși, ci de ce se întâmplă ce se întâmplă. Concret:
 
-Bash seems simple at first glance — short commands, instant output — but when you try to automate something real, you suddenly discover that `$?` does not do what you think, that pipes lose variables and that a misplaced space in `[ $var ]` breaks your entire script. I have been through this with every generation of students, and the kit reflects exactly the problems I have seen in practice.
+**Automatizare și scripting:** Vei scrie scripturi Bash care fac în 30 de secunde ce înainte făceai manual în 30 de minute. Backup-uri, procesare log-uri, deployment, rapoarte — lucruri care par plictisitoare devin satisfăcătoare când le automatizezi o dată și apoi funcționează singure.
 
-An observation after several years of teaching: students who take notes of their commands and output as they go reach working solutions much faster. Not because they are cleverer, but because they can return to what worked and compare it with what does not. It is a trivial practice but surprisingly effective.
+**Debugging și diagnosticare:** Vei ști să folosești `strace`, `top`, `htop`, `lsof` (sau, cel putin, o sa poti spune ca ai auzit de ele) pentru a înțelege de ce un program nu face ce trebuie. În loc să cauți orbește, vei putea urmări exact ce se întâmplă la nivel de sistem.
 
----
+**Administrare sisteme:** Permisiuni, procese, servicii, cron jobs — vocabularul de bază al oricărui administrator de sistem. Chiar dacă nu vei lucra în sysadmin, vei înțelege ce fac colegii tăi devops când vorbesc despre "a da chmod 755" sau "a trimite SIGTERM".
 
-## What You Will Be Able to Do After This Course
+**Fundament pentru specializări:** Cunoștințele de aici sunt punctul de plecare pentru mai multe direcții (si, aici, amintesc doar cateva):
 
-By the end, you will have a solid understanding of how an operating system works — not just which buttons to press, but why what happens happens. Specifically:
-
-**Automation and scripting:** You will write Bash scripts that do in 30 seconds what you previously did manually in 30 minutes. Backups, log processing, deployment, reports — things that seem tedious become satisfying when you automate them once and then they work on their own.
-
-**Debugging and diagnostics:** You will know how to use `strace`, `top`, `htop`, `lsof` (or, at least, you will be able to say you have heard of them) to understand why a programme is not doing what it should. Instead of searching blindly, you will be able to trace exactly what is happening at system level.
-
-**System administration:** Permissions, processes, services, cron jobs — the basic vocabulary of any system administrator. Even if you will not work in sysadmin, you will understand what your devops colleagues mean when they talk about "giving chmod 755" or "sending SIGTERM".
-
-**Foundation for specialisations:** The knowledge here is the starting point for several directions (and here I mention just a few):
-
-| Direction | What you use from this course |
+| Direcție | Ce folosești din acest curs |
 |----------|----------------------------|
-| DevOps / SRE | Scripting, processes, services, containers |
-| Information security | Permissions, processes, system audits |
-| Backend development | IPC, threading, virtual memory |
-| Embedded / IoT | Processes, scheduling, kernel |
-| Cloud engineering | Virtualisation, containers, automation |
-| Data engineering | Text processing (grep/sed/awk), pipelines |
+| DevOps / SRE | Scripting, procese, servicii, containere |
+| Securitate informatică | Permisiuni, procese, audituri de sistem |
+| Dezvoltare backend | IPC, threading, memorie virtuală |
+| Embedded / IoT | Procese, scheduling, kernel |
+| Cloud engineering | Virtualizare, containere, automatizare |
+| Data engineering | Procesare text (grep/sed/awk), pipeline-uri |
 
-You do not need to choose now — the idea is that the fundamentals you build here will help you wherever you end up.
-
----
-
-## Why the Course Looks the Way It Does
-
-A few principles I had in mind when structuring the materials:
-
-**There is no "programmer gene."** The ability to write code is acquired through deliberate practice, not an innate talent you are born with or not. Patitsas and colleagues demonstrated in 2016 that only 5.8% of grade distributions in computer science courses are bimodal — the rest of the myth "some can, some cannot" is self-fulfilling prophecy.
-
-**Beginners are not slowed-down experts.** They need different approaches, not just more time. That is why the materials include Parsons Problems (code reordering), Peer Instruction (questions with pair discussions) and structured Live Coding. These are techniques validated in recent computing education research!
-
-**Errors are opportunities, not failures.** I have normalised the idea (opportunity) of making mistakes throughout the kit. Every programmer has gone through the same stupid bugs — the misplaced space somewhere in a `[ $var ]`, forgotten quotation marks, off-by-one in for/while loops. When you see that the instructor also makes mistakes whilst correcting/fixing code typed in real time, it somehow becomes easier to accept that you too will make mistakes. (And you no longer feel alone in the dark ... although, sometimes, even GPT seems like a torch!)
-
-**LLMs are tools, not adversaries.** Today's students have access to ChatGPT, Claude, Gemini — there is no point in designing courses that ignore reality. I have included explicitly "LLM-aware" exercises where you must evaluate what the AI generates, not just copy. The aim is understanding, not task completion.
-
-**Attention works in sprints (but short ones!).** Neuroscience research shows that sustained attention for students is realistic in windows of 5-10 minutes, not 50. That is why assignments are structured in micro-milestones with immediate checks. Breaks are not wasted time — incubation helps knowledge consolidation. (Honestly, in my youth I tried incubation without having learnt anything beforehand ... I failed some exams doing that, but at least I failed them well-rested.)
-
-If it sounds strange that an Operating Systems course thinks about neuroscience and pedagogy: this is how any course should look. Traditional teaching — slides read monotonously for two hours, with students in a passive role — has never worked well; we have just collectively accepted that this is normal. It is not normal. It is industrial education: efficient for processing people, inefficient for teaching them anything.
-
-The materials here are the result of years of experimentation, testing and iteration. The methods of Peer Instruction, Productive Failure, Subgoal Labelling (obviously) were not invented by me. They are validated in research at SIGCSE, ICER, ITiCSE (see refs). What I have done is apply them in the concrete context of our course and see what works with students at ASE.
+Nu e nevoie să alegi acum — ideea e că fundamentele pe care le construiești aici te vor ajuta indiferent unde ajungi.
 
 ---
 
-# PART I: SETUP AND CONFIGURATION
+## De Ce Arată Cursul Așa Cum Arată
 
-This section covers everything you need to do before the first seminar. Without a working environment, the rest is useless.
+Câteva principii pe care le-am avut în minte când am structurat materialele:
+
+**Nu există "gena programatorului."** Abilitatea de a scrie cod e dobândită prin practică deliberată, nu e un talent înnăscut cu care te naști sau nu. Patitsas și colegii au demonstrat în 2016 că doar 5.8% din distribuțiile de note în cursurile de informatică sunt bimodal — restul mitului "unii pot, alții nu" e profeție auto-împlinită.
+
+**Începătorii nu sunt experți încetiți.** Au nevoie de abordări diferite, nu doar de mai mult timp. De aceea materialele includ Parsons Problems (reordonare cod), Peer Instruction (întrebări cu discuții în perechi), și Live Coding structurat. Sunt tehnici validate în cercetarea recentă din computing education!
+
+**Erorile sunt oportunități, nu eșecuri.** Am normalizat ideea (oportunitatea) de a greși în tot kit-ul. Fiecare programator a trecut prin aceleași bug-uri stupide — spațiul greșit aiurea dintr-un `[ $var ]`, uitatul ghilimelelor, off-by-one în buclele for/while. Când vezi că și profesorul greșește deși se corectează/repară codul tastat în timp real, parcă devine mai ușor să accepți că și tu vei greși. (Si nu te mai simti singur in intuneric ... desi, cateodata si GPT-ul zici ca-i lanterna!).
+
+**LLM-urile sunt tool-uri, nu adversari.** Studenții de azi au acces la ChatGPT, Claude, Gemini — n-are sens să facem cursuri care ignoră realitatea. Am inclus exerciții explicit "LLM-aware" unde trebuie să evaluezi ce generează AI-ul, nu doar să copiezi. Scopul e înțelegerea, nu finalizarea temei.
+
+**Atenția funcționează în sprinturi (dar scurte!).** Cercetările din neuroștiință arată că atenția susținută pentru studenți e realistă în ferestre de 5-10 minute, nu 50. De aceea temele sunt structurate în micro-milestone-uri cu verificări imediate. Pauzele nu sunt pierdere de timp — incubația ajută la sedimentarea cunostintelor. (Sincer, in tinerete am incercat si incubatie fara invatat nimic in prealabil ... am picat niste examene facand asta, dar macar le-am picat odihnit.)
+
+Dacă sună ciudat că un curs de Sisteme de Operare se gândește la neuroștiință și pedagogie: așa ar trebui să arate orice curs. Predatul tradițional — slide-uri citite monoton timp de două ore, cu studenții în rol pasiv — nu a funcționat niciodată bine, doar am acceptat colectiv că așa e normal. Nu e normal. E învățământ industrial: eficient pentru a procesa oameni, ineficient pentru a-i învăța ceva.
+
+Materialele de aici sunt rezultatul a ani de experimentare, testare, și iterare. Metodele de Peer Instruction, Productive Failure, Subgoal Labeling (evident) nu sunt găsite de mine. Sunt validate în cercetare la SIGCSE, ICER, ITiCSE (vezi ref). Ce am făcut eu e să le aplic în contextul concret al cursului nostru și să văd ce funcționează cu studenții de la ASE.
 
 ---
 
-## Step 0: Choose Your Installation Option
+# PARTEA I: SETUP ȘI CONFIGURARE
 
-You have three main options. My recommendation is WSL2 if you are on Windows — it is the simplest and closest to the real Linux experience.
+Această secțiune acoperă tot ce trebuie să faci înainte de primul seminar. Fără un mediu funcțional, restul e inutil.
 
-| Option | For whom | Advantages | Disadvantages |
+---
+
+## Pasul 0: Alege-ți Varianta de Instalare
+
+Ai trei opțiuni principale. Recomandarea mea e WSL2 dacă ești pe Windows — e cel mai simplu și cel mai aproape de experiența Linux reală.
+
+| Opțiune | Pentru cine | Avantaje | Dezavantaje |
 |---------|-------------|----------|-------------|
-| **WSL2** | Windows 10/11 | Fast, integrated into Windows, no reboot | Requires updated Windows |
-| **VirtualBox** | Any OS | Complete isolation, snapshots | Slower, consumes more resources |
-| **Dual boot** | Advanced users | Native performance | Risk during installation, must reboot |
+| **WSL2** | Windows 10/11 | Rapid, integrat în Windows, fără reboot | Necesită Windows actualizat |
+| **VirtualBox** | Orice OS | Izolare completă, snapshot-uri | Mai lent, consumă mai multe resurse |
+| **Dual boot** | Utilizatori avansați | Performanță nativă | Risc la instalare, trebuie să repornești |
 
-**Quick decision:** If you have a recent Windows 10/11, go with WSL2. If you have an older Windows or want complete isolation, VirtualBox. Dual boot only if you know what you are doing.
+**Decizia rapidă:** Dacă ai Windows 10/11 recent, mergi pe WSL2. Dacă ai un Windows mai vechi sau vrei izolare completă, VirtualBox. Dual boot doar dacă știi ce faci.
 
 ---
 
-## Step 1: Installing WSL2 (Recommended Option)
+## Pasul 1: Instalare WSL2 (Varianta Recomandată)
 
-WSL2 has completely changed the way I teach — now students can practise Linux without dual boot or a separate virtual machine.
+WSL2 a schimbat complet modul în care predau — acum studenții pot exersa Linux fără dual boot sau mașină virtuală separată.
 
-### 1.1 Check the Requirements
+### 1.1 Verifică Cerințele
 
-**Windows 10:** You need version 2004 or newer (Build 19041+)  
-**Windows 11:** Any version works
+**Windows 10:** Trebuie versiunea 2004 sau mai nouă (Build 19041+)  
+**Windows 11:** Orice versiune merge
 
-Check your version:
+Verifică versiunea ta:
 
 ```powershell
-# POWERSHELL (Windows) - run as normal user
+# POWERSHELL (Windows) - rulează ca utilizator normal
 winver
 ```
 
-A window opens with information. Look for the Build number.
+Se deschide o fereastră cu informații. Caută numărul de Build.
 
-### 1.2 Check Virtualisation
+### 1.2 Verifică Virtualizarea
 
-Open Task Manager (`Ctrl+Shift+Esc`), Performance tab, click on CPU. In the bottom right you should see:
+Deschide Task Manager (`Ctrl+Shift+Esc`), tab-ul Performance, click pe CPU. În dreapta jos trebuie să vezi:
 
 ```
 Virtualization: Enabled
 ```
 
-If it says "Disabled", you need to enable virtualisation from BIOS. The procedure differs depending on the motherboard manufacturer — search for "[laptop/PC brand] enable virtualization BIOS".
+Dacă scrie "Disabled", trebuie să activezi virtualizarea din BIOS. Procedura diferă în funcție de producătorul plăcii de bază — caută "[marca laptop/PC] enable virtualization BIOS".
 
-### 1.3 Enable WSL2
+### 1.3 Activează WSL2
 
-Open PowerShell **as Administrator** (right-click on Start → Terminal (Admin) or Windows PowerShell (Admin)):
+Deschide PowerShell **ca Administrator** (click dreapta pe Start → Terminal (Admin) sau Windows PowerShell (Admin)):
 
 ```powershell
 # POWERSHELL (Administrator)
-# Enable Windows Subsystem for Linux
+# Activează Windows Subsystem for Linux
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 
-# Enable Virtual Machine Platform
+# Activează Virtual Machine Platform
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 ```
 
-**RESTART your computer.** Seriously, without a restart it will not work.
+**RESTARTEAZĂ calculatorul.** Serios, fără restart nu merge.
 
-### 1.4 Install Ubuntu
+### 1.4 Instalează Ubuntu
 
-After restart, open PowerShell as Administrator again:
+După restart, deschide din nou PowerShell ca Administrator:
 
 ```powershell
 # POWERSHELL (Administrator)
-# Download and install the WSL2 kernel update
+# Descarcă și instalează actualizarea pentru kernel-ul WSL2
 wsl --update
 
-# Set WSL2 as the default version
+# Setează WSL2 ca versiune implicită
 wsl --set-default-version 2
 
-# Install Ubuntu 24.04 LTS
+# Instalează Ubuntu 24.04 LTS
 wsl --install -d Ubuntu-24.04
 ```
 
-The download takes 5-15 minutes depending on your internet connection. At the end, a new window with Ubuntu opens automatically.
+Descărcarea durează 5-15 minute în funcție de internet. La final se deschide automat o fereastră nouă cu Ubuntu.
 
-### 1.5 Create Your Linux Account
+### 1.5 Creează-ți Contul Linux
 
-Ubuntu asks you to create a user.
+Ubuntu îți cere să creezi un utilizator. 
 
-**Username:** Your surname, lowercase, without diacritics  
-Examples: `popescu`, `ionescu`, `stefanescu`
+**Username:** Numele tău de familie, cu litere mici, fără diacritice  
+Exemple: `popescu`, `ionescu`, `stefanescu`
 
-**Password:** `stud` (for consistency in the lab)
+**Parolă:** `stud` (pentru consistență în laborator)
 
-When you type the password, **you see nothing on the screen** — no stars, no dots. This is normal for Linux. Type and press Enter.
+Când scrii parola, **nu vezi nimic pe ecran** — nici stele, nici puncte. E normal pentru Linux. Tastează și apasă Enter.
 
-### 1.6 Update the System
+### 1.6 Actualizează Sistemul
 
-The first command you run on any freshly installed Linux system:
+Prima comandă pe care o rulezi în orice sistem Linux proaspăt instalat:
 
 ```bash
-# BASH (Ubuntu) - black background
+# BASH (Ubuntu) - fundal negru
 sudo apt update && sudo apt upgrade -y
 ```
 
-`sudo` = "superuser do" — runs the command with administrator privileges  
-`apt` = the package manager from Debian/Ubuntu  
-`-y` = automatically answers "yes" to questions
+`sudo` = "superuser do" — rulează comanda cu privilegii de administrator  
+`apt` = package manager-ul din Debian/Ubuntu  
+`-y` = răspunde automat "yes" la întrebări
 
-It takes a few minutes. Grab a coffee.
+Durează câteva minute. Ia o cafea.
 
-### 1.7 Install the Required Packages
+### 1.7 Instalează Pachetele Necesare
 
 ```bash
 # BASH (Ubuntu)
-# Packages for seminars
+# Pachete pentru seminarii
 sudo apt install -y git vim nano tree htop ncdu shellcheck python3 python3-pip python3-venv build-essential openssh-server curl wget figlet lolcat cowsay fortune pv dialog jq bc
 
-# Verify the installation
-echo "Verifying installation..."
+# Verifică instalarea
+echo "Verificare instalare..."
 for cmd in git vim nano tree htop python3 shellcheck ssh curl wget; do
-    command -v "$cmd" >/dev/null && echo "  [OK] $cmd" || echo "  [MISSING] $cmd"
+    command -v "$cmd" >/dev/null && echo "  [OK] $cmd" || echo "  [LIPSĂ] $cmd"
 done
 ```
 
-### 1.8 Configure SSH (for PuTTY and WinSCP)
+### 1.8 Configurează SSH (pentru PuTTY și WinSCP)
 
-SSH allows you to connect to Ubuntu from Windows using PuTTY or to transfer files with WinSCP.
+SSH îți permite să te conectezi la Ubuntu din Windows folosind PuTTY sau să transferi fișiere cu WinSCP.
 
 ```bash
 # BASH (Ubuntu)
-# Start the SSH service
+# Pornește serviciul SSH
 sudo service ssh start
 
-# Verify it is running
+# Verifică că rulează
 sudo service ssh status
 
-# Find the IP address
+# Află adresa IP
 hostname -I
 ```
 
-Note the IP address (probably `172.x.x.x`) — you will use it in PuTTY.
+Notează adresa IP (probabil `172.x.x.x`) — o vei folosi în PuTTY.
 
-### 1.9 Set the Hostname
+### 1.9 Setează Hostname-ul
 
-For identification in the lab, set a descriptive hostname:
+Pentru identificare în laborator, setează un hostname descriptiv:
 
 ```bash
 # BASH (Ubuntu)
-# Replace AP_1001_A with your group and position
-# Format: [Specialisation]_[Group]_[PC Letter]
-# Example: AP_1029_B for Applied Informatics, group 1029, PC B
+# Înlocuiește AP_1001_A cu grupa și poziția ta
+# Format: [Specializare]_[Grupa]_[Litera PC-ului]
+# Exemplu: AP_1029_B pentru Informatică Economică (Aplicată), grupa 1029, PC-ul B
 
 sudo hostnamectl set-hostname AP_1029_A
 ```
 
-Close and reopen the terminal to see the change.
+Închide și redeschide terminalul pentru a vedea schimbarea.
 
 ---
 
-## Step 2: Recommended Folder Structure
+## Pasul 2: Structura de Foldere Recomandată
 
-A good folder structure saves you from chaos during the semester. I have seen students with all files in a single folder — they would find `script.sh`, `script2.sh`, `script_final.sh`, `script_final_v2.sh` and no longer knew which was which.
+O structură bună de foldere te scapă de haos pe parcursul semestrului. Am văzut studenți cu toate fișierele într-un singur folder — găseau `script.sh`, `script2.sh`, `script_final.sh`, `script_final_v2.sh` și nu mai știau care e care.
 
-### 2.1 Create the Basic Structure
+### 2.1 Creează Structura de Bază
 
 ```bash
 # BASH (Ubuntu)
-# Create the main structure
+# Creează structura principală
 mkdir -p ~/so-lab/{cursuri,seminarii,teme,proiecte,experimente,backup}
 
-# Create subdirectories for each seminar
+# Creează subdirectoare pentru fiecare seminar
 for i in $(seq -w 1 6); do
     mkdir -p ~/so-lab/seminarii/SEM0$i/{exercitii,demo,notite}
 done
 
-# Create subdirectories for assignments
+# Creează subdirectoare pentru teme
 for i in $(seq -w 1 7); do
     mkdir -p ~/so-lab/teme/TEMA0$i
 done
 
-# Create subdirectories for courses
+# Creează subdirectoare pentru cursuri
 for i in $(seq -w 1 14); do
     mkdir -p ~/so-lab/cursuri/CURS$i/{notite,scripturi}
 done
 
-# Visualise the structure
+# Vizualizează structura
 tree -L 3 ~/so-lab/
 ```
 
-You should see:
+Ar trebui să vezi:
 
 ```
-/home/yourname/so-lab/
+/home/numeletau/so-lab/
 ├── backup/
 ├── cursuri/
 │   ├── CURS01/
@@ -294,7 +268,7 @@ You should see:
 │   ├── CURS02/
 │   │   ├── notite/
 │   │   └── scripturi/
-│   └── ... (up to CURS14)
+│   └── ... (până la CURS14)
 ├── experimente/
 ├── proiecte/
 ├── seminarii/
@@ -304,27 +278,27 @@ You should see:
 │   │   └── notite/
 │   ├── SEM02/
 │   │   └── ...
-│   └── ... (up to SEM06)
+│   └── ... (până la SEM06)
 └── teme/
     ├── TEMA01/
     ├── TEMA02/
-    └── ... (up to TEMA07)
+    └── ... (până la TEMA07)
 ```
 
-### 2.2 Why This Structure
+### 2.2 De Ce Această Structură
 
-| Folder | What you put there | Why separate |
+| Folder | Ce pui acolo | De ce separat |
 |--------|--------------|---------------|
-| `cursuri/` | Notes and scripts from courses | Theory, separated from practice |
-| `seminarii/` | Exercises from the lab | Each seminar is independent |
-| `teme/` | Homework assignments | You submit them, do not mix them |
-| `proiecte/` | Semester project | Larger code, different structure |
-| `experimente/` | Tests, experiments | Place to "break things" |
-| `backup/` | Safety copies | Before major modifications |
+| `cursuri/` | Notițe și scripturi din cursuri | Teoria, separată de practică |
+| `seminarii/` | Exerciții din laborator | Fiecare seminar e independent |
+| `teme/` | Temele de casă | Le predai, nu le amesteci |
+| `proiecte/` | Proiectul de semestru | Cod mai mare, structură diferită |
+| `experimente/` | Teste, încercări | Loc pentru a "sparge lucruri" |
+| `backup/` | Copii de siguranță | Înainte de modificări majore |
 
-### 2.3 Create the Directory for Homework Recordings
+### 2.3 Creează Directorul pentru Înregistrări de Teme
 
-Assignments are recorded with a special script (more details in the assignments section):
+Temele se înregistrează cu un script special (mai multe detalii în secțiunea despre teme):
 
 ```bash
 # BASH (Ubuntu)
@@ -333,75 +307,75 @@ mkdir -p ~/HOMEWORKS
 
 ---
 
-## Step 3: Git Configuration
+## Pasul 3: Configurare Git
 
-Git is necessary to clone the kit and for versioning your own scripts. If you have not used Git before, now is the time to learn — it is a skill you will use in any programming job.
+Git e necesar pentru a clona kit-ul și pentru versionarea propriilor scripturi. Dacă nu ai folosit Git până acum, e momentul să înveți — e o abilitate pe care o vei folosi în orice job de programare.
 
-### 3.1 Initial Configuration
+### 3.1 Configurare Inițială
 
 ```bash
 # BASH (Ubuntu)
-# Set your identity (replace with your details)
+# Setează identitatea ta (înlocuiește cu datele tale)
 git config --global user.name "Popescu Ion"
 git config --global user.email "ion.popescu@student.ase.ro"
 
-# Useful settings
+# Setări utile
 git config --global init.defaultBranch main
 git config --global core.editor "nano"
 git config --global pull.rebase false
 
-# Verify the configuration
+# Verifică configurația
 git config --list
 ```
 
-### 3.2 Clone the ROso Kit
+### 3.2 Clonează Kit-ul ROso
 
 ```bash
 # BASH (Ubuntu)
 cd ~/so-lab
 
-# Clone the repository
+# Clonează repository-ul
 git clone https://github.com/antonioclim/ROso.git
 
-# Verify the contents
+# Verifică conținutul
 ls -la ROso/
 ```
 
-If the repository is private or you received the materials another way, copy them manually to `~/so-lab/ROso/`.
+Dacă repository-ul e privat sau ai primit materialele pe altă cale, copiază-le manual în `~/so-lab/ROso/`.
 
-### 3.3 Create Repositories for Assignments
+### 3.3 Creează Repository-uri pentru Teme
 
-Each assignment should have its own repository (or at least its own branch). This helps you:
-- Revert to previous versions if you break something
-- See what you modified and when
-- Demonstrate that you worked progressively (not everything on the last night)
+Fiecare temă ar trebui să aibă propriul repository (sau cel puțin propriul branch). Asta te ajută să:
+- Revii la versiuni anterioare dacă strici ceva
+- Vezi ce ai modificat și când
+- Demonstrezi că ai lucrat progresiv (nu totul în ultima noapte)
 
 ```bash
 # BASH (Ubuntu)
-# For each assignment, initialise a Git repo
+# Pentru fiecare temă, inițializează un repo Git
 cd ~/so-lab/teme/TEMA01
 git init
 echo "# Tema 01 - SO" > README.md
 git add README.md
 git commit -m "Initial commit"
 
-# Create .gitignore
+# Creează .gitignore
 cat > .gitignore << 'EOF'
-# Temporary files
+# Fișiere temporare
 *.tmp
 *.bak
 *~
 *.swp
 
-# Outputs
+# Output-uri
 *.log
 *.out
 
-# Python cache
+# Cache Python
 __pycache__/
 *.pyc
 
-# System files
+# Fișiere de sistem
 .DS_Store
 Thumbs.db
 EOF
@@ -410,56 +384,56 @@ git add .gitignore
 git commit -m "Add .gitignore"
 ```
 
-### 3.4 Recommended Git Workflow for Assignments
+### 3.4 Workflow Git Recomandat pentru Teme
 
 ```bash
 # BASH (Ubuntu)
-# 1. Before starting work
+# 1. Înainte să începi lucrul
 cd ~/so-lab/teme/TEMA01
 git status
 
-# 2. After each important milestone
+# 2. După fiecare milestone important
 git add script.sh
-git commit -m "Implement backup function"
+git commit -m "Implementare funcție de backup"
 
-# 3. At the end
+# 3. La final
 git add .
-git commit -m "Assignment complete - all requirements implemented"
+git commit -m "Temă completă - toate cerințele implementate"
 
-# 4. View the history
+# 4. Vezi istoricul
 git log --oneline
 ```
 
-**Good commit messages:**
-- `"Add input validation function"`
-- `"Fix bug in processing files with spaces"`
-- `"Optimise main loop"`
+**Mesaje de commit bune:**
+- `"Adaugă funcția de validare input"`
+- `"Repară bug în procesarea fișierelor cu spații"`
+- `"Optimizează bucla principală"`
 
-**Bad commit messages:**
+**Mesaje de commit proaste:**
 - `"update"`
 - `"asdfasdf"`
 - `"final final FINAL"`
 
 ---
 
-## Step 4: Verify the Installation
+## Pasul 4: Verifică Instalarea
 
-Run this verification script to ensure everything is in order:
+Rulează acest script de verificare pentru a te asigura că totul e în regulă:
 
 ```bash
 # BASH (Ubuntu)
 cat << 'EOF' > ~/verify_setup.sh
 #!/usr/bin/env bash
-# Verification script for the SO kit
+# Script de verificare pentru kit-ul SO
 
 echo ""
 echo "╔════════════════════════════════════════════════════════════════╗"
-echo "║          WORKING ENVIRONMENT VERIFICATION - SO ASE             ║"
+echo "║          VERIFICARE MEDIU DE LUCRU - SO ASE                    ║"
 echo "╚════════════════════════════════════════════════════════════════╝"
 echo ""
 
-# System information
-echo "▶ SYSTEM"
+# Informații sistem
+echo "▶ SISTEM"
 echo "  Hostname: $(hostname)"
 echo "  User: $(whoami)"
 echo "  Ubuntu: $(lsb_release -ds 2>/dev/null || echo 'N/A')"
@@ -467,48 +441,48 @@ echo "  Kernel: $(uname -r)"
 echo "  Bash: $(bash --version | head -1 | cut -d' ' -f4)"
 echo ""
 
-# Network
-echo "▶ NETWORK"
+# Rețea
+echo "▶ REȚEA"
 echo "  IP: $(hostname -I 2>/dev/null | awk '{print $1}' || echo 'N/A')"
 if ping -c 1 -W 2 google.com >/dev/null 2>&1; then
     echo "  Internet: OK"
 else
-    echo "  Internet: NO CONNECTION"
+    echo "  Internet: FĂRĂ CONEXIUNE"
 fi
 echo ""
 
-# Required commands
-echo "▶ REQUIRED COMMANDS"
+# Comenzi necesare
+echo "▶ COMENZI NECESARE"
 CMDS="bash git nano vim python3 gcc shellcheck ssh tree htop awk sed grep find tar curl wget"
 for cmd in $CMDS; do
     if command -v "$cmd" >/dev/null 2>&1; then
-        printf "  [OK]      %s\n" "$cmd"
+        printf "  [OK]    %s\n" "$cmd"
     else
-        printf "  [MISSING] %s\n" "$cmd"
+        printf "  [LIPSĂ] %s\n" "$cmd"
     fi
 done
 echo ""
 
-# Optional commands
-echo "▶ OPTIONAL COMMANDS (for demos)"
+# Comenzi opționale
+echo "▶ COMENZI OPȚIONALE (pentru demo-uri)"
 OPT_CMDS="figlet lolcat cowsay fortune pv dialog jq"
 for cmd in $OPT_CMDS; do
     if command -v "$cmd" >/dev/null 2>&1; then
-        printf "  [OK]      %s\n" "$cmd"
+        printf "  [OK]    %s\n" "$cmd"
     else
-        printf "  [--]      %s (optional)\n" "$cmd"
+        printf "  [--]    %s (opțional)\n" "$cmd"
     fi
 done
 echo ""
 
-# Folder structure
-echo "▶ FOLDER STRUCTURE"
+# Structura de foldere
+echo "▶ STRUCTURA DE FOLDERE"
 DIRS="so-lab so-lab/cursuri so-lab/seminarii so-lab/teme so-lab/proiecte HOMEWORKS"
 for dir in $DIRS; do
     if [ -d ~/"$dir" ]; then
-        printf "  [OK]      ~/%s\n" "$dir"
+        printf "  [OK]    ~/%s\n" "$dir"
     else
-        printf "  [MISSING] ~/%s\n" "$dir"
+        printf "  [LIPSĂ] ~/%s\n" "$dir"
     fi
 done
 echo ""
@@ -519,21 +493,21 @@ if git config user.name >/dev/null 2>&1; then
     echo "  User: $(git config user.name)"
     echo "  Email: $(git config user.email)"
 else
-    echo "  [!] Git is not configured (run git config)"
+    echo "  [!] Git nu e configurat (rulează git config)"
 fi
 echo ""
 
 # SSH
 echo "▶ SSH"
 if systemctl is-active --quiet ssh 2>/dev/null || service ssh status 2>/dev/null | grep -q running; then
-    echo "  SSH Server: ACTIVE"
+    echo "  Server SSH: ACTIV"
 else
-    echo "  SSH Server: INACTIVE (run: sudo service ssh start)"
+    echo "  Server SSH: INACTIV (rulează: sudo service ssh start)"
 fi
 echo ""
 
 echo "════════════════════════════════════════════════════════════════"
-echo "Verification complete!"
+echo "Verificare completă!"
 echo "════════════════════════════════════════════════════════════════"
 EOF
 
@@ -543,199 +517,199 @@ chmod +x ~/verify_setup.sh
 
 ---
 
-## Step 5: VirtualBox Installation (Alternative)
+## Pasul 5: Instalare VirtualBox (Alternativă)
 
-If WSL2 does not work or you prefer complete isolation, use VirtualBox.
+Dacă WSL2 nu funcționează sau preferi izolare completă, folosește VirtualBox.
 
-### 5.1 Download and Install VirtualBox
+### 5.1 Descarcă și Instalează VirtualBox
 
-1. Download from https://www.virtualbox.org/wiki/Downloads
-2. Choose "Windows hosts" (or the variant for your OS)
-3. Run the installer with default settings
+1. Descarcă de la https://www.virtualbox.org/wiki/Downloads
+2. Alege "Windows hosts" (sau varianta pentru OS-ul tău)
+3. Rulează installer-ul cu setările implicite
 
-### 5.2 Download Ubuntu 24.04 LTS
+### 5.2 Descarcă Ubuntu 24.04 LTS
 
-1. Download the ISO from https://ubuntu.com/download/desktop
-2. Choose "Ubuntu 24.04 LTS"
-3. Save the `.iso` file (about 5 GB)
+1. Descarcă ISO-ul de la https://ubuntu.com/download/desktop
+2. Alege "Ubuntu 24.04 LTS"
+3. Salvează fișierul `.iso` (circa 5 GB)
 
-### 5.3 Create the Virtual Machine
+### 5.3 Creează Mașina Virtuală
 
-1. Open VirtualBox → New
+1. Deschide VirtualBox → New
 2. Name: `Ubuntu-SO`
 3. Type: Linux, Version: Ubuntu (64-bit)
-4. Memory: minimum 4096 MB (4 GB), recommended 8192 MB
+4. Memory: minim 4096 MB (4 GB), recomandat 8192 MB
 5. Hard disk: Create a virtual hard disk now
    - VDI, Dynamically allocated
-   - Minimum 25 GB, recommended 50 GB
+   - Minim 25 GB, recomandat 50 GB
 
-### 5.4 Configure the Machine
+### 5.4 Configurează Mașina
 
-Before starting, adjust the settings (Settings):
+Înainte de a porni, ajustează setările (Settings):
 
 **System → Processor:**
-- Processors: 2-4 (depending on how many cores you have)
+- Processors: 2-4 (în funcție de câte core-uri ai)
 
 **Display → Screen:**
 - Video Memory: 128 MB
-- Enable 3D Acceleration: ticked (if it works)
+- Enable 3D Acceleration: bifat (dacă merge)
 
 **Storage:**
-- Controller: IDE → Empty → click on the disc icon → Choose a disk file
-- Select the downloaded Ubuntu ISO
+- Controller: IDE → Empty → click pe iconița de disc → Choose a disk file
+- Selectează ISO-ul Ubuntu descărcat
 
-### 5.5 Install Ubuntu
+### 5.5 Instalează Ubuntu
 
-1. Start → follow the installation wizard
+1. Start → urmează wizard-ul de instalare
 2. Install Ubuntu → Normal installation
-3. Username and password: same as for WSL2
+3. Username și parolă: la fel ca la WSL2
 
-After installation, install Guest Additions for resolution and shared clipboard:
+După instalare, instalează Guest Additions pentru rezoluție și clipboard partajat:
 
 ```bash
-# BASH (Ubuntu in VirtualBox)
+# BASH (Ubuntu în VirtualBox)
 sudo apt update
 sudo apt install -y virtualbox-guest-utils virtualbox-guest-x11
 sudo reboot
 ```
 
-### 5.6 Snapshot Before the Lab
+### 5.6 Snapshot înainte de Laborator
 
-VirtualBox has an excellent feature: snapshots. Before each lab, take a snapshot:
+VirtualBox are o funcție excelentă: snapshot-uri. Înainte de fiecare laborator, fă un snapshot:
 
 1. Machine → Take Snapshot
-2. Name: "Before SEM03" (or whichever seminar follows)
+2. Name: "Înainte de SEM03" (sau ce seminar urmează)
 
-If you break something, you can instantly revert to the previous state.
-
----
-
-# PART II: KIT STRUCTURE
+Dacă strici ceva, poți reveni instant la starea anterioară.
 
 ---
 
-## Overview
+# PARTEA II: STRUCTURA KIT-ULUI
+
+---
+
+## Vedere de Ansamblu
 
 ```
 ROso/
-├── 001CONDITIIinit/          # ← STEP 1: Installation and configuration
-├── 002HWinit/          # ← STEP 2: Guides for students  
-├── 003GHID/          # ← STEP 3: Technical guides
+├── 001CONDITIIinit/          # ← PASUL 1: Instalare și configurare
+├── 002HWinit/          # ← PASUL 2: Ghiduri pentru studenți  
+├── 003GHID/          # ← PASUL 3: Ghiduri tehnice
 │
-├── SO_curs/                  # Course materials (theory)
-│   └── SO_curs01..14/        #   14 thematic units
+├── SO_curs/                  # Materialele de curs (teorie)
+│   └── SO_curs01..14/        #   14 unități tematice
 │
-├── SEM01..06/                # Seminar materials (practice)
-│   └── [detailed structure below]
+├── SEM01..06/                # Materialele de seminar (practică)
+│   └── [structură detaliată mai jos]
 │
-├── SEM-PROJ/                 # Semester projects
-│   ├── EASY/                 #   5 projects, 15-20 hours
-│   ├── MEDIUM/               #   15 projects, 25-35 hours
-│   └── ADVANCED/             #   3 projects, 40-50 hours
+├── SEM-PROJ/                 # Proiecte de semestru
+│   ├── EASY/                 #   5 proiecte, 15-20 ore
+│   ├── MEDIUM/               #   15 proiecte, 25-35 ore
+│   └── ADVANCED/             #   3 proiecte, 40-50 ore
 │
-└── 000SUPPL/                 # Supplementary materials
-    ├── diagrame_png/         #   Pre-rendered diagrams
+└── 000SUPPL/                 # Materiale suplimentare
+    ├── diagrame_png/         #   Diagrame pre-renderizate
     └── Exercitii_Examene_*.md
 ```
 
 ---
 
-## Folder 001CONDITIIinit — Installation
+## Folder-ul 001CONDITIIinit — Instalare
 
-Here you find the detailed installation guides:
+Aici găsești ghidurile detaliate de instalare:
 
-| File | Contents |
+| Fișier | Conținut |
 |--------|----------|
-| `GHID_WSL2_Ubuntu2404_INCEPATORI_SO_ASE.md` | Step-by-step guide for WSL2 |
-| `GHID_WSL2_Ubuntu2404_INTERACTIV.html` | Interactive version (open in browser) |
-| `GHID_VirtualBox_Ubuntu2404_INCEPATORI_SO_ASE.md` | Guide for VirtualBox |
-| `GHID_VirtualBox_Ubuntu2404_INTERACTIV.html` | Interactive version |
-| `TC0.A_RO-TC laborator 0C_*.pdf` | Lab 0 worksheet (prerequisites) |
+| `GHID_WSL2_Ubuntu2404_INCEPATORI_SO_ASE.md` | Ghid pas-cu-pas pentru WSL2 |
+| `GHID_WSL2_Ubuntu2404_INTERACTIV.html` | Versiune interactivă (deschide în browser) |
+| `GHID_VirtualBox_Ubuntu2404_INCEPATORI_SO_ASE.md` | Ghid pentru VirtualBox |
+| `GHID_VirtualBox_Ubuntu2404_INTERACTIV.html` | Versiune interactivă |
+| `TC0.A_RO-TC laborator 0C_*.pdf` | Fișa de laborator 0 (prerequisite) |
 
-If you followed the steps in the previous section, you have already covered most of the content of these guides.
+Dacă ai urmat pașii din secțiunea anterioară, ai parcurs deja mare parte din conținutul acestor ghiduri.
 
 ---
 
-## Folder 002HWinit — Guides for Students
+## Folder-ul 002HWinit — Ghiduri pentru Studenți
 
-Contains instructions for submitting and recording assignments:
+Conține instrucțiuni pentru predarea și înregistrarea temelor:
 
-| File | Contents |
+| Fișier | Conținut |
 |--------|----------|
-| `GHID_STUDENT_RO.md` | How to use the recording script |
-| `record_homework_tui_RO.py` | Python script with text interface for assignments |
-| `record_homework_RO.sh` | Bash version (alternative) |
+| `GHID_STUDENT_RO.md` | Cum să folosești scriptul de înregistrare |
+| `record_homework_tui_RO.py` | Script Python cu interfață text pentru teme |
+| `record_homework_RO.sh` | Versiune Bash (alternativă) |
 
-### How Homework Recording Works
+### Cum Funcționează Înregistrarea Temelor
 
-Assignments are not submitted as files — terminal sessions are recorded. This means the instructor sees exactly what commands you gave and in what order.
+Temele nu se predau ca fișiere — se înregistrează sesiuni de terminal. Asta înseamnă că profesorul vede exact ce comenzi ai dat și în ce ordine.
 
 ```bash
 # BASH (Ubuntu)
-# Download the script
+# Descarcă scriptul
 cd ~/HOMEWORKS
 wget -O record_homework_tui_RO.py "https://drive.google.com/uc?export=download&id=1YLqNamLCdz6OzF6hlcPr1hr738DIaSYz"
 chmod +x record_homework_tui_RO.py
 
-# Run
+# Rulează
 python3 record_homework_tui_RO.py
 ```
 
-On the first run, the script installs the necessary dependencies (`rich`, `questionary`, `asciinema`). Then it asks you for:
-- Name, surname, group
-- Assignment number (e.g.: `03a`)
+La prima rulare, scriptul instalează dependențele necesare (`rich`, `questionary`, `asciinema`). Apoi îți cere:
+- Nume, prenume, grupă
+- Numărul temei (ex: `03a`)
 
-Recording starts. You do the assignment. When you finish, type `STOP_tema` or `Ctrl+D`. The script generates a cryptographically signed `.cast` file and uploads it to the server.
+Începe înregistrarea. Faci tema. Când termini, tastezi `STOP_tema` sau `Ctrl+D`. Scriptul generează un fișier `.cast` semnat criptografic și îl încarcă pe server.
 
-Why recording, not files?
-- You cannot copy from colleagues (the signature is unique)
-- The thinking process is visible, not just the result
-- Mistakes and corrections are visible (and that is ok!)
+De ce înregistrare, nu fișiere?
+- Nu poți copia de la colegi (semnătura e unică)
+- Se vede procesul de gândire, nu doar rezultatul
+- Greșelile și corecțiile sunt vizibile (și ok!)
 
 ---
 
-## Folder 003GHID — Technical Guides
+## Folder-ul 003GHID — Ghiduri Tehnice
 
-Contains guides for scripting and debugging:
+Conține ghiduri pentru scripting și debugging:
 
-| File | Contents |
+| Fișier | Conținut |
 |--------|----------|
-| `00_Cum_se_utilizeaza_kitul.md` | General kit overview |
-| `01_Ghid_Scripting_Bash.md` | Best practices for Bash scripts |
-| `02_Ghid_Scripting_Python_pentru_SO.md` | Python in OS context |
-| `03_Ghid_Observabilitate_si_Debugging.md` | How to understand what the system does |
-| `04_Idei_de_proiecte.md` | Inspiration for projects |
-| `05_Ghid_PlantUML.md` | How to generate diagrams |
+| `00_Cum_se_utilizeaza_kitul.md` | Prezentare generală a kit-ului |
+| `01_Ghid_Scripting_Bash.md` | Best practices pentru scripturi Bash |
+| `02_Ghid_Scripting_Python_pentru_SO.md` | Python în context OS |
+| `03_Ghid_Observabilitate_si_Debugging.md` | Cum să înțelegi ce face sistemul |
+| `04_Idei_de_proiecte.md` | Inspirație pentru proiecte |
+| `05_Ghid_PlantUML.md` | Cum să generezi diagrame |
 
-### Extract from the Bash Scripting Guide
+### Extras din Ghidul de Scripting Bash
 
-The most important rules:
+Cele mai importante reguli:
 
-**1. Shebang and strict mode**
+**1. Shebang și mod strict**
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 ```
 
-**2. Quotes everywhere**
+**2. Ghilimele peste tot**
 ```bash
-# WRONG
+# GREȘIT
 for f in *.txt; do
-    echo $f        # Bug if the name has spaces
+    echo $f        # Bug dacă numele are spații
 done
 
-# CORRECT
+# CORECT
 for f in ./*.txt; do
     [[ -e "$f" ]] || continue
     echo "$f"
 done
 ```
 
-**3. Small, testable functions**
+**3. Funcții mici, testabile**
 ```bash
 ensure_cmd() {
     command -v "$1" >/dev/null 2>&1 || {
-        echo "Error: missing command $1" >&2
+        echo "Eroare: lipsește comanda $1" >&2
         exit 1
     }
 }
@@ -744,7 +718,7 @@ ensure_cmd git
 ensure_cmd python3
 ```
 
-**4. Automatic cleanup**
+**4. Cleanup automat**
 ```bash
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
@@ -752,290 +726,290 @@ trap 'rm -rf "$tmp"' EXIT
 
 ---
 
-## Structure of a Seminar (SEM01-06)
+## Structura Unui Seminar (SEM01-06)
 
-All seminars have the same organisation:
+Toate seminariile au aceeași organizare:
 
 ```
 SEM0X/
-├── README.md                    # General overview
+├── README.md                    # Prezentare generală
 │
-├── docs/                        # Documentation
-│   ├── S0X_00_ANALIZA_*.md      #   Pedagogical plan
-│   ├── S0X_01_GHID_INSTRUCTOR   #   For the instructor
-│   ├── S0X_02_MATERIAL_PRINCIPAL #   Central material
-│   ├── S0X_03_PEER_INSTRUCTION  #   MCQ questions
-│   ├── S0X_04_PARSONS_PROBLEMS  #   Code reordering
-│   ├── S0X_05_LIVE_CODING_*     #   Live coding script
-│   ├── S0X_06_EXERCITII_SPRINT  #   Short exercises
-│   ├── S0X_07_LLM_AWARE_*       #   Exercises with AI
-│   ├── S0X_08_DEMO_*            #   Spectacular demos
-│   ├── S0X_09_CHEAT_SHEET_*     #   1-page summary
-│   └── S0X_10_AUTOEVALUARE_*    #   Reflection
+├── docs/                        # Documentație
+│   ├── S0X_00_ANALIZA_*.md      #   Plan pedagogic
+│   ├── S0X_01_GHID_INSTRUCTOR   #   Pentru instructor
+│   ├── S0X_02_MATERIAL_PRINCIPAL #   Materialul central
+│   ├── S0X_03_PEER_INSTRUCTION  #   Întrebări MCQ
+│   ├── S0X_04_PARSONS_PROBLEMS  #   Reordonare cod
+│   ├── S0X_05_LIVE_CODING_*     #   Script live coding
+│   ├── S0X_06_EXERCITII_SPRINT  #   Exerciții scurte
+│   ├── S0X_07_LLM_AWARE_*       #   Exerciții cu AI
+│   ├── S0X_08_DEMO_*            #   Demo-uri spectaculoase
+│   ├── S0X_09_CHEAT_SHEET_*     #   Rezumat 1 pagină
+│   └── S0X_10_AUTOEVALUARE_*    #   Reflecție
 │
 ├── scripts/
-│   ├── bash/                    #   Setup, quiz, validation
-│   ├── demo/                    #   Demonstration scripts
-│   └── python/                  #   Autograder, generators
+│   ├── bash/                    #   Setup, quiz, validare
+│   ├── demo/                    #   Scripturi demonstrative
+│   └── python/                  #   Autograder, generatoare
 │
-├── prezentari/                  #   HTML slides
-├── resurse/                     #   Test files
-├── teme/                        #   Requirements and rubrics
-└── teste/                       #   Automated tests
+├── prezentari/                  #   Slide-uri HTML
+├── resurse/                     #   Fișiere de test
+├── teme/                        #   Cerințe și rubrici
+└── teste/                       #   Teste automatizate
 ```
 
-### How to Go Through a Seminar
+### Cum Să Parcurgi Un Seminar
 
 ```bash
 # BASH (Ubuntu)
 cd ~/so-lab/ROso/SEM02
 
-# 1. Read the general overview
+# 1. Citește prezentarea generală
 less README.md
 
-# 2. Go through the main material
+# 2. Parcurge materialul principal
 less docs/S02_02_MATERIAL_PRINCIPAL.md
 
-# 3. Run the demos
+# 3. Rulează demo-urile
 chmod +x scripts/demo/*.sh
 ./scripts/demo/S02_01_hook_demo.sh
 
-# 4. Test your knowledge
+# 4. Testează-ți cunoștințele
 ./scripts/bash/S02_02_quiz_interactiv.sh
 
-# 5. Do the exercises
+# 5. Fă exercițiile
 less docs/S02_06_EXERCITII_SPRINT.md
 
-# 6. Read the assignment requirements
+# 6. Citește cerințele temei
 less teme/S02_01_TEMA.md
 ```
 
 ---
 
-# PART III: DETAILED CONTENT
+# PARTEA III: CONȚINUT DETALIAT
 
 ---
 
-## Courses (SO_curs01-14)
+## Cursurile (SO_curs01-14)
 
-I structured the courses following the classical order from Silberschatz and Tanenbaum, with adjustments based on what works practically.
+Am structurat cursurile urmând ordinea clasică din Silberschatz și Tanenbaum, cu ajustări bazate pe ce funcționează practic.
 
-| Course | Topic | Key Concepts | Hook |
+| Curs | Temă | Concepte Cheie | Hook |
 |------|------|----------------|------|
-| 01 | Introduction to OS | OS role, kernel architectures, evolution | Why is the computer not just hardware? |
-| 02 | System Calls | The syscall mechanism, strace, API vs ABI | What happens when you type `ls`? |
-| 03 | Processes | States, fork(), exec(), Copy-on-Write | How does Unix make copies without copying? |
-| 04 | Scheduling | FCFS, SJF, RR, MLFQ, CFS | Why do some programmes "skip the queue"? |
-| 05 | Threads | Models, pthread, race conditions | Why is doing 2 things simultaneously hard? |
-| 06 | Synchronisation | Mutex, semaphores, monitors | How do you prevent chaos when everyone wants the same resource? |
-| 07 | IPC | Pipes, sockets, shared memory | How do processes talk to each other? |
-| 08 | Deadlock | Coffman conditions, Banker's algorithm | Why does everything sometimes lock up? |
-| 09 | Virtual Memory | Address space, paging | How can a process use "more" memory than you have? |
-| 10 | Paging | TLB, replacement algorithms | Why does the cache matter so much? |
-| 11 | File Systems I | Inode, hard/soft links | What are those numbers from `ls -i`? |
-| 12 | File Systems II | Journaling, ext4, RAID | Why do you not lose data when the power goes off? |
-| 13 | Security | Permissions, ACL, capabilities | Why can you not delete any file? |
-| 14 | Virtualisation | VM vs containers, namespaces | How does Docker run in a shared kernel? |
+| 01 | Introducere în SO | Rol OS, arhitecturi kernel, evoluție | De ce calculatorul nu e doar hardware? |
+| 02 | System Calls | Mecanismul syscall, strace, API vs ABI | Ce se întâmplă când tastezi `ls`? |
+| 03 | Procese | Stări, fork(), exec(), Copy-on-Write | Cum face Unix copii fără să copieze? |
+| 04 | Scheduling | FCFS, SJF, RR, MLFQ, CFS | De ce unele programe "sar rândul"? |
+| 05 | Thread-uri | Modele, pthread, race conditions | De ce e greu să faci 2 lucruri simultan? |
+| 06 | Sincronizare | Mutex, semafoare, monitoare | Cum împiedici haosul când toți vor aceeași resursă? |
+| 07 | IPC | Pipes, sockets, shared memory | Cum vorbesc procesele între ele? |
+| 08 | Deadlock | Condiții Coffman, Banker's algorithm | De ce se blochează uneori totul? |
+| 09 | Memorie Virtuală | Spațiu adrese, paginare | Cum poate un proces folosi "mai multă" memorie decât ai? |
+| 10 | Paginare | TLB, algoritmi de înlocuire | De ce contează cache-ul atât de mult? |
+| 11 | File Systems I | Inode, hard/soft links | Ce sunt acele numere din `ls -i`? |
+| 12 | File Systems II | Journaling, ext4, RAID | De ce nu pierzi date când se oprește curentul? |
+| 13 | Securitate | Permisiuni, ACL, capabilities | De ce nu poți șterge orice fișier? |
+| 14 | Virtualizare | VM vs containere, namespaces | Cum rulează Docker într-un kernel partajat? |
 
 ---
 
-## Seminars (SEM01-06)
+## Seminariile (SEM01-06)
 
 ### Seminar 1: Shell Basics
 
-We start from zero: navigation, variables, globbing. It seems trivial, but the difference between `$var` and `"$var"` produces bugs even in scripts written by experienced people.
+Pornim de la zero: navigare, variabile, globbing. Pare banal, dar diferența dintre `$var` și `"$var"` produce bug-uri și în scripturi scrise de oameni cu experiență.
 
-**What you will learn:**
-- Navigation (`cd`, `ls`, `pwd`, `tree`)
-- Local and environment variables
-- Quoting and escape sequences
+**Ce vei învăța:**
+- Navigare (`cd`, `ls`, `pwd`, `tree`)
+- Variabile locale și de mediu
+- Quoting și escape sequences
 - File globbing (`*`, `?`, `[abc]`, `{a,b,c}`)
-- Configuring `.bashrc`
+- Configurare `.bashrc`
 
-**Thought challenge:** Why are there so many ways of quoting in Bash (`'...'`, `"..."`, `$'...'`, `$"..."`)?
+**Provocare de gândire:** De ce există atâtea modalități de a face quoting în Bash (`'...'`, `"..."`, `$'...'`, `$"..."`)?
 
-The short answer: historical compatibility. Thompson's shell from 1971 did not have variables. Bourne Shell from 1979 added variables, and single and double quotes acquired different meanings. Then came the ANSI-C extensions (`$'...'`) in Bash for escape sequences like `\n`. Each addition had to be compatible with existing scripts. The result is chaotic, but it works.
+Răspunsul scurt: compatibilitate istorică. Shell-ul lui Thompson din 1971 nu avea variabile. Bourne Shell din 1979 a adăugat variabile, iar ghilimelele simple și duble au căpătat sensuri diferite. Apoi au venit extensiile ANSI-C (`$'...'`) în Bash pentru escape sequences ca `\n`. Fiecare adăugare a trebuit să fie compatibilă cu scripturile existente. Rezultatul e haotic, dar funcționează.
 
 ---
 
 ### Seminar 2: Pipeline Master
 
-Ken Thompson implemented pipes in a single night in 1973, at Doug McIlroy's insistence. McIlroy wanted programmes to be able to connect "like a garden hose". The idea defined Unix.
+Ken Thompson a implementat pipe-urile într-o singură noapte în 1973, la insistențele lui Doug McIlroy. McIlroy voia ca programele să se poată conecta "ca un furtun de grădină". Ideea a definit Unix.
 
-**What you will learn:**
-- Control operators (`;`, `&&`, `||`, `&`)
-- I/O redirection (`>`, `>>`, `<`, `2>`, `&>`)
-- Pipes and tee
-- Filters (`sort`, `uniq`, `cut`, `paste`, `tr`, `wc`)
-- Loops (`for`, `while`, `until`)
+**Ce vei învăța:**
+- Operatori de control (`;`, `&&`, `||`, `&`)
+- Redirecționare I/O (`>`, `>>`, `<`, `2>`, `&>`)
+- Pipes și tee
+- Filtre (`sort`, `uniq`, `cut`, `paste`, `tr`, `wc`)
+- Bucle (`for`, `while`, `until`)
 
-**Thought challenge:** Why is `cat file | grep pattern` considered an "anti-pattern" (Useless Use of Cat)?
+**Provocare de gândire:** De ce `cat file | grep pattern` e considerat un "anti-pattern" (Useless Use of Cat)?
 
-The command `grep pattern file` does the same thing without the extra process. But it is not always bad — sometimes `cat` makes the code clearer, especially in long pipelines. The practical rule: if speed matters, avoid it; if readability matters, perhaps keep it.
+Comanda `grep pattern file` face același lucru fără procesul extra. Dar nu e întotdeauna rău — câteodată `cat` face codul mai clar, mai ales în pipeline-uri lungi. Regula practică: dacă viteza contează, evită; dacă citibilitatea contează, poate păstra.
 
 ---
 
 ### SEM05-06: Find & Permissions
 
-`find` is probably the command with the most options in Unix. The first version had a completely different syntax from what we use today — they changed it because it was too complicated. And it still remained complicated.
+`find` e probabil comanda cu cele mai multe opțiuni din Unix. Prima versiune avea o sintaxă complet diferită de ce folosim azi — au schimbat-o pentru că era prea complicată. Și tot a rămas complicată.
 
-**What you will learn:**
-- `find` with multiple criteria and actions
-- `xargs` for parallel processing
-- Permissions: `chmod`, `chown`, `umask`
-- Special permissions: SUID, SGID, Sticky bit
-- `cron` for automation
+**Ce vei învăța:**
+- `find` cu criterii multiple și acțiuni
+- `xargs` pentru procesare în paralel
+- Permisiuni: `chmod`, `chown`, `umask`
+- Permisiuni speciale: SUID, SGID, Sticky bit
+- `cron` pentru automatizare
 
-**Thought challenge:** Why does Sticky bit exist on `/tmp`?
+**Provocare de gândire:** De ce există Sticky bit pe `/tmp`?
 
-Without Sticky bit, anyone can delete other people's files from a directory with write permissions for all. Sticky bit (the `t` notation in `drwxrwxrwt`) allows only the file owner to delete it. It was invented for shared directories like `/tmp`. The irony: originally "Sticky" meant the programme stayed in memory after execution (for performance). The meaning changed completely.
+Fără Sticky bit, oricine poate șterge fișierele altora dintr-un director cu permisiuni de scriere pentru toți. Sticky bit (notația `t` în `drwxrwxrwt`) permite doar proprietarului fișierului să-l șteargă. A fost inventat pentru directoare partajate ca `/tmp`. Ironia: inițial "Sticky" însemna că programul rămânea în memorie după execuție (pentru performanță). Sensul s-a schimbat complet.
 
 ---
 
 ### SEM07-08: Text Processing
 
-Regular expressions were invented by Stephen Kleene in 1951 to describe formal languages. Ken Thompson brought them to computing in 1968 when he implemented a text editor (the precursor of `ed`). `grep` literally means "**g**lobal **r**egular **e**xpression **p**rint" — a command from `ed`.
+Expresiile regulate au fost inventate de Stephen Kleene în 1951 pentru a descrie limbaje formale. Ken Thompson le-a adus în informatică în 1968 când a implementat un editor de text (precursorul `ed`). `grep` înseamnă literalmente "**g**lobal **r**egular **e**xpression **p**rint" — o comandă din `ed`.
 
-**What you will learn:**
-- Regular expressions: BRE and ERE
-- `grep` for searching
-- `sed` for transformations
-- `awk` for column processing
+**Ce vei învăța:**
+- Expresii regulate: BRE și ERE
+- `grep` pentru căutare
+- `sed` pentru transformări
+- `awk` pentru procesare coloane
 
-**Thought challenge:** Why is `awk` called that?
+**Provocare de gândire:** De ce `awk` se numește așa?
 
-Aho, Weinberger, Kernighan — the creators' initials. Yes, the same Kernighan from "The C Programming Language". Awk was created in 1977 at Bell Labs, contemporary with the first C manual.
+Aho, Weinberger, Kernighan — inițialele creatorilor. Da, același Kernighan de la "The C Programming Language". Awk a fost creat în 1977 la Bell Labs, contemporan cu primul manual de C.
 
 ---
 
 ### SEM09-10: Advanced Scripting
 
-After you know the basic commands, it is time to combine them into scripts that behave decently even when things go wrong.
+După ce știi comenzile de bază, e timpul să le combini în scripturi care se comportă decent și când lucrurile merg prost.
 
-**What you will learn:**
-- Functions and libraries
-- Indexed and associative arrays
-- Signal handling with `trap`
-- Debugging and profiling
+**Ce vei învăța:**
+- Funcții și biblioteci
+- Arrays indexate și asociative
+- Signal handling cu `trap`
+- Debugging și profiling
 - Best practices
 
-**Thought challenge:** Why are Bash arrays indexed from 0, but `$@` is indexed from 1?
+**Provocare de gândire:** De ce Bash arrays sunt indexate de la 0, dar `$@` e indexat de la 1?
 
-Positional parameters (`$1`, `$2`, etc.) existed before arrays. When they added arrays in Bash 2.0 (1996), they chose indexing from 0 for compatibility with C. But they could not change `$1` to `$0` (which already meant the script name). The result: inconsistency you have to memorise.
+Parametrii poziționali (`$1`, `$2`, etc.) existau înainte de arrays. Când au adăugat arrays în Bash 2.0 (1996), au ales indexare de la 0 pentru compatibilitate cu C. Dar n-au putut schimba `$1` în `$0` (care înseamnă deja numele scriptului). Rezultatul: inconsistență pe care trebuie s-o memorezi.
 
 ---
 
 ### SEM11-12: CAPSTONE Projects
 
-Integration. Projects that combine everything: Monitor, Backup, Deployer.
+Integrare. Proiecte care combină tot: Monitor, Backup, Deployer.
 
-**What you will build:**
-- System Monitor with terminal dashboard
-- Incremental backup system
-- Automatic deployment tool
-
----
-
-# PART IV: SEMESTER PROJECTS
+**Ce vei construi:**
+- System Monitor cu dashboard în terminal
+- Sistem de backup incremental
+- Tool de deployment automat
 
 ---
 
-## Choosing the Project
-
-You have 23 projects at three levels. My advice: do not choose the easiest just to finish — choose something that interests you or that would help you in the future.
-
-### Level EASY (5 projects, 15-20 hours)
-
-Bash only, no external dependencies. Good for consolidation.
-
-| Code | Project | Description |
-|-----|---------|-----------|
-| E01 | File System Auditor | Scans and reports directory structure |
-| E02 | Log Analyser | Parses and summarises log files |
-| E03 | Bulk File Organiser | Sorts files by extension/date/size |
-| E04 | System Health Reporter | Generates reports about system status |
-| E05 | Config File Manager | Backup and versioning for configurations |
-
-### Level MEDIUM (15 projects, 25-35 hours)
-
-Bash with optional Kubernetes integration for bonus.
-
-| Code | Project | Description |
-|-----|---------|-----------|
-| M01 | Incremental Backup | Backups that save only what has changed |
-| M02 | Process Monitor | Monitors process lifecycle |
-| M03 | Service Watchdog | Automatically restarts failed services |
-| M04 | Network Scanner | Detects open ports and services |
-| M05 | Deployment Pipeline | Automates application deployment |
-| M06 | Resource Historian | Resource usage history |
-| M07 | Security Audit | Framework for security audits |
-| M08 | Disk Manager | Disk space management |
-| M09 | Task Scheduler | Manager for scheduled tasks |
-| M10 | Process Tree Analyser | Analyses process hierarchy |
-| M11 | Memory Forensics | Tool for memory analysis |
-| M12 | File Integrity Monitor | Detects unauthorised modifications |
-| M13 | Log Aggregator | Centralises logs from multiple sources |
-| M14 | Config Manager | Configuration management for multiple environments |
-| M15 | Parallel Executor | Parallel task execution |
-
-### Level ADVANCED (3 projects, 40-50 hours)
-
-Bash + components in C.
-
-| Code | Project | Description |
-|-----|---------|-----------|
-| A01 | Mini Job Scheduler | Simplified scheduler in cron style |
-| A02 | Shell Extension | Extensions for bash |
-| A03 | Distributed File Sync | File synchronisation between machines |
+# PARTEA IV: PROIECTE DE SEMESTRU
 
 ---
 
-## Recommended Structure for Projects
+## Alegerea Proiectului
+
+Ai 23 de proiecte la trei niveluri. Sfatul meu: nu alege cel mai ușor doar să termini — alege ceva care te interesează sau care te-ar ajuta în viitor.
+
+### Nivel EASY (5 proiecte, 15-20 ore)
+
+Doar Bash, fără dependențe externe. Bune pentru consolidare.
+
+| Cod | Proiect | Descriere |
+|-----|---------|-----------|
+| E01 | File System Auditor | Scanează și raportează structura directoarelor |
+| E02 | Log Analyzer | Parsează și rezumă fișiere de log |
+| E03 | Bulk File Organizer | Sortează fișiere după extensie/dată/dimensiune |
+| E04 | System Health Reporter | Generează rapoarte despre starea sistemului |
+| E05 | Config File Manager | Backup și versionare pentru configurări |
+
+### Nivel MEDIUM (15 proiecte, 25-35 ore)
+
+Bash cu opțiune de integrare Kubernetes pentru bonus.
+
+| Cod | Proiect | Descriere |
+|-----|---------|-----------|
+| M01 | Incremental Backup | Backup-uri care salvează doar ce s-a schimbat |
+| M02 | Process Monitor | Monitorizează ciclul de viață al proceselor |
+| M03 | Service Watchdog | Repornește automat servicii căzute |
+| M04 | Network Scanner | Detectează porturi deschise și servicii |
+| M05 | Deployment Pipeline | Automatizează deploy-ul aplicațiilor |
+| M06 | Resource Historian | Istoricul utilizării resurselor |
+| M07 | Security Audit | Framework pentru audituri de securitate |
+| M08 | Disk Manager | Gestionare spațiu pe disk |
+| M09 | Task Scheduler | Manager pentru task-uri programate |
+| M10 | Process Tree Analyzer | Analizează ierarhia proceselor |
+| M11 | Memory Forensics | Tool pentru analiză memorie |
+| M12 | File Integrity Monitor | Detectează modificări neautorizate |
+| M13 | Log Aggregator | Centralizează log-uri din mai multe surse |
+| M14 | Config Manager | Gestionare configurări multiple medii |
+| M15 | Parallel Executor | Execuție paralelă de task-uri |
+
+### Nivel ADVANCED (3 proiecte, 40-50 ore)
+
+Bash + componente în C.
+
+| Cod | Proiect | Descriere |
+|-----|---------|-----------|
+| A01 | Mini Job Scheduler | Scheduler simplificat în stil cron |
+| A02 | Shell Extension | Extensii pentru bash |
+| A03 | Distributed File Sync | Sincronizare fișiere între mașini |
+
+---
+
+## Structura Recomandată pentru Proiecte
 
 ```bash
 # BASH (Ubuntu)
 mkdir -p ~/so-lab/proiecte/M05_Deployment_Pipeline/{src,tests,docs,config}
 cd ~/so-lab/proiecte/M05_Deployment_Pipeline
 
-# Initialise git
+# Inițializează git
 git init
 
-# Create the structure
+# Creează structura
 cat > README.md << 'EOF'
 # M05 - Deployment Pipeline
 
-## Description
-[What the project does]
+## Descriere
+[Ce face proiectul]
 
-## Requirements
+## Cerințe
 - Bash 5.0+
 - Git
-- [other dependencies]
+- [alte dependențe]
 
-## Installation
+## Instalare
 ```bash
 chmod +x src/deploy.sh
 ```
 
-## Usage
+## Utilizare
 ```bash
 ./src/deploy.sh --help
 ```
 
-## Structure
+## Structura
 ```
-├── src/           # Source code
-├── tests/         # Tests
-├── docs/          # Documentation
-├── config/        # Configuration files
+├── src/           # Cod sursă
+├── tests/         # Teste
+├── docs/          # Documentație
+├── config/        # Fișiere de configurare
 └── README.md
 ```
 
-## Author
-[Your name] - [group]
+## Autor
+[Numele tău] - [grupa]
 EOF
 
-# Create .gitignore
+# Creează .gitignore
 cat > .gitignore << 'EOF'
 *.log
 *.tmp
@@ -1050,268 +1024,268 @@ git commit -m "Initial project structure"
 
 ---
 
-# PART V: CHALLENGES AND OPEN QUESTIONS
+# PARTEA V: PROVOCĂRI ȘI ÎNTREBĂRI DESCHISE
 
 ---
 
-## Things I Still Have Not Completely Resolved
+## Lucruri pe Care Încă Nu Le-am Rezolvat Complet
 
-Teaching operating systems has a few problems for which there are no perfectly satisfactory solutions. I mention them because honesty is more valuable than the illusion that everything is resolved.
+Predarea sistemelor de operare are câteva probleme pentru care nu există soluții perfect satisfăcătoare. Le menționez pentru că onestitatea e mai valoroasă decât iluzia că totul e rezolvat.
 
-### The Problem of Abstraction vs. Detail
+### Problema Abstractizării vs. Detaliului
 
-Students need to understand how an operating system works, but:
-- If we go into too many details, they get lost in complexity
-- If we stay at a high level, they do not truly understand what is happening
+Studenții trebuie să înțeleagă cum funcționează un sistem de operare, dar:
+- Dacă intrăm în prea multe detalii, se pierd în complexitate
+- Dacă rămânem la nivel înalt, nu înțeleg cu adevărat ce se întâmplă
 
-I have not found the perfect balance. I try to alternate: one session of "big picture", one session of "deep dive" on a specific concept.
+Nu am găsit echilibrul perfect. Încerc să alternez: o sesiune de "big picture", o sesiune de "deep dive" pe un concept specific.
 
-### The LLM Problem
+### Problema LLM-urilor
 
-Students can generate Bash code with ChatGPT. How do you evaluate whether they understood or just copied?
+Studenții pot genera cod Bash cu ChatGPT. Cum evaluezi dacă au înțeles sau doar au copiat?
 
-The current solution: LLM-aware exercises where you must evaluate the generated code, identify bugs, explain what it does. It works partially — some still copy the explanations. It is an arms race we will not completely win. At least, however, we can ask better questions.
+Soluția actuală: exerciții LLM-aware unde trebuie să evaluezi codul generat, să identifici bug-uri, să explici ce face. Funcționează parțial — unii tot copiază explicațiile. E un arms race pe care nu-l vom câștiga complet. Cel puțin însă putem pune întrebări mai bune.
 
-### The Problem of Different Working Environments
+### Problema Mediilor de Lucru Diferite
 
-Some students have new laptops, others have computers from 2015. Some have Windows, others macOS, a few Linux. WSL2 has helped enormously, but strange cases still appear.
+Unii studenți au laptopuri noi, alții au calculatoare din 2015. Unii au Windows, alții macOS, câțiva Linux. WSL2 a ajutat enorm, dar tot apar cazuri ciudate.
 
-The partial solution: detailed guides, verification scripts, VirtualBox as plan B. It is not perfect.
-
----
-
-## Questions We Do Not Have Complete Answers To
-
-These are legitimate questions from computing education research that researchers are still debating:
-
-**1. How much code must a student write to understand a concept?**
-
-There is no magic number. Some understand from 10 lines, others need 100. Research suggests that "productive struggle" matters more than quantity, but it is hard to quantify.
-
-**2. Does immediate feedback help or harm in the long term?**
-
-Bjork's paradox: delayed feedback can lead to better long-term learning, although it feels harder at the moment. But how delayed? Research does not give a clear answer.
-
-**3. How do you teach debugging?**
-
-It is a different skill from writing code, but it is rarely taught explicitly. I have tried to include deliberate errors in live coding, but I do not know if it is enough.
+Soluția parțială: ghiduri detaliate, scripturi de verificare, VirtualBox ca plan B. Nu e perfect.
 
 ---
 
-## Critical Thinking Exercises
+## Întrebări la Care Nu Avem Răspuns Complet
 
-For each seminar, a few questions to think about:
+Acestea sunt întrebări legitime din computing education research pe care cercetătorii încă le dezbat:
+
+**1. Cât cod trebuie să scrie un student pentru a înțelege un concept?**
+
+Nu există un număr magic. Unii înțeleg din 10 linii, alții au nevoie de 100. Cercetările sugerează că "productive struggle" (efortul productiv) contează mai mult decât cantitatea, dar e greu de cuantificat.
+
+**2. Feedback-ul imediat ajută sau dăunează pe termen lung?**
+
+Paradoxul lui Bjork: feedback-ul întârziat poate duce la învățare mai bună pe termen lung, deși se simte mai greu pe moment. Dar cât de întârziat? Cercetările nu dau un răspuns clar.
+
+**3. Cum predai debugging?**
+
+E o abilitate diferită de scrierea codului, dar rareori e predată explicit. Am încercat să includ erori deliberate în live coding, dar nu știu dacă e suficient.
+
+---
+
+## Exerciții de Gândire Critică
+
+Pentru fiecare seminar, câteva întrebări la care să te gândești:
 
 **Seminar 1:**
-- Why did Unix choose to treat everything as a file (including devices)?
-- What would have happened if environment variables did not exist?
+- De ce a ales Unix să trateze totul ca fișier (inclusiv dispozitive)?
+- Ce s-ar fi întâmplat dacă variabilele de mediu nu ar exista?
 
 **Seminar 2:**
-- Why was the Unix philosophy "do one thing well" so influential?
-- What disadvantages does this approach have?
+- De ce a fost filozofia Unix "do one thing well" atât de influentă?
+- Ce dezavantaje are această abordare?
 
 **SEM05-06:**
-- Unix permissions are 50+ years old. What would replace them if we designed from scratch today?
-- Why is SUID considered a security risk, but still exists?
+- Permisiunile Unix au 50+ ani. Ce le-ar înlocui dacă am proiecta azi de la zero?
+- De ce SUID e considerat un risc de securitate, dar tot există?
 
 **SEM07-08:**
-- Why do regular expressions have such cryptic syntax?
-- Would it have been better if `grep`, `sed`, `awk` had been a single tool?
+- De ce expresiile regulate au o sintaxă atât de criptică?
+- Ar fi fost mai bine dacă `grep`, `sed`, `awk` ar fi fost un singur tool?
 
 **SEM09-10:**
-- Why does Bash not have static typing? Would it be better if it did?
-- Should shell scripting be replaced with Python for automation?
+- De ce Bash nu are typing static? Ar fi mai bun dacă ar avea?
+- Shell scripting ar trebui înlocuit cu Python pentru automatizare?
 
 ---
 
-# PART VI: DETAILED TROUBLESHOOTING
+# PARTEA VI: TROUBLESHOOTING DETALIAT
 
 ---
 
-## Problems with WSL2 Installation
+## Probleme la Instalare WSL2
 
 ### "WSL 2 requires an update to its kernel component"
 
 ```powershell
 # POWERSHELL (Administrator)
 wsl --update
-# Restart after update
+# Restartează după actualizare
 ```
 
-### "Error: 0x80370102" or "Please enable the Virtual Machine Platform"
+### "Error: 0x80370102" sau "Please enable the Virtual Machine Platform"
 
-Virtualisation is not enabled in BIOS. The procedure:
+Virtualizarea nu e activată în BIOS. Procedura:
 
-1. Restart your computer
-2. When it starts, quickly press the BIOS key:
-   - **Dell:** F2 or F12
-   - **HP:** F10 or Esc
-   - **Lenovo:** F1 or F2
-   - **ASUS:** F2 or Del
-   - **Acer:** F2 or Del
-3. Look for "Virtualization Technology", "VT-x", "AMD-V" or "SVM"
-4. Change from Disabled to Enabled
-5. Save (usually F10) and exit
+1. Restartează calculatorul
+2. Când pornește, apasă rapid tasta pentru BIOS:
+   - **Dell:** F2 sau F12
+   - **HP:** F10 sau Esc
+   - **Lenovo:** F1 sau F2
+   - **ASUS:** F2 sau Del
+   - **Acer:** F2 sau Del
+3. Caută "Virtualization Technology", "VT-x", "AMD-V" sau "SVM"
+4. Schimbă din Disabled în Enabled
+5. Salvează (de regulă F10) și ieși
 
-### "Error: 0x80370114" — cannot start the virtual machine
+### "Error: 0x80370114" — nu se poate porni mașina virtuală
 
-Hyper-V or another virtualisation technology may be in conflict. Check:
+Hyper-V sau altă tehnologie de virtualizare poate fi în conflict. Verifică:
 
 ```powershell
 # POWERSHELL (Administrator)
-# Disable Hyper-V if it is enabled and you are not using it
+# Dezactivează Hyper-V dacă e activat și nu-l folosești
 dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
 
-# OR enable it completely for WSL2
+# SAU activează-l complet pentru WSL2
 dism.exe /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
 ```
 
-### WSL opens but does not respond
+### WSL se deschide dar nu răspunde
 
 ```powershell
 # POWERSHELL
-# Completely stop WSL
+# Oprește complet WSL
 wsl --shutdown
 
-# Check the status
+# Verifică starea
 wsl --status
 
-# Restart
+# Repornește
 wsl
 ```
 
 ---
 
-## Problems in the Terminal
+## Probleme în Terminal
 
-### "Permission denied" when running scripts
+### "Permission denied" la rularea scripturilor
 
 ```bash
 # BASH (Ubuntu)
-# Cause 1: The script does not have execution permission
+# Cauza 1: Scriptul nu are permisiunea de execuție
 chmod +x script.sh
 ./script.sh
 
-# Cause 2: The file is on a Windows partition mounted without exec
-# Solution: move the file to Linux home
+# Cauza 2: Fișierul e pe partiție Windows montată fără exec
+# Soluție: mută fișierul în home Linux
 cp /mnt/c/Users/.../script.sh ~/
 chmod +x ~/script.sh
 ~/script.sh
 
-# Cause 3: Wrong or missing shebang
-# Check the first line:
+# Cauza 3: Shebang greșit sau lipsă
+# Verifică prima linie:
 head -1 script.sh
-# It should be: #!/usr/bin/env bash or #!/bin/bash
+# Trebuie să fie: #!/usr/bin/env bash sau #!/bin/bash
 ```
 
-### Romanian characters displayed incorrectly
+### Caractere românești afișate greșit
 
 ```bash
 # BASH (Ubuntu)
-# Check the current locale
+# Verifică locale-ul curent
 locale
 
-# Set the correct locale
+# Setează locale-ul corect
 export LANG=ro_RO.UTF-8
 export LC_ALL=ro_RO.UTF-8
 
-# If the locale is not installed
+# Dacă locale-ul nu e instalat
 sudo locale-gen ro_RO.UTF-8
 sudo update-locale LANG=ro_RO.UTF-8
 
-# Permanent - add to ~/.bashrc
+# Permanent - adaugă în ~/.bashrc
 echo 'export LANG=ro_RO.UTF-8' >> ~/.bashrc
 echo 'export LC_ALL=ro_RO.UTF-8' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### Variables from `while | read` do not persist
+### Variabilele din `while | read` nu persistă
 
-This is a classic trap. When you use a pipe, the right side runs in a subshell, and changes do not propagate back.
+Aceasta e o capcană clasică. Când folosești pipe, partea dreaptă rulează într-un subshell, iar modificările nu se propagă înapoi.
 
 ```bash
-# WRONG - subshell problem
+# GREȘIT - subshell problem
 count=0
 cat file.txt | while read line; do
     ((count++))
 done
-echo $count    # Displays 0!
+echo $count    # Afișează 0!
 
-# CORRECT - use redirect instead of pipe
+# CORECT - folosește redirect în loc de pipe
 count=0
 while read line; do
     ((count++))
 done < file.txt
-echo $count    # Displays the correct value
+echo $count    # Afișează valoarea corectă
 
-# ALTERNATIVE - use process substitution
+# ALTERNATIV - folosește process substitution
 count=0
 while read line; do
     ((count++))
 done < <(cat file.txt)
-echo $count    # Works
+echo $count    # Funcționează
 ```
 
-### The script works manually but not from cron
+### Scriptul funcționează manual dar nu din cron
 
-Cron runs with a minimal PATH and without your environment variables.
+Cron rulează cu un PATH minimal și fără variabilele tale de mediu.
 
 ```bash
 # BASH (Ubuntu)
-# Solution 1: Add PATH in crontab
+# Soluția 1: Adaugă PATH în crontab
 crontab -e
-# Add at the beginning:
+# Adaugă la început:
 # PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# Solution 2: Use absolute paths in the script
-# Instead of:
+# Soluția 2: Folosește căi absolute în script
+# În loc de:
 grep pattern file.txt
-# Write:
+# Scrie:
 /usr/bin/grep pattern /home/user/file.txt
 
-# Solution 3: Source .bashrc at the beginning
+# Soluția 3: Source-uiește .bashrc la început
 #!/usr/bin/env bash
 source ~/.bashrc
-# ... rest of the script
+# ... restul scriptului
 ```
 
 ### Line endings Windows vs Linux (CRLF vs LF)
 
-Files edited in Windows have `\r\n` at the end of lines. Linux expects only `\n`. Symptoms: strange behaviour, error messages with `^M`.
+Fișierele editate în Windows au `\r\n` la sfârșitul liniilor. Linux așteaptă doar `\n`. Simptomele: comportament ciudat, mesaje de eroare cu `^M`.
 
 ```bash
 # BASH (Ubuntu)
-# Check the file type
+# Verifică tipul fișierului
 file script.sh
-# If it says "with CRLF line terminators" - that is the problem
+# Dacă zice "with CRLF line terminators" - e problema
 
-# Convert with sed
+# Convertește cu sed
 sed -i 's/\r$//' script.sh
 
-# OR with dos2unix
+# SAU cu dos2unix
 sudo apt install dos2unix
 dos2unix script.sh
 
-# Verification
+# Verificare
 cat -A script.sh | head -5
-# OK lines end in $ 
-# Lines with CRLF end in ^M$
+# Liniile OK se termină în $ 
+# Liniile cu CRLF se termină în ^M$
 ```
 
 ---
 
-## Problems with Git
+## Probleme cu Git
 
 ### "fatal: not a git repository"
 
 ```bash
 # BASH (Ubuntu)
-# You are in the wrong directory
+# Ești în directorul greșit
 pwd
-# Navigate to the directory with the repository
+# Navighează la directorul cu repository-ul
 cd ~/so-lab/proiecte/M05_Deployment_Pipeline
 
-# OR initialise a new repo
+# SAU inițializează un repo nou
 git init
 ```
 
@@ -1319,380 +1293,236 @@ git init
 
 ```bash
 # BASH (Ubuntu)
-# Someone modified the remote repository
-# Pull before push
+# Cineva a modificat repository-ul remote
+# Pull înainte de push
 git pull origin main
-# Resolve any conflicts
+# Rezolvă eventuale conflicte
 git push origin main
 
-# OR force the push (CAUTION: overwrites others' changes)
+# SAU forțează push-ul (ATENȚIE: suprascrie modificările altora)
 git push -f origin main
 ```
 
-### How to undo the last commit
+### Cum anulez ultimul commit
 
 ```bash
 # BASH (Ubuntu)
-# Keep the changes, undo only the commit
+# Păstrează modificările, anulează doar commit-ul
 git reset --soft HEAD~1
 
-# Undo the commit AND the changes (CAUTION: data loss)
+# Anulează commit-ul ȘI modificările (ATENȚIE: pierdere date)
 git reset --hard HEAD~1
 ```
 
 ---
 
-## Problems with SSH
+## Probleme cu SSH
 
-### "Connection refused" when connecting with PuTTY
+### "Connection refused" la conectare PuTTY
 
-1. Verify that Ubuntu is running (the WSL window must be open)
-2. Verify that SSH is started:
+1. Verifică că Ubuntu rulează (fereastra WSL trebuie să fie deschisă)
+2. Verifică că SSH e pornit:
    ```bash
    # BASH (Ubuntu)
    sudo service ssh status
-   # If it is stopped:
+   # Dacă e oprit:
    sudo service ssh start
    ```
-3. Verify the IP address:
+3. Verifică adresa IP:
    ```bash
    hostname -I
-   # Use the first address displayed
+   # Folosește prima adresă afișată
    ```
-4. Verify that Windows firewall is not blocking port 22
+4. Verifică că firewall-ul Windows nu blochează portul 22
 
 ### "Host key verification failed"
 
 ```bash
 # BASH (Ubuntu)
-# Delete the old key
-ssh-keygen -R hostname_or_ip
+# Șterge cheia veche
+ssh-keygen -R hostname_sau_ip
 
-# Reconnect (it will ask you to accept the new key)
+# Reconectează-te (va cere să accepți noua cheie)
 ssh user@hostname
 ```
 
 ---
 
-# PART VII: DEVELOPER TOOLS
-
-This section documents the shared utilities and automation scripts available in the kit. If you are an instructor customising materials or a student debugging the autograder, this is where you will find the relevant documentation.
+# PARTEA VII: POVEȘTI ȘI CONTEXT ISTORIC
 
 ---
 
-## Shared Utilities (lib/)
+## De Unde Vin Lucrurile Pe Care Le Folosim
 
-The `lib/` directory contains Python modules used across all seminars. These are not student-facing code — they power the autograders, quiz generators, and anti-plagiarism infrastructure.
+Fiecare comandă și concept din Unix are o istorie. Iată câteva care merită cunoscute.
 
-### logging_utils.py
+### Thompson și Ritchie la Bell Labs (1969-1973)
 
-Provides consistent, coloured logging across all Python scripts. Every autograder and test script uses this module to produce readable output that distinguishes informational messages from warnings and errors.
+Unix a început ca proiect personal. Ken Thompson voia să porteze un joc (Space Travel) pe un PDP-7 nefolosit. În proces, a creat un sistem de operare. Dennis Ritchie s-a alăturat și a creat limbajul C pentru a putea rescrie Unix portabil.
 
-```python
-from logging_utils import setup_logging
+PDP-7 avea 18 KB de memorie. Întregul sistem de operare, cu shell și utilitare, încăpea acolo. Azi, un favicon de pe web ocupă mai mult.
 
-logger = setup_logging(__name__)
-logger.info("Processing started")
-logger.warning("Low disk space")
-logger.error("File not found")
-```
+În 1983, Thompson și Ritchie au primit Premiul Turing — cel mai prestigios premiu în informatică. Ritchie a murit în octombrie 2011, o săptămână după Steve Jobs. Jobs a primit atenția presei; Ritchie a trecut aproape neobservat. Ironic, iPhone-ul lui Jobs rulează pe un kernel derivat din Unix.
 
-The colours are intentional: green for success, yellow for warnings, red for errors. When you run 20 test cases, this helps you find problems without reading every line.
+### Pipes — O Noapte de Muncă (1973)
 
-### randomisation_utils.py
+Doug McIlroy, șeful departamentului lui Thompson, tot insista că programele ar trebui să se poată conecta "ca un furtun de grădină" — output-ul unuia să fie input-ul altuia.
 
-Generates deterministic, student-specific test parameters for anti-plagiarism. The key insight is that each student gets different test inputs, but those inputs are reproducible — if you run the autograder twice with the same student email and assignment, you get the same parameters.
+Thompson a implementat pipe-urile într-o singură noapte. A doua zi, echipa a rescris toate utilitarele pentru a le suporta. Ideea a definit Unix și a influențat tot ce a venit după.
 
-```python
-from randomisation_utils import generate_student_seed, randomise_test_parameters
+Notația `|` pentru pipe vine de la convenția folosită în logica matematică pentru "sau". A fost aleasă pentru că arată ca un tub.
 
-seed = generate_student_seed("student@ase.ro", "SEM03_HW")
-params = randomise_test_parameters(seed)
-# Same student + assignment = same parameters (reproducible)
-```
+### De Ce Comenzile Au Nume Ciudate
 
-This approach makes copying homework useless: two students with the same code will fail each other's tests, because their expected outputs differ.
-
-For complete documentation including all available functions and parameters, see `lib/README.md`.
-
----
-
-## Automation Scripts (scripts/)
-
-The `scripts/` directory contains maintenance and CI automation. These are designed for instructors managing the kit, not for student use.
-
-### check_links.sh
-
-Validates documentation links across the entire kit. A broken link in a seminar handout is worse than no link at all — it wastes student time.
-
-```bash
-# Check internal links only (fast, ~10 seconds)
-./scripts/check_links.sh
-
-# Check all links including external URLs (slow, ~2 minutes)
-./scripts/check_links.sh --external
-
-# Show help
-./scripts/check_links.sh --help
-```
-
-The script uses [lychee](https://github.com/lycheeverse/lychee) if installed, falling back to a simpler grep-based check otherwise. For best results:
-
-```bash
-cargo install lychee
-# or on macOS
-brew install lychee
-```
-
-### add_print_styles.sh
-
-Injects print stylesheets into HTML presentations for offline handouts. Before this existed, printing slides produced unreadable output with cut-off text and broken layouts.
-
-```bash
-# Preview changes (shows what would be modified)
-./scripts/add_print_styles.sh --dry-run
-
-# Apply changes
-./scripts/add_print_styles.sh
-```
-
-After running, presentations can be printed cleanly from any browser (Ctrl+P / Cmd+P). The stylesheet hides navigation elements, adjusts fonts for paper, and ensures code blocks do not overflow.
-
----
-
-## CI Pipeline
-
-Each seminar includes a GitHub Actions CI configuration (`ci/github_actions.yml`). Version 2.2 of the pipeline includes seven jobs:
-
-| Job | What It Does | Why It Matters |
-|-----|--------------|----------------|
-| `lint-bash` | ShellCheck on all Bash scripts | Catches common errors like unquoted variables |
-| `lint-python` | Ruff on all Python code | Enforces consistent style and catches bugs |
-| `validate-yaml` | Quiz and config validation | Ensures quiz files are well-formed |
-| `ai-check` | AI fingerprint detection | Flags suspiciously polished submissions |
-| `link-check` | Documentation link validation | Prevents broken links from reaching students |
-| `test` | pytest with coverage threshold | Verifies autograder correctness |
-| `structure-check` | Directory structure validation | Ensures standard kit layout |
-
-The AI fingerprint detection deserves explanation: it looks for patterns common in LLM-generated code (overly verbose comments, certain phrasings, suspiciously complete error handling for a beginner). It is not definitive proof, but it flags submissions for manual review.
-
-Run locally with:
-
-```bash
-cd SEM01
-make test        # Run tests
-make lint        # Run linters
-make ai-check    # Check for AI patterns
-```
-
----
-
-## Testing
-
-### Running Tests
-
-The testing infrastructure uses pytest throughout. Tests live in `lib/` for shared utilities and in `SEM*/tests/` for seminar-specific validation.
-
-```bash
-# Run all lib tests
-cd lib/
-pytest -v test_*.py
-
-# Run with coverage report
-pytest -v --cov=. --cov-report=term-missing
-
-# Run seminar-specific tests
-cd SEM01/tests/
-pytest -v
-```
-
-### Test Coverage Targets
-
-| Component | Target | Rationale |
-|-----------|--------|-----------|
-| lib/ | >80% | These modules are used everywhere; bugs propagate |
-| Autograders | >75% | Incorrect grading undermines student trust |
-| Quiz generators | >70% | Less critical; manual review catches most issues |
-
-The coverage targets are enforced in CI — a pull request that drops coverage below the threshold will not merge.
-
----
-
-# PART VIII: STORIES AND HISTORICAL CONTEXT
-
----
-
-## Where the Things We Use Come From
-
-Every command and concept in Unix has a history. Here are a few worth knowing.
-
-### Thompson and Ritchie at Bell Labs (1969-1973)
-
-Unix started as a personal project. Ken Thompson wanted to port a game (Space Travel) to an unused PDP-7. In the process, he created an operating system. Dennis Ritchie joined and created the C language so they could rewrite Unix portably.
-
-The PDP-7 had 18 KB of memory. The entire operating system, with shell and utilities, fit in there. Today, a web favicon takes up more.
-
-In 1983, Thompson and Ritchie received the Turing Award — the most prestigious award in computer science. Ritchie died in October 2011, a week after Steve Jobs. Jobs got the press attention; Ritchie went almost unnoticed. Ironically, Jobs's iPhone runs on a kernel derived from Unix.
-
-### Pipes — One Night's Work (1973)
-
-Doug McIlroy, Thompson's department head, kept insisting that programmes should be able to connect "like a garden hose" — the output of one should be the input of another.
-
-Thompson implemented pipes in a single night. The next day, the team rewrote all utilities to support them. The idea defined Unix and influenced everything that came after.
-
-The `|` notation for pipe comes from the convention used in mathematical logic for "or". It was chosen because it looks like a tube.
-
-### Why Commands Have Strange Names
-
-- `ls` = "list" (shortened to type faster)
+- `ls` = "list" (scurtat pentru a tasta mai repede)
 - `cd` = "change directory"
 - `pwd` = "print working directory"
-- `cat` = "concatenate" (originally for concatenating files, now also used to display them)
-- `grep` = "**g**lobal **r**egular **e**xpression **p**rint" — a command from the `ed` editor
-- `awk` = Aho, Weinberger, Kernighan — the creators' initials
+- `cat` = "concatenate" (inițial pentru a concatena fișiere, acum folosit și pentru a le afișa)
+- `grep` = "**g**lobal **r**egular **e**xpression **p**rint" — o comandă din editorul `ed`
+- `awk` = Aho, Weinberger, Kernighan — inițialele creatorilor
 - `sed` = "**s**tream **ed**itor"
-- `cron` = Chronos, the Greek god of time
+- `cron` = Chronos, zeul grec al timpului
 
-Teletypes from the '70s were slow. The shorter the command name, the faster you could type. That is why `cp` instead of `copy`, `mv` instead of `move`, `rm` instead of `remove`.
+Teletype-urile din anii '70 erau lente. Cu cât numele comenzii era mai scurt, cu atât mai repede puteai tasta. De aceea `cp` în loc de `copy`, `mv` în loc de `move`, `rm` în loc de `remove`.
 
-### Regular Expressions — From Mathematics to grep
+### Expresiile Regulate — De la Matematică la grep
 
-Stephen Kleene invented regular expressions in 1951 for formal language theory. Ken Thompson first implemented them in software in 1968, in a text editor.
+Stephen Kleene a inventat expresiile regulate în 1951 pentru teoria limbajelor formale. Ken Thompson le-a implementat în software pentru prima dată în 1968, într-un editor de text.
 
-When Thompson created `grep` in 1973, he took the implementation from the editor and made it a standalone command. `grep` comes from `ed`, the Unix line editor: the command `g/re/p` meant "**g**lobal search for **r**egular **e**xpression and **p**rint".
+Când Thompson a creat `grep` în 1973, a luat implementarea din editor și a făcut-o comandă standalone. `grep` vine din `ed`, editorul de linie al Unix: comanda `g/re/p` însemna "**g**lobal search for **r**egular **e**xpression and **p**rint".
 
-### The Creator of Bash
+### Creatorul lui Bash
 
-Bash was created by Brian Fox in 1989 for the GNU project. The goal was to replace Bourne Shell (sh) with something compatible but improved. The name is an acronym and a pun: **B**ourne **A**gain **SH**ell.
+Bash a fost creat de Brian Fox în 1989 pentru proiectul GNU. Scopul era să înlocuiască Bourne Shell (sh) cu ceva compatibil dar îmbunătățit. Numele e un acronim și un joc de cuvinte: **B**ourne **A**gain **SH**ell ("shell-ul Bourne reînviat").
 
-Fox worked alone on the first version. He left the project in 1994, and Chet Ramey took over maintenance. Ramey still maintains Bash today, after 30 years.
+Fox a lucrat singur la prima versiune. A părăsit proiectul în 1994, iar Chet Ramey a preluat mentenanța. Ramey încă menține Bash azi, după 30 de ani.
 
-### Why Linux Is Called Linux
+### De Ce Linux se Numește Linux
 
-Linus Torvalds created the kernel in 1991, as a student at the University of Helsinki. He originally wanted to call it "Freax" (free + freak + x from Unix), but the administrator of the FTP server where he published it did not agree and put it in a folder named "Linux" (Linus + Unix).
+Linus Torvalds a creat kernelul în 1991, ca student la Universitatea din Helsinki. Inițial voia să-l numească "Freax" (free + freak + x de la Unix), dar administratorul serverului FTP unde l-a publicat nu a fost de acord și l-a pus într-un folder numit "Linux" (Linus + Unix).
 
-Torvalds accepted the name reluctantly. He wrote on the mailing list: "it's too egotistical, I can't name something after myself".
+Torvalds a acceptat numele cu reticență. A scris pe lista de mail: "e prea egocentric, nu pot să numesc ceva după mine".
 
 ---
 
-## Why Some Things Are the Way They Are
+## De Ce Unele Lucruri Sunt Așa Cum Sunt
 
-### Why 755 and 644?
+### De ce 755 și 644?
 
-Unix permissions are stored as an octal number. Each digit represents permissions for owner, group, others:
+Permisiunile Unix sunt stocate ca un număr octal. Fiecare cifră reprezintă permisiunile pentru owner, group, others:
 - 7 = rwx (read + write + execute) = 4 + 2 + 1
 - 5 = r-x (read + execute) = 4 + 0 + 1
 - 4 = r-- (read only) = 4 + 0 + 0
 
-755 for directories and scripts (executable by all, modifiable only by owner).
-644 for normal files (readable by all, modifiable only by owner).
+755 pentru directoare și scripturi (executabile de toți, modificabile doar de owner).
+644 pentru fișiere normale (citibile de toți, modificabile doar de owner).
 
-Could it have been different? Yes. But when you have billions of scripts that set `chmod 755`, you can no longer change.
+Ar fi putut fi altfel? Da. Dar când ai miliarde de scripturi care setează `chmod 755`, nu mai poți schimba.
 
-### Why $HOME and not something else?
+### De ce $HOME și nu altceva?
 
-Environment variables were invented in Version 7 Unix (1979). The `$VARIABLE` convention comes from Bourne Shell. The `$` sign was chosen because it was not used for anything else in the syntax.
+Variabilele de mediu au fost inventate în Version 7 Unix (1979). Convenția `$VARIABILA` vine din Bourne Shell. Semnul `$` a fost ales pentru că nu era folosit pentru altceva în sintaxă.
 
-Why uppercase? To distinguish them from local shell variables. The convention is just that — a convention. It is not enforced by the system.
+De ce majuscule? Pentru a le distinge de variabilele locale ale shell-ului. Convenția e doar asta — convenție. Nu e impusă de sistem.
 
-### Why is the shebang `#!`?
+### De ce shebang-ul e `#!`?
 
-The first line `#!/bin/bash` is called the "shebang" (or "hashbang"). When Unix sees an executable file that starts with `#!`, it uses the specified programme as the interpreter.
+Prima linie `#!/bin/bash` se numește "shebang" (sau "hashbang"). Când Unix vede un fișier executabil care începe cu `#!`, folosește programul specificat ca interpretor.
 
-Why `#!`? `#` was already used for comments in the shell. `!` is the character that meant, in some contexts, "execute". The combination was unused and distinctive.
+De ce `#!`? `#` era deja folosit pentru comentarii în shell. `!` e caracterul care însemna, în unele contexte, "execută". Combinația era nefolosită și distinctivă.
 
-The term "shebang" comes from slang. Perhaps from "sharp bang" (#!), perhaps from the Irish expression "shebeen" (illegal bar). Nobody knows for sure.
-
----
-
-# PART IX: REFERENCES AND RESOURCES
+Termenul "shebang" vine din argou. Poate de la "sharp bang" (#!), poate de la expresia irlandeză "shebeen" (bar ilegal). Nimeni nu știe sigur.
 
 ---
 
-## Official Documentation
-
-- [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/) — The complete reference
-- [POSIX Shell Specification](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html) — Portable standard
-- [Linux man pages](https://man7.org/linux/man-pages/) — Documentation for each command
-
-## Recommended Books
-
-- **"The Linux Command Line"** - William Shotts — Free online, excellent for beginners
-- **"Learning the bash Shell"** - O'Reilly — Classic for Bash
-- **"Operating Systems: Three Easy Pieces"** - Arpaci-Dusseau — OS theory, available free
-
-## Interactive Tutorials
-
-- [Exercism Bash Track](https://exercism.org/tracks/bash) — Exercises with feedback
-- [OverTheWire Bandit](https://overthewire.org/wargames/bandit/) — Wargame for shell
-- [ShellCheck](https://www.shellcheck.net/) — Online linter for scripts
-
-## Computing Education Research
-
-- [SIGCSE](https://sigcse.org/) — The main community
-- [ACM TOCE](https://dl.acm.org/journal/toce) — Reference journal
-- [Computing Education Research Blog](https://computinged.wordpress.com/) — Mark Guzdial's blog
+# PARTEA VIII: REFERINȚE ȘI RESURSE
 
 ---
 
-# PART X: LICENCE
+## Documentație Oficială
+
+- [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/) — Referința completă
+- [POSIX Shell Specification](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html) — Standard portabil
+- [Linux man pages](https://man7.org/linux/man-pages/) — Documentația fiecărei comenzi
+
+## Cărți Recomandate
+
+- **"The Linux Command Line"** - William Shotts — Gratuit online, excelent pentru începători
+- **"Learning the bash Shell"** - O'Reilly — Clasic pentru Bash
+- **"Operating Systems: Three Easy Pieces"** - Arpaci-Dusseau — Teorie OS, disponibil gratuit
+
+## Tutoriale Interactive
+
+- [Exercism Bash Track](https://exercism.org/tracks/bash) — Exerciții cu feedback
+- [OverTheWire Bandit](https://overthewire.org/wargames/bandit/) — Wargame pentru shell
+- [ShellCheck](https://www.shellcheck.net/) — Linter online pentru scripturi
+
+## Cercetare în Computing Education
+
+- [SIGCSE](https://sigcse.org/) — Comunitatea principală
+- [ACM TOCE](https://dl.acm.org/journal/toce) — Jurnal de referință
+- [Computing Education Research Blog](https://computinged.wordpress.com/) — Blog al lui Mark Guzdial
+
+---
+
+# PARTEA IX: LICENȚĂ
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                           RESTRICTIVE LICENCE                                ║
-║                    Version 4.0.0 · January 2025                              ║
-║              © 2025 Antonio Clim. All rights reserved.                       ║
+║                           LICENȚĂ RESTRICTIVĂ                                ║
+║                    Versiune 4.0.0 · Ianuarie 2025                            ║
+║              © 2025 Antonio Clim. Toate drepturile rezervate.                ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Permitted Uses
+### Utilizări Permise
 
-✓ **Personal study** — download and use the materials for individual learning  
-✓ **Code execution** — run the examples on your devices  
-✓ **Local modification** — adapt the code for personal experiments  
-✓ **Personal notes** — create derivative notes for your own use
+✓ **Studiu personal** — descarcă și folosește materialele pentru învățare individuală  
+✓ **Execuție cod** — rulează exemplele pe dispozitivele tale  
+✓ **Modificare locală** — adaptează codul pentru experimente personale  
+✓ **Note personale** — creează note derivate pentru uz propriu
 
-### Prohibited Uses (without prior written agreement)
+### Utilizări Interzise (fără acord scris prealabil)
 
-✗ **Publication** — uploading or distributing the materials on any platform  
-✗ **Teaching** — use in courses, workshops or training sessions  
-✗ **Presentation** — teaching or presenting the materials to third parties  
-✗ **Redistribution** — redistribution in any form  
-✗ **Derivative works** — creating derivative works for public use  
-✗ **Commercial use** — commercial exploitation of any kind
+✗ **Publicare** — încărcarea sau distribuirea materialelor pe orice platformă  
+✗ **Predare** — utilizarea în cursuri, workshop-uri sau sesiuni de training  
+✗ **Prezentare** — predarea sau prezentarea materialelor către terți  
+✗ **Redistribuire** — redistribuirea în orice formă  
+✗ **Lucrări derivate** — crearea de lucrări derivate pentru uz public  
+✗ **Uz comercial** — exploatarea comercială de orice fel
 
-### Legal Provisions
+### Prevederi Legale
 
-**No warranty** — The materials are provided "as is" without any warranty, express or implied, including, but not limited to, the warranties of merchantability, fitness for a particular purpose and non-infringement.
+**Fără garanție** — Materialele sunt furnizate "ca atare" fără nicio garanție, expresă sau implicită, incluzând, dar fără a se limita la, garanțiile de vandabilitate, potrivire pentru un anumit scop și neîncălcare.
 
-**Limitation of liability** — In no circumstance shall the author be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from or in connection with the materials.
+**Limitarea răspunderii** — În nicio circumstanță autorul nu va fi răspunzător pentru nicio pretenție, daune sau altă răspundere, fie într-o acțiune contractuală, delictuală sau de altă natură, care decurge din sau în legătură cu materialele.
 
-**Applicable law** — These terms are governed by the laws of Romania. Disputes shall be subject to the exclusive jurisdiction of the courts of Bucharest.
+**Legea aplicabilă** — Acești termeni sunt guvernați de legile României. Disputele vor fi supuse jurisdicției exclusive a instanțelor din București.
 
-**Contact for permissions** — For requests regarding educational use, publication or other permissions, contact the author through official academic channels or through the repository issue tracker.
+**Contact pentru permisiuni** — Pentru solicitări privind utilizarea educațională, publicarea sau alte permisiuni, contactați autorul prin canalele academice oficiale sau prin issue tracker-ul repository-ului.
 
-### Attribution Requirements
+### Cerințe de Atribuire
 
-When citing these materials in academic works (where permitted):
+Când citezi aceste materiale în lucrări academice (unde este permis):
 
 ```
-Clim, A. (2025). ROso — Educational Kit for Operating Systems (Extended Edition).  
-Bucharest University of Economic Studies — CSIE.
+Clim, A. (2025). ROso — Kit Educațional pentru Sisteme de Operare (Ediție Extinsă).  
+Academia de Studii Economice București — CSIE.
 ```
 
 ---
 
-# ANNEXES
+# ANEXE
 
 ---
 
-## Annex A: Standard Lab Credentials
+## Anexa A: Credențiale Standard Laborator
 
-For consistency in the lab, we use these credentials:
+Pentru consistență în laborator, folosim aceste credențiale:
 
 **Ubuntu/WSL:**
 ```
-User: stud (or your surname)
+User: stud (sau numele tău de familie)
 Pass: stud
 ```
 
@@ -1705,43 +1535,43 @@ Pass: studstudstud
 
 ---
 
-## Annex B: Emergency Commands
+## Anexa B: Comenzi de Urgență
 
-When something does not work and you do not know why:
+Când ceva nu merge și nu știi de ce:
 
 ```bash
 # BASH (Ubuntu)
-# Check the system version
+# Verifică versiunea sistemului
 lsb_release -a
 uname -a
 
-# Check disk space
+# Verifică spațiul pe disk
 df -h
 
-# Check memory
+# Verifică memoria
 free -h
 
-# Check processes
+# Verifică procesele
 top -bn1 | head -20
 
-# Check recent logs
+# Verifică log-urile recente
 journalctl -xe --no-pager | tail -50
 
-# Restart WSL (from PowerShell)
+# Repornește WSL (din PowerShell)
 # wsl --shutdown
 # wsl
 ```
 
 ---
 
-## Annex C: Complete .gitignore Template
+## Anexa C: Template .gitignore Complet
 
 ```gitignore
 # =============================================================================
-# .gitignore for SO Assignments/Projects
+# .gitignore pentru Teme/Proiecte SO
 # =============================================================================
 
-# Temporary files
+# Fișiere temporare
 *.tmp
 *.temp
 *.bak
@@ -1750,7 +1580,7 @@ journalctl -xe --no-pager | tail -50
 *.swp
 *.swo
 
-# Logs and output
+# Log-uri și output
 *.log
 *.out
 *.err
@@ -1779,19 +1609,19 @@ env/
 Thumbs.db
 Desktop.ini
 
-# Archives (do not commit them)
+# Arhive (nu le commit-ezi)
 *.zip
 *.tar.gz
 *.rar
 *.7z
 
-# Generated directories
+# Directoare generate
 output/
 results/
 build/
 dist/
 
-# Files with sensitive data
+# Fișiere cu date sensibile
 *.key
 *.pem
 passwords.txt
@@ -1800,107 +1630,57 @@ secrets.*
 
 ---
 
-## Annex D: Weekly Workflow
+## Anexa D: Flux de Lucru Săptămânal
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         THE COURSE WEEK                                      │
+│                         SĂPTĂMÂNA DE CURS                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐              │
-│    │ BEFORE THE   │     │ DURING THE   │     │ AFTER THE    │              │
-│    │   SEMINAR    │────▶│   SEMINAR    │────▶│   SEMINAR    │              │
+│    │ ÎNAINTE DE   │     │   ÎN TIMPUL  │     │  DUPĂ        │              │
+│    │   SEMINAR    │────▶│  SEMINARULUI │────▶│  SEMINAR     │              │
 │    └──────────────┘     └──────────────┘     └──────────────┘              │
 │           │                    │                    │                       │
 │           ▼                    ▼                    ▼                       │
 │    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐              │
-│    │ 1. Read      │     │ 1. Participate│    │ 1. Review    │              │
-│    │    README    │     │    actively  │     │    notes     │              │
+│    │ 1. Citește   │     │ 1. Participă │     │ 1. Revizuiește │            │
+│    │    README    │     │    activ     │     │    notițele   │             │
 │    │              │     │              │     │               │              │
-│    │ 2. Go through│     │ 2. Note the  │     │ 2. Complete  │              │
-│    │    MATERIAL_ │     │    commands  │     │    assignment│              │
+│    │ 2. Parcurge  │     │ 2. Notează   │     │ 2. Completează│             │
+│    │    MATERIAL_ │     │    comenzile │     │    tema       │              │
 │    │    PRINCIPAL │     │              │     │               │              │
-│    │              │     │ 3. Ask when  │     │ 3. Run       │              │
-│    │ 3. Prepare   │     │    you don't │     │    validator │              │
-│    │    environment│    │    understand│     │               │              │
+│    │              │     │ 3. Întreabă  │     │ 3. Rulează    │              │
+│    │ 3. Pregătește│     │    când nu   │     │    validatorul│             │
+│    │    mediul    │     │    înțelegi  │     │               │              │
 │    └──────────────┘     └──────────────┘     └──────────────┘              │
 │                                                                             │
-│    Time: 30 min         Time: 100 min        Time: 60-90 min               │
+│    Timp: 30 min         Timp: 100 min        Timp: 60-90 min               │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Annex E: Kit Statistics
+## Anexa E: Statistici Kit
 
-| Category | Quantity | Details |
+| Categorie | Cantitate | Detalii |
 |-----------|-----------|---------|
-| Theoretical courses | 14 | SO_curs01 to SO_curs14 |
-| Supplementary lectures | 4 | Network, Containers, Kernel, NPU |
-| Practical seminars | 7 | SEM01 to SEM07 |
-| Semester projects | 23 | 5 EASY + 15 MEDIUM + 3 ADVANCED |
-| Markdown files | 362 | Documentation, guides, and specifications |
-| HTML presentations | 71 | Interactive slides with print support |
-| PNG diagrams | 27 | In 00_SUPPLEMENTARY/ |
-| SVG diagrams | 26 | Vector graphics throughout |
-| Python scripts | 65 | Autograders, tools, tests |
-| Bash scripts | 118 | Demos, utilities, validators |
-| YAML quiz files | 28 | Structured question banks |
-| Test files | 25+ | pytest and shell tests |
-| Estimated hours (total) | 60+ | For complete coverage |
-| Demonstration scripts | 180+ | Combined Bash and Python |
-| Exam exercises | 3 sets | In 00_SUPPLEMENTARY/ |
+| Cursuri teoretice | 14 | SO_curs01 până la SO_curs14 |
+| Seminarii practice | 6 | SEM01 până la SEM06 |
+| Proiecte de semestru | 23 | 5 EASY + 15 MEDIUM + 3 ADVANCED |
+| Diagrame PNG | 27 | În 000SUPPL/diagrame_png/ |
+| Ore estimate (total) | 60+ | Pentru parcurgere completă |
+| Scripturi demonstrative | 100+ | Bash și Python |
+| Exerciții examen | 3 seturi | În 000SUPPL/ |
 
 ---
 
-## Annex F: Changelog
-
-### Version 5.3.1 (January 2026)
-
-**New Features:**
-- Added print stylesheets to all HTML presentations (`assets/css/print.css`)
-- Added link checking to CI pipeline (`scripts/check_links.sh`)
-- Expanded test coverage for lib/ utilities to >80%
-- Added comprehensive lib/README.md documentation
-
-**Improvements:**
-- Updated CI to version 2.2 with link-check job
-- Standardised script documentation across all seminars
-- Enhanced test templates with better error messages
-- Added SEM07 for evaluation and grading procedures
-
-**Files Added:**
-- `lib/README.md`
-- `lib/test_logging_utils.py`
-- `lib/test_randomisation_utils.py`
-- `scripts/check_links.sh`
-- `scripts/add_print_styles.sh`
-- `assets/css/print.css`
-- `SEM01/tests/test_ai_fingerprint.py`
-
-### Version 5.3.0 (December 2025)
-
-- Initial FAZA 5-6 release
-- Complete restructure with 14 weeks
-- AI-aware exercises integrated throughout
-- Anti-plagiarism infrastructure with MOSS/JPlag integration
-
-### Version 4.0.0 (September 2025)
-
-- Major reorganisation of folder structure
-- Added project difficulty classification (EASY/MEDIUM/ADVANCED)
-- Introduced autograder framework
-- Standardised seminar format
-
----
-
-*Kit updated: January 2026*  
-*Version: 5.3.1*  
-*Tested on: Ubuntu 24.04 LTS, WSL2 with Ubuntu 22.04/24.04*  
-*Feedback and errors: through GITHUB issue tracker*
+*Kit actualizat: Ianuarie 2025*  
+*Testat pe: Ubuntu 24.04 LTS, WSL2 cu Ubuntu 22.04/24.04*  
+*Feedback și erori: prin canalele oficiale ASE-CSIE sau issue tracker*
 
 ---
 
 **ing. dr. Antonio Clim**  
-Assistant Lecturer (fixed-term) | Bucharest University of Economic Studies — CSIE
+Asistent universitar (pe perioada determinata) | Academia de Studii Economice București — CSIE
