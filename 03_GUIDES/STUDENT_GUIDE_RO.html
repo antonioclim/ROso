@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghid de utilizare – înregistrarea temelor</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-green: #00ff41;
+            --accent-green-dim: #00cc33;
+            --border-color: #30363d;
+            --code-bg: #161b22;
+            --link-color: #58a6ff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--accent-green);
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.3em;
+        }
+        
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-green);
+        }
+        
+        h2 {
+            font-size: 1.5em;
+        }
+        
+        h3 {
+            font-size: 1.25em;
+            border-bottom: none;
+        }
+        
+        p {
+            margin-bottom: 1em;
+        }
+        
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        code {
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: var(--accent-green);
+        }
+        
+        pre {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1em;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--accent-green);
+            padding-left: 1em;
+            margin: 1em 0;
+            color: var(--text-secondary);
+            background-color: var(--bg-secondary);
+            padding: 1em;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        ul, ol {
+            margin-left: 2em;
+            margin-bottom: 1em;
+        }
+        
+        li {
+            margin-bottom: 0.5em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.75em;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--bg-tertiary);
+            color: var(--accent-green);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 2em 0;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+        
+        strong {
+            color: var(--accent-green-dim);
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            
+            pre {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>Ghid de utilizare – înregistrarea temelor</h1>
+
+<h2>Sisteme de Operare 2023-2027</h2>
+
+<p><strong>Versiune:</strong> 1.1.1 | <strong>Ultima actualizare:</strong> ianuarie 2025</p>
+
+<hr />
+
+<h2>🎯 Înainte să începi</h2>
+
+<p><strong>Nu intra în panică.</strong> La prima vedere, procesul poate părea complicat, însă:
+- scriptul automatizează aproape totul;
+- cea mai frecventă eroare (o greșeală de tastare la <code>STOP_homework</code>) se remediază în câteva secunde;
+- poți reînregistra de câte ori este necesar.</p>
+
+<p>💪 <strong>85% dintre studenții din anii anteriori au reușit din prima încercare.</strong></p>
+
+<hr />
+
+<h2>🔄 Diagrama procesului de înregistrare</h2>
+
+<pre><code>┌─────────────────┐
+│  🚀 Start       │
+│    Script       │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐     No       ┌─────────────────┐
+│  Dependencies   ├─────────────►│ 📦 Automatic    │
+│  installed?     │              │ install pip,    │
+└────────┬────────┘              │ asciinema, etc. │
+         │ Yes                   └────────┬────────┘
+         │◄──────────────────────────────┘
+         ▼
+┌─────────────────┐
+│ 📝 Enter        │◄───┐
+│ student data    │    │ Invalid data
+└────────┬────────┘    │
+         │ Data OK     │
+         ▼             │
+┌─────────────────┐    │
+│  Validate       ├────┘
+│  data format    │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ 💾 Save         │
+│ local config    │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ 🎬 START        │
+│ Recording       │
+│ asciinema       │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ 👨‍💻 Execute      │◄───┐
+│ homework cmds   │    │ No
+└────────┬────────┘    │
+         │             │
+         ▼             │
+┌─────────────────┐    │
+│ STOP_homework?  ├────┘
+└────────┬────────┘
+         │ Yes
+         ▼
+┌─────────────────┐
+│ 🔐 Generate     │
+│ RSA signature   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐     Failed   ┌─────────────────┐
+│ 📤 SCP Upload   ├─────────────►│ Retry (max 3x)  │
+│ to server       │◄─────────────┤ or saved        │
+└────────┬────────┘              │ LOCALLY         │
+         │ Success               └─────────────────┘
+         ▼
+┌─────────────────┐
+│ ✅ SUCCESS!     │
+│ Homework sent   │
+└─────────────────┘
+</code></pre>
+
+<blockquote>
+  <p>💡 <strong>Din experiență:</strong> în 2023, un student a tastat din greșeală <code>STOP-homework</code> (cu cratimă în loc de underscore) și a pierdut 20 de minute încercând să înțeleagă de ce înregistrarea nu se oprește. Soluția a fost să citească atent mesajul de pe ecran: este <code>STOP_homework</code>, cu <strong>underscore</strong>. De atunci, textul a fost făcut mai vizibil și a fost adăugat <code>Ctrl+D</code> ca alternativă. Este util să înveți din greșelile deja întâlnite.</p>
+</blockquote>
+
+<hr />
+
+<h2>Configurare inițială (o singură dată)</h2>
+
+<h3>Pasul 1: Deschide terminalul</h3>
+
+<p>Pe Ubuntu/WSL, deschide un terminal.</p>
+
+<p><em>(WSL2 a schimbat semnificativ modul în care pot fi exersate competențele Linux, deoarece permite practică fără dual boot.)</em></p>
+
+<blockquote>
+  <p>🚨 <strong>AVERTISMENT!</strong> Folosește propriul terminal, instalat și configurat conform indicațiilor cadrului didactic.</p>
+  
+  <p>NU te conecta la sop.ase.ro.</p>
+  
+  <p>⚠️ Erorile cauzate de nerespectarea acestei instrucțiuni îți aparțin, iar temele care nu sunt înregistrate din mediul tău local și trimise corespunzător NU vor fi luate în considerare.</p>
+</blockquote>
+
+<hr />
+
+<h3>Pasul 2: Creează directorul HOMEWORKS</h3>
+
+<div class="codehilite">
+<pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/HOMEWORKS
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> nimic (comanda <code>mkdir -p</code> nu afișează mesaj la succes). Este normal.</p>
+
+<p>Verifică faptul că directorul a fost creat:</p>
+
+<div class="codehilite">
+<pre><span></span><code>ls<span class="w"> </span>-la<span class="w"> </span>~/HOMEWORKS
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi ceva asemănător cu:</strong></p>
+
+<pre><code>total 8
+drwxr-xr-x  2 stud stud 4096 Jan 27 10:00 .
+drwxr-xr-x 15 stud stud 4096 Jan 27 09:55 ..
+</code></pre>
+
+<p>📝 <strong>Notă:</strong> directorul este gol pentru moment (doar <code>.</code> și <code>..</code>). Este normal.</p>
+
+<p>Observație: <code>~</code> reprezintă directorul tău „home” (<code>/home/{username}/</code>).</p>
+
+<hr />
+
+<h3>Pasul 3: Descarcă scriptul</h3>
+
+<p><strong>Opțiunea A: Descărcare din Google Drive (recomandată pentru începători)</strong></p>
+
+<ol>
+<li><p>Deschide linkul în browser:</p>
+
+<ul>
+<li>Python TUI (recomandat): https://drive.google.com/file/d/1YLqNamLCdz6OzF6hlcPr1hr738DIaSYz/view?usp=drive_link</li>
+<li>Bash (alternativă): https://drive.google.com/file/d/1dLXPEtGjLo4f9G0Uojd-YXzY7c3ku1Ez/view?usp=drive_link</li>
+</ul></li>
+<li><p>Apasă Download (sau pictograma ⬇️)</p></li>
+<li><p>Salvează fișierul pe calculatorul tău (Windows)</p></li>
+</ol>
+
+<hr />
+
+<p><strong>Opțiunea B: Descărcare directă cu wget în terminal</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+wget<span class="w"> </span>-O<span class="w"> </span>record_homework_tui_RO.py<span class="w"> </span><span class="s2">&quot;https://drive.google.com/uc?export=download&amp;id=1YLqNamLCdz6OzF6hlcPr1hr738DIaSYz&quot;</span>
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong></p>
+
+<pre><code>--2025-01-27 10:05:32--  https://drive.google.com/uc?...
+Resolving drive.google.com (drive.google.com)... 142.250.185.78
+Connecting to drive.google.com (drive.google.com)|142.250.185.78|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 34644 (34K) [application/octet-stream]
+Saving to: `record_homework_tui_RO.py`
+
+record_homework_tui_RO.py   100%[===================&gt;]  33.83K  --.-KB/s    in 0.02s
+
+2025-01-27 10:05:33 (1.65 MB/s) - `record_homework_tui_RO.py` saved [34644/34644]
+</code></pre>
+
+<p>⚠️ <strong>Dacă vezi "ERROR 403: Forbidden":</strong> linkul poate fi restricționat. Descarcă manual din browser.</p>
+
+<blockquote>
+  <p>💡 Metoda aceasta descarcă fișierul direct în directorul HOMEWORKS, fără pași intermediari.</p>
+</blockquote>
+
+<hr />
+
+<p><strong>Opțiunea C: Copiază scriptul în Ubuntu folosind WinSCP</strong></p>
+
+<ol>
+<li>Deschide WinSCP și conectează-te la sistemul tău Ubuntu/WSL</li>
+<li>Navighează la <code>/home/{username}/HOMEWORKS/</code></li>
+<li>Copiază fișierul descărcat (<code>record_homework_tui_RO.py</code>) în acest director</li>
+</ol>
+
+<hr />
+
+<p><strong>Opțiunea D: Copiere directă în WSL (dacă folosești WSL)</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code>cp<span class="w"> </span>/mnt/c/Users/<span class="o">{</span>WindowsName<span class="o">}</span>/Downloads/record_homework_tui_RO.py<span class="w"> </span>~/HOMEWORKS/
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> nimic (succes „tăcut”).</p>
+
+<p>⚠️ Înlocuiește <code>{WindowsName}</code> cu numele tău de utilizator din Windows.</p>
+
+<p><strong>Verifică faptul că a funcționat:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>~/HOMEWORKS/
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi fișierul listat.</strong></p>
+
+<hr />
+
+<h3>Pasul 4: Fă scriptul executabil</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+chmod<span class="w"> </span>+x<span class="w"> </span>record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> nimic (succes „tăcut”).</p>
+
+<p>Verifică faptul că permisiunile s-au schimbat:</p>
+
+<div class="codehilite">
+<pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi <code>x</code> în permisiuni:</strong></p>
+
+<pre><code>-rwxr-xr-x 1 stud stud 34644 Jan 27 10:05 record_homework_tui_RO.py
+ ^^^
+ These 'x' mean "executable"
+</code></pre>
+
+<p>❌ <strong>Dacă vezi <code>-rw-r--r--</code></strong> (fără <code>x</code>): comanda chmod nu a funcționat.
+Verifică faptul că ești în directorul corect cu <code>pwd</code> — ar trebui să afișeze <code>~/HOMEWORKS</code> sau <code>/home/{username}/HOMEWORKS</code>.</p>
+
+<hr />
+
+<h3>Pasul 5: Verifică structura finală</h3>
+
+<div class="codehilite">
+<pre><span></span><code>ls<span class="w"> </span>-la<span class="w"> </span>~/HOMEWORKS/
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong></p>
+
+<pre><code>drwxr-xr-x  2 {username} {username} 4096 Jan 21 10:00 .
+drwxr-xr-x 15 {username} {username} 4096 Jan 21 09:55 ..
+-rwxr-xr-x  1 {username} {username} 38000 Jan 21 10:00 record_homework_tui_RO.py
+</code></pre>
+
+<p>✅ <strong>Dacă vezi ceva asemănător, ești pregătit.</strong></p>
+
+<hr />
+
+<h2>🧪 Opțional: rulare de probă (recomandată)</h2>
+
+<p>Înainte să înregistrezi tema reală, fă o rulare de test cu date fictive. Durează aproximativ 2 minute și elimină surprizele în momentul predării.</p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+./record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<p>Introdu date de test:
+- Nume (familie): <code>TEST</code>
+- Prenume: <code>Student</code>
+- Grupă: <code>0000</code>
+- Specializare: Economic Informatics (English)
+- Temă: <code>01x</code></p>
+
+<p>Apoi:
+1. Tastează câteva comenzi simple (<code>ls</code>, <code>pwd</code>, <code>echo "hello"</code>)
+2. Tastează <code>STOP_homework</code> (cu <strong>underscore</strong>, nu cu cratimă)
+3. Observă generarea semnăturii
+4. Încărcarea va eșua (grupa 0000 nu există) — pentru probă este în regulă</p>
+
+<p>Șterge fișierul de test după finalizare:</p>
+
+<div class="codehilite">
+<pre><span></span><code>rm<span class="w"> </span>0000_TEST_Student_HW01x.cast
+</code></pre>
+</div>
+
+<p><strong>De ce este utilă rularea de probă?</strong> Prima interacțiune cu interfața de înregistrare, procesul de semnare și încărcarea poate părea copleșitoare. O probă scurtă reduce stresul și crește încrederea pentru predarea reală.</p>
+
+<hr />
+
+<h2>Pornire rapidă (de fiecare dată)</h2>
+
+<h3>Pasul 1: Intră în directorul HOMEWORKS</h3>
+
+<div class="codehilite">
+<pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> nimic (succes „tăcut”). Promptul poate reflecta directorul curent.</p>
+
+<hr />
+
+<h3>Pasul 2: Rulează scriptul</h3>
+
+<div class="codehilite">
+<pre><span></span><code>python3<span class="w"> </span>record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> efectul „Matrix rain”, urmat de bannerul programului.</p>
+
+<hr />
+
+<h3>Pasul 3: Urmează instrucțiunile afișate</h3>
+
+<hr />
+
+<h2>Prima utilizare (durează mai mult)</h2>
+
+<p>La prima rulare, scriptul:</p>
+
+<ol>
+<li>✅ verifică și instalează <code>pip</code> (dacă lipsește)</li>
+<li>✅ instalează bibliotecile Python: <code>rich</code>, <code>questionary</code></li>
+<li>✅ instalează utilitarele de sistem: <code>asciinema</code>, <code>openssl</code>, <code>sshpass</code></li>
+</ol>
+
+<p>Procesul poate dura 1-3 minute, în funcție de conexiunea la internet.</p>
+
+<p><strong>Ar trebui să vezi mesaje asemănătoare cu:</strong></p>
+
+<pre><code>⚡ Installing pip...
+✓ pip has been installed!
+
+⚡ Installing Python packages: rich, questionary...
+✓ Python packages have been installed!
+
+⚡ Installing system packages: asciinema, openssl, sshpass...
+✓ System packages have been installed!
+</code></pre>
+
+<p>Rulările ulterioare vor fi rapide: nu mai este nevoie de instalări suplimentare.</p>
+
+<hr />
+
+<h2>Introducerea datelor</h2>
+
+<h3>Nume (familie)</h3>
+
+<ul>
+<li>Format: doar litere și cratimă (fără spații)</li>
+<li>Exemple valide: <code>Smith</code>, <code>Jones-Williams</code></li>
+<li>Conversie: MAJUSCULE (<code>SMITH</code>)</li>
+<li>Recomandare: testează cu date simple înainte de cazuri complexe</li>
+</ul>
+
+<h3>Prenume</h3>
+
+<ul>
+<li>Format: doar litere și cratimă (fără spații)</li>
+<li>Exemple valide: <code>John</code>, <code>Mary-Anne</code></li>
+<li>Conversie: inițială mare (<code>John</code>)</li>
+<li>Dacă ai dubii, folosește <code>man</code> sau <code>--help</code> acolo unde este disponibil</li>
+</ul>
+
+<h3>Grupă</h3>
+
+<ul>
+<li>Format: exact 4 cifre</li>
+<li>Exemple valide: <code>1029</code>, <code>1035</code>, <code>1234</code></li>
+</ul>
+
+<h3>Specializare</h3>
+
+<ul>
+<li>Folosește tastele săgeți sus/jos pentru navigare</li>
+<li>Apasă <strong>ENTER</strong> pentru selecție</li>
+<li>Opțiuni:
+<ul>
+<li>Economic Informatics (English)</li>
+<li>Grup ID</li>
+<li>Economic Informatics (Romanian)</li>
+</ul></li>
+</ul>
+
+<h3>Număr temă</h3>
+
+<ul>
+<li>Format: 01-07 urmat de o literă</li>
+<li>Exemple valide: <code>01a</code>, <code>03b</code>, <code>07c</code></li>
+</ul>
+
+<hr />
+
+<h2>Date precompletate</h2>
+
+<p>După prima utilizare, datele tale vor fi salvate automat:
+- nume (familie)
+- prenume
+- grupă</p>
+
+<p>La rularea următoare, aceste câmpuri vor fi <strong>precompletate</strong>. Poți:
+- apăsa <strong>ENTER</strong> pentru a păstra valoarea anterioară;
+- introduce altceva pentru a o înlocui.</p>
+
+<p>Numărul temei nu este precompletat (se schimbă la fiecare predare).</p>
+
+<hr />
+
+<h2>Înregistrare</h2>
+
+<h3>Când începe înregistrarea:</h3>
+
+<pre><code>╔═══════════════════════════════════════════════════════════════════╗
+║                     🔴 RECORDING IN PROGRESS                      ║
+╠═══════════════════════════════════════════════════════════════════╣
+║                                                                   ║
+║   To STOP and SAVE the recording, type: STOP_homework             ║
+║                                                                   ║
+║   or press Ctrl+D                                                 ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+</code></pre>
+
+<h3>Ce ai de făcut:</h3>
+
+<ol>
+<li>Rulează comenzile cerute de temă</li>
+<li>Arată clar ce faci și de ce</li>
+<li>Când ai terminat, tastează:</li>
+</ol>
+
+<div class="codehilite">
+<pre><span></span><code>STOP_homework
+</code></pre>
+</div>
+
+<p>sau apasă <code>Ctrl+D</code></p>
+
+<h3>Sugestii pentru o înregistrare bună:</h3>
+
+<ul>
+<li>✅ Tastează clar — graba produce greșeli</li>
+<li>✅ Poți explica succint ce faci (îl ajută pe evaluator să urmărească raționamentul)</li>
+<li>✅ Verifică rezultatele comenzilor înainte să oprești</li>
+<li>❌ NU șterge greșelile — ele arată progresul de învățare</li>
+<li>❌ NU folosi excesiv <code>clear</code>/<code>cls</code></li>
+</ul>
+
+<hr />
+
+<h2>Încărcare</h2>
+
+<p>După oprirea înregistrării:</p>
+
+<ol>
+<li>✅ scriptul generează semnătura criptografică</li>
+<li>✅ încearcă încărcarea pe server (3 încercări)</li>
+<li>✅ afișează un rezumat final</li>
+</ol>
+
+<h3>Dacă încărcarea reușește:</h3>
+
+<pre><code>╔═══════════════════════════════════════════════════════════════════╗
+║                     ✅ UPLOAD SUCCESSFUL!                         ║
+╚═══════════════════════════════════════════════════════════════════╝
+</code></pre>
+
+<h3>Dacă încărcarea eșuează:</h3>
+
+<p>Fișierul este salvat local și vei vedea un mesaj cu comanda pentru trimitere manuală:</p>
+
+<pre><code>╔═════════════════════════════════════════════════════════════════════════╗
+║                          Submission Failed                              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   ❌ COULD NOT SEND HOMEWORK!                                           ║
+║                                                                         ║
+║   The file has been saved locally.                                      ║
+║                                                                         ║
+║   ╔═══════════════════════════════════════════════════════════════╗     ║
+║   ║                                                               ║     ║
+║   ║   📁  1029_SMITH_John_HW03b.cast                              ║     ║
+║   ║                                                               ║     ║
+║   ╚═══════════════════════════════════════════════════════════════╝     ║
+║                                                                         ║
+║   Try later (when you restore connection) using:                        ║
+║                                                                         ║
+║   scp -P 1001 1029_SMITH_John_HW03b.cast stud-id[AT]sop.ase.ro:/home... ║
+║                                                                         ║
+║   ⚠️  DO NOT modify the .cast file before submission!                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+</code></pre>
+
+<p>Reține:
+- ⚠️ NU modifica fișierul <code>.cast</code> — semnătura devine invalidă
+- 📋 Copiază comanda afișată și ruleaz-o când ai acces la internet
+- 🔄 Poți încerca de câte ori este necesar</p>
+
+<hr />
+
+<h2>✅ Verifică înainte de trimitere</h2>
+
+<p>Folosește scriptul de verificare pentru a valida tema înainte de încărcarea manuală:</p>
+
+<div class="codehilite">
+<pre><span></span><code>./check_my_submission.sh<span class="w"> </span>1029_SMITH_John_HW03b.cast
+</code></pre>
+</div>
+
+<p>Acesta verifică dimensiunea fișierului, prezența semnăturii, formatul numelui de fișier și alte condiții. Remediază orice eroare înainte de a încerca trimiterea.</p>
+
+<hr />
+
+<h2>Fișierul generat</h2>
+
+<h3>Locație:</h3>
+
+<p>Fișierul <code>.cast</code> este salvat în directorul curent (de exemplu <code>~/HOMEWORKS/</code> dacă ai urmat pașii de configurare).</p>
+
+<pre><code>/home/{username}/HOMEWORKS/1029_SMITH_John_HW03b.cast
+</code></pre>
+
+<h3>Nume de fișier:</h3>
+
+<pre><code>[GROUP]_[SURNAME]_[FirstName]_HW[Number].cast
+</code></pre>
+
+<p>Exemplu: <code>1029_SMITH_John_HW03b.cast</code></p>
+
+<h3>Conținut:</h3>
+
+<ul>
+<li>înregistrarea completă a sesiunii de terminal;</li>
+<li>semnătura criptografică (pentru verificarea autenticității).</li>
+</ul>
+
+<hr />
+
+<h2>❓ Întrebări frecvente (FAQ)</h2>
+
+<h3>General</h3>
+
+<p><strong>Î: De ce trebuie să folosesc propriul terminal și nu serverul sop.ase.ro?</strong></p>
+
+<p>R: Înregistrarea asciinema captează TOATĂ activitatea din terminal. Pe server, activitatea ta s-ar amesteca cu a altor studenți, iar fișierul rezultat ar deveni inutilizabil. În plus, semnătura criptografică se bazează pe utilizatorul LOCAL.</p>
+
+<blockquote>
+  <p><em>Un student a rulat scriptul pe serverul partajat. Înregistrarea de 47 de minute a inclus munca altor trei studenți, o discuție din pauza de cafea și lista de redare Spotify a cuiva, auzită „pe fundal”. Evită această situație.</em></p>
+</blockquote>
+
+<hr />
+
+<p><strong>Î: Pot folosi un alt terminal decât cel implicit (Windows Terminal, iTerm2)?</strong></p>
+
+<p>R: Da, orice terminal care suportă secvențe ANSI este potrivit. Recomandări:
+- Windows: Windows Terminal (preinstalat pe Windows 11)
+- macOS: iTerm2 sau Terminal.app
+- Linux: GNOME Terminal, Konsole, Alacritty</p>
+
+<hr />
+
+<p><strong>Î: Ce se întâmplă dacă închid accidental terminalul în timpul înregistrării?</strong></p>
+
+<p>R: Înregistrarea se oprește automat și fișierul parțial este salvat. Poți:
+1. verifica dacă fișierul <code>.cast</code> există: <code>ls -la ~/HOMEWORKS/*.cast</code>
+2. dacă este prea scurt, șterge-l și reîncepe: <code>rm ~/HOMEWORKS/...cast</code>
+3. rulează din nou scriptul</p>
+
+<hr />
+
+<p><strong>Î: Pot edita fișierul <code>.cast</code> după înregistrare?</strong></p>
+
+<p>R: <strong>Nu.</strong> Orice modificare invalidează semnătura criptografică și tema va fi respinsă automat. Dacă ai greșit, șterge fișierul și reînregistrează.</p>
+
+<hr />
+
+<p><strong>Î: Cum verific că semnătura este validă?</strong></p>
+
+<p>R: Nu o poți valida singur — doar cadrul didactic are cheia privată. Totuși, poți verifica dacă semnătura EXISTĂ:</p>
+
+<div class="codehilite">
+<pre><span></span><code>tail<span class="w"> </span>-5<span class="w"> </span>~/HOMEWORKS/GROUP_SURNAME_FirstName_HWxx.cast
+<span class="c1"># The last line should start with &quot;## &quot; followed by Base64</span>
+</code></pre>
+</div>
+
+<p>Sau folosește scriptul de verificare:</p>
+
+<div class="codehilite">
+<pre><span></span><code>./check_my_submission.sh<span class="w"> </span>your_homework.cast
+</code></pre>
+</div>
+
+<hr />
+
+<h2>🔧 Probleme uzuale (depanare)</h2>
+
+<h3>Probleme de instalare</h3>
+
+<h4>1. "Permission denied" în timpul instalării</h4>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Make sure you are in the HOMEWORKS directory</span>
+<span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+
+<span class="c1"># Run with sudo the first time (for installing dependencies)</span>
+sudo<span class="w"> </span>python3<span class="w"> </span>record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> instalarea dependențelor, urmată de interfața normală.</p>
+
+<hr />
+
+<h4>2. "E: Unable to locate package asciinema"</h4>
+
+<p>Repository-urile apt nu sunt actualizate. Rulează:</p>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>asciinema
+</code></pre>
+</div>
+
+<p><strong>Ar trebui să vezi:</strong> lista de pachete actualizată, apoi instalarea asciinema.</p>
+
+<p>Dacă tot nu funcționează, adaugă PPA-ul oficial:</p>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>apt-add-repository<span class="w"> </span>ppa:zanchey/asciinema
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>asciinema
+</code></pre>
+</div>
+
+<hr />
+
+<h4>3. Instalarea pip eșuează cu "externally-managed-environment"</h4>
+
+<p>Pe Ubuntu 23.04+ și Debian 12+, sistemul protejează pachetele Python.
+Scriptul gestionează automat acest caz, însă pentru instalare manuală:</p>
+
+<div class="codehilite">
+<pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--break-system-packages<span class="w"> </span>rich<span class="w"> </span>questionary
+</code></pre>
+</div>
+
+<hr />
+
+<h4>4. "sudo: apt: command not found"</h4>
+
+<p><strong>Cauză:</strong> nu ești pe o distribuție Debian/Ubuntu.</p>
+
+<p><strong>Soluție:</strong> dacă folosești Fedora/RHEL:</p>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>asciinema<span class="w"> </span>openssl<span class="w"> </span>sshpass
+</code></pre>
+</div>
+
+<p>Pentru Arch:</p>
+
+<div class="codehilite">
+<pre><span></span><code>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>asciinema<span class="w"> </span>openssl<span class="w"> </span>sshpass
+</code></pre>
+</div>
+
+<hr />
+
+<h4>5. "python3: command not found"</h4>
+
+<p><strong>Cauză:</strong> Python nu este instalat sau nu se află în PATH.</p>
+
+<p><strong>Soluție:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check if it exists under another name:</span>
+python<span class="w"> </span>--version
+
+<span class="c1"># If it works, create a symlink:</span>
+sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span><span class="k">$(</span>which<span class="w"> </span>python<span class="k">)</span><span class="w"> </span>/usr/local/bin/python3
+
+<span class="c1"># If it does not exist at all:</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3
+</code></pre>
+</div>
+
+<hr />
+
+<h4>6. WSL: "chmod: cannot access <code>record_homework_tui_RO.py</code>: No such file"</h4>
+
+<p><strong>Cauză:</strong> fișierul nu se află în directorul curent.</p>
+
+<p><strong>Soluție:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check where you are:</span>
+<span class="nb">pwd</span>
+<span class="c1"># You should see: /home/YOURNAME/HOMEWORKS</span>
+
+<span class="c1"># If not, navigate:</span>
+<span class="nb">cd</span><span class="w"> </span>~/HOMEWORKS
+
+<span class="c1"># Check the contents:</span>
+ls<span class="w"> </span>-la
+</code></pre>
+</div>
+
+<hr />
+
+<h3>Probleme la rulare</h3>
+
+<h4>7. Eroare de import "rich" sau "questionary" după instalare</h4>
+
+<p><strong>Cauză:</strong> pip a instalat în <code>site-packages</code> la nivel de utilizator, însă Python nu găsește pachetul.</p>
+
+<p><strong>Soluție:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check where it was installed:</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>show<span class="w"> </span>rich<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Location
+
+<span class="c1"># Add to PYTHONPATH (temporary):</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/lib/python3.11/site-packages:</span><span class="nv">$PYTHONPATH</span><span class="s2">&quot;</span>
+
+<span class="c1"># Or reinstall globally (requires sudo):</span>
+sudo<span class="w"> </span>pip3<span class="w"> </span>install<span class="w"> </span>rich<span class="w"> </span>questionary
+</code></pre>
+</div>
+
+<hr />
+
+<h4>8. Ecranul „Matrix rain” este deteriorat (caractere ciudate)</h4>
+
+<p><strong>Cauză:</strong> terminalul nu suportă caractere Unicode japoneze.</p>
+
+<p><strong>Soluție:</strong> setează fontul terminalului la unul cu suport Unicode:
+- Windows Terminal: "Cascadia Code" sau "Consolas"
+- Terminal VS Code: "Fira Code" sau "JetBrains Mono"</p>
+
+<p>Alternativ, folosește varianta Bash (fără efecte Matrix):</p>
+
+<div class="codehilite">
+<pre><span></span><code>./record_homework_RO.sh
+</code></pre>
+</div>
+
+<hr />
+
+<h4>9. Culorile nu apar (totul este alb/negru)</h4>
+
+<p><strong>Cauză:</strong> terminalul nu suportă 256 de culori sau ANSI este dezactivat.</p>
+
+<p><strong>Soluție:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check colour support:</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$TERM</span>
+<span class="c1"># You should see: xterm-256color</span>
+
+<span class="c1"># If you see something else (e.g.: &quot;dumb&quot;):</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TERM</span><span class="o">=</span>xterm-256color
+<span class="c1"># Add to ~/.bashrc for permanence</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h3>Probleme de înregistrare</h3>
+
+<h4>10. Înregistrarea nu se oprește când tastez <code>STOP_homework</code></h4>
+
+<p><strong>Cauză:</strong> <code>STOP_homework</code> este interpretat în sesiunea de înregistrare.</p>
+
+<p>Cauze posibile:
+1. tastezi în alt terminal (trebuie să fie cel în care rulează înregistrarea)
+2. ai scris <code>stop_homework</code> (sensibil la litere mari/mici)
+3. ai scris <code>STOP-homework</code> (cu cratimă în loc de underscore)
+4. ai spații în plus</p>
+
+<p><strong>Soluție alternativă:</strong> apasă <code>Ctrl+D</code> (end of file)</p>
+
+<blockquote>
+  <p>În practică, această situație prinde pe cineva în fiecare semestru. Nu ești singur.</p>
+</blockquote>
+
+<hr />
+
+<h4>11. Fișierul <code>.cast</code> este gol sau foarte mic (sub 1KB)</h4>
+
+<p><strong>Cauză:</strong> înregistrarea s-a oprit prematur.</p>
+
+<p>Cauze:
+1. ai apăsat Ctrl+C în loc de Ctrl+D
+2. shell-ul s-a închis neașteptat
+3. eroare la inițializarea asciinema</p>
+
+<p><strong>Soluție:</strong> verifică astfel:</p>
+
+<div class="codehilite">
+<pre><span></span><code>cat<span class="w"> </span>~/HOMEWORKS/GROUP_SURNAME_FirstName_HWxx.cast<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+<span class="c1"># You should see valid JSON</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h4>12. Am greșit o comandă și vreau să o refac</h4>
+
+<p><strong>Soluție:</strong> NU opri înregistrarea. Greșelile sunt acceptabile și arată procesul de învățare. Poți:
+1. să folosești săgeata sus pentru a edita comanda anterioară
+2. să tastezi comanda corectă</p>
+
+<p>⚠️ <strong>NU folosi <code>clear</code></strong> — șterge istoricul vizual necesar evaluării.</p>
+
+<hr />
+
+<h4>13. Vreau să fac pauză în timpul înregistrării</h4>
+
+<p><strong>Informație:</strong> asciinema înregistrează și timpul de inactivitate.</p>
+
+<p><strong>Soluție:</strong> poți face pauză, însă:
+- la redare, pauzele lungi sunt vizibile;
+- evaluatorul poate accelera redarea, deci nu este o problemă;
+- pentru pauze foarte lungi (ore), este preferabil să oprești și să reîncepi.</p>
+
+<hr />
+
+<h3>Probleme de rețea / încărcare</h3>
+
+<h4>14. "Connection refused" în timpul încărcării</h4>
+
+<p><strong>Cauze posibile:</strong>
+- nu ești conectat la internet;
+- serverul este temporar indisponibil;
+- ești pe o rețea restricționată.</p>
+
+<p><strong>Soluție:</strong> fișierul este salvat local. Încearcă mai târziu sau contactează cadrul didactic.</p>
+
+<hr />
+
+<h4>15. "Connection timed out"</h4>
+
+<p><strong>Cauză:</strong> serverul sop.ase.ro folosește portul 1001 (nu portul standard 22).</p>
+
+<p>Cauze posibile:
+1. firewall-ul blochează portul 1001 (frecvent în rețele corporative)
+2. VPN activ care nu rutează corect
+3. server temporar indisponibil</p>
+
+<p><strong>Soluție:</strong></p>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Test connectivity:</span>
+nc<span class="w"> </span>-zv<span class="w"> </span>sop.ase.ro<span class="w"> </span><span class="m">1001</span>
+
+<span class="c1"># If you are on VPN, disconnect temporarily</span>
+<span class="c1"># If you are on a restricted network, use mobile hotspot</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h4>16. "Host key verification failed"</h4>
+
+<p><strong>Cauză:</strong> cheia SSH a serverului s-a schimbat sau este prima conexiune.</p>
+
+<p><strong>Notă:</strong> scriptul folosește <code>-o StrictHostKeyChecking=no</code>, deci nu ar trebui să vezi această eroare. Dacă apare totuși:</p>
+
+<div class="codehilite">
+<pre><span></span><code>ssh-keygen<span class="w"> </span>-R<span class="w"> </span>sop.ase.ro
+<span class="c1"># Then run the script again</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h4>17. "Permission denied" în timpul încărcării (dar conexiunea funcționează)</h4>
+
+<p><strong>Cauză:</strong> directorul de destinație nu există sau nu ai permisiuni.</p>
+
+<p><strong>Soluție:</strong> este o problemă pe server. Contactează cadrul didactic cu:
+- specializarea selectată: [eninfo/grupeid/roinfo]
+- mesajul exact de eroare
+- output-ul comenzii: <code>sshpass -p stud ssh -p 1001 stud-id[AT]sop.ase.ro "ls -la /home/HOMEWORKS/"</code></p>
+
+<hr />
+
+<h3>Alte probleme</h3>
+
+<h4>18. Scriptul nu pornește deloc</h4>
+
+<div class="codehilite">
+<pre><span></span><code><span class="c1"># Check the Python version</span>
+python3<span class="w"> </span>--version
+<span class="c1"># Must be Python 3.8 or newer</span>
+
+<span class="c1"># Check that the script exists and is executable</span>
+ls<span class="w"> </span>-l<span class="w"> </span>~/HOMEWORKS/record_homework_tui_RO.py
+</code></pre>
+</div>
+
+<hr />
+
+<h4>19. Am introdus date greșite</h4>
+
+<p>Rulează din nou scriptul și introdu datele corecte. Fișierul anterior va fi suprascris.</p>
+
+<hr />
+
+<h4>20. Înregistrarea include și promptul scriptului (nu doar comenzile mele)</h4>
+
+<p><strong>Notă:</strong> aceasta este intenționat. Evaluatorul vede contextul complet. Asciinema captează tot ce se întâmplă în terminal, inclusiv mesajele scriptului, ceea ce ajută la verificarea autenticității.</p>
+
+<hr />
+
+<h2>Despre semnătura criptografică</h2>
+
+<p>Fiecare înregistrare este semnată digital cu RSA. Acest lucru garantează:</p>
+
+<ul>
+<li>✅ <strong>Autenticitate</strong> — evaluatorul poate verifica faptul că ai creat fișierul</li>
+<li>✅ <strong>Integritate</strong> — fișierul nu poate fi modificat după semnare</li>
+<li>✅ <strong>Non-repudiere</strong> — nu poți nega că ai trimis tema</li>
+<li>Verifică întotdeauna rezultatul înainte de a continua</li>
+</ul>
+
+<p><strong>Nu poți falsifica semnătura altui student.</strong></p>
+
+<hr />
+
+<h2>✨ Sfaturi pentru reușită</h2>
+
+<ol>
+<li><strong>Citește întregul ghid</strong> înainte de prima încercare (aproximativ 15 minute)</li>
+<li><strong>Fă o rulare de probă</strong> cu date fictive (secțiunea de mai sus)</li>
+<li><strong>Pregătește comenzile</strong> într-un document separat înainte de înregistrare</li>
+<li><strong>Testează comenzile</strong> individual înainte de înregistrarea finală</li>
+<li><strong>Verifică predarea</strong> cu <code>check_my_submission.sh</code> înainte de încărcarea manuală</li>
+</ol>
+
+<hr />
+
+<h2>🏆 Ai reușit</h2>
+
+<p>Dacă ai ajuns aici și ai trimis tema cu succes — felicitări.</p>
+
+<p>Ai utilizat:
+- 🐧 scripting în shell pe Linux
+- 🔐 criptografie asimetrică (RSA)
+- 🌐 transfer securizat de fișiere (SCP)
+- 📹 înregistrare de terminal (asciinema)</p>
+
+<p>Acestea sunt competențe utilizate frecvent în administrarea sistemelor și în activități DevOps. <strong>Ești pe direcția potrivită.</strong></p>
+
+<hr />
+
+<h2>Suport</h2>
+
+<p>Pentru probleme tehnice, urmează această escaladare:</p>
+
+<ol>
+<li><p><strong>Auto-ajutor:</strong></p>
+
+<ul>
+<li>rulează <code>./check_my_submission.sh</code> pentru diagnostic;</li>
+<li>consultă secțiunea FAQ de mai sus;</li>
+<li>consultă secțiunea de depanare;</li>
+<li>verifică faptul că ai cea mai recentă versiune a scriptului.</li>
+</ul></li>
+<li><p><strong>Sprijin din partea colegilor:</strong></p>
+
+<ul>
+<li>întreabă un coleg care a trimis deja cu succes;</li>
+<li>consultă forumul disciplinei / canalul Teams (dacă este disponibil).</li>
+</ul></li>
+<li><p><strong>Contactarea cadrului didactic:</strong></p>
+
+<ul>
+<li>discută cu cadrul didactic în timpul orelor de consultanță;</li>
+<li>trimite un mesaj cu subiectul: <code>[OS Homework] Scurtă descriere a problemei</code></li>
+<li>include: grupa, mesajul exact de eroare, ce ai încercat.</li>
+</ul></li>
+</ol>
+
+<p><strong>Timp de răspuns:</strong> cadrele didactice răspund, de regulă, în 24-48 ore în timpul semestrului. Pentru situații urgente înainte de termen, folosește orele de consultanță.</p>
+
+<hr />
+
+<p><em>Sisteme de Operare 2023-2027 - ASE București</em>
+<em>Versiune documentație: 1.1.1</em></p>
+
+</body>
+</html>
