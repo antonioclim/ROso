@@ -1,0 +1,27 @@
+2024-01-15 08:23:45 [INFO] Server started on port 8080 client=172.16.0.5
+2024-01-15 08:23:46 [INFO] Database connection established: 192.168.1.100:5432
+2024-01-15 08:24:01 [DEBUG] Loading configuration from /etc/app/config.yaml
+2024-01-15 08:24:15 [INFO] User alice_AT_example_DOT_com logged in from 10.0.0.15
+2024-01-15 08:25:33 [WARNING] High memory usage detected: 85%
+2024-01-15 08:26:01 [ERROR] Failed to connect to cache server 192.168.1.50:6379
+2024-01-15 08:26:02 [INFO] Retrying cache connection.. client=172.16.0.6.
+2024-01-15 08:26:05 [INFO] Cache connection restored
+2024-01-15 08:27:18 [INFO] User bob.smith_AT_company_DOT_org logged in from 10.0.0.22
+2024-01-15 08:28:44 [DEBUG] Processing request: GET /api/users
+2024-01-15 08:29:01 [INFO] Request completed in 234ms
+2024-01-15 08:30:15 [WARNING] Slow query detected: 1523ms
+2024-01-15 08:31:22 [ERROR] Authentication failed for user invalid_AT_test_DOT_com from 192.168.2.99
+2024-01-15 08:32:00 [INFO] Scheduled backup started
+2024-01-15 08:33:45 [INFO] Backup completed: 2.3GB written to /backup/2024-01-15/
+2024-01-15 08:34:12 [DEBUG] Clearing temporary files from /tmp/app-cache/
+2024-01-15 08:35:00 [INFO] User carol.w_AT_techcorp_DOT_com logged in from 10.0.0.8
+2024-01-15 08:36:28 [ERROR] Disk space low on /var/log: 92% used
+2024-01-15 08:37:15 [WARNING] Rate limit exceeded for IP 192.168.3.100
+2024-01-15 08:38:00 [INFO] Health check passed - all services operational
+2024-01-15 08:39:22 [INFO] User alice_AT_example_DOT_com logged out
+2024-01-15 08:40:01 [DEBUG] Garbage collection completed: freed 128MB
+2024-01-15 08:41:33 [INFO] New user registered: david.new_AT_email_DOT_com
+2024-01-15 08:42:15 [ERROR] Failed to send email notification: SMTP timeout
+2024-01-15 08:43:00 [INFO] Retry email queued for david.new_AT_email_DOT_com
+2024-01-15 08:44:28 [WARNING] SSL certificate expires in 30 days
+2024-01-15 08:45:00 [INFO] Daily statistics: 1523 requests, 12 errors, 99.2% uptime

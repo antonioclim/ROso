@@ -1,0 +1,36 @@
+Contact Information Database
+============================
+
+Personal Contacts:
+- John Doe: john.doe_AT_gmail_DOT_com, +40-721-123-456
+- Maria Pop: maria.pop_AT_yahoo_DOT_ro, 0722.234.567
+- Alexandru Ionescu: alex_ionescu_AT_hotmail_DOT_com, +40 733 345 678
+- Elena Dumitrescu: elena.d_AT_outlook_DOT_com, 0744-456-789
+
+Business Contacts:
+- TechCorp Support: support_AT_techcorp_DOT_com, +40-21-123-4567
+- Sales Team: sales_AT_company_DOT_ro, 0212345678
+- HR Department: hr_AT_firma_DOT_ro, +40-21-987-6543
+
+International:
+- Pierre Dubois (France): pierre_AT_example_DOT_fr, +33 1 23 45 67 89
+- Hans Mueller (Germany): h.mueller_AT_firma_DOT_de, +49 30 1234567
+- Giovanni Rossi (Italy): giovanni_AT_azienda_DOT_it, +39 06 12345678
+
+IP Addresses Found in Logs:
+- Primary Server: 192.168.1.1
+- Backup Server: 192.168.1.2
+- External Gateway: 10.0.0.1
+- DNS Server: 8.8.8.8
+- Invalid: 999.999.999.999 (should not match strict IP regex)
+- Border case: 255.255.255.0
+
+URLs Referenced:
+- Website: https://www.example.com/page?id=123
+- API: http://api.company.com:8080/v2/users
+- Secure: https://secure.bank.com/login
+- FTP: ftp://files.server.com/downloads/
+
+Notes:
+The the quick brown fox jumps over the lazy dog.
+This sentence has has repeated words.
