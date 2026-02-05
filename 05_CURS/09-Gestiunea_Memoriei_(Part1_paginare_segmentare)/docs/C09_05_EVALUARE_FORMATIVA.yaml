@@ -1,0 +1,178 @@
+# C09_05_EVALUARE_FORMATIVA.yaml
+# Curs 9: Gestiunea Memoriei (Part 1 - Paginare, Segmentare)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 9
+  subiect: "Gestiunea Memoriei (Part 1 - Paginare, Segmentare)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este o adresă logică (virtuală)?"
+    optiuni:
+      - "Adresa fizică în RAM"
+      - "Adresa generată de CPU, văzută de proces"
+      - "Adresa pe disk"
+      - "Adresa IP"
+    corect: 1
+    explicatie: "Adresa logică = adresa văzută de program; tradusă de MMU în adresă fizică."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce este paginarea?"
+    optiuni:
+      - "Divizarea programului în funcții"
+      - "Divizarea memoriei în blocuri de dimensiune fixă (pagini și frame-uri)"
+      - "Comprimarea memoriei"
+      - "Criptarea datelor"
+    corect: 1
+    explicatie: "Paginare: spațiul logic în pagini, memoria fizică în frame-uri de aceeași dimensiune."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce conține o intrare în Page Table?"
+    optiuni:
+      - "Codul programului"
+      - "Numărul frame-ului fizic și biți de control (valid, dirty, protection)"
+      - "Adresa IP"
+      - "Parola utilizatorului"
+    corect: 1
+    explicatie: "PTE: frame number + valid bit + dirty bit + protection bits + reference bit."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Care este diferența între fragmentare internă și externă?"
+    optiuni:
+      - "Sunt identice"
+      - "Internă: spațiu irosit în blocuri alocate. Externă: spațiu liber fragmentat între blocuri"
+      - "Externă nu există"
+      - "Internă apare doar pe disk"
+    corect: 1
+    explicatie: "Internă: ultimul frame parțial folosit. Externă: blocuri libere prea mici pentru cereri mari."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "De ce paginarea elimină fragmentarea externă?"
+    optiuni:
+      - "Nu o elimină"
+      - "Orice frame liber poate fi folosit pentru orice pagină; nu contează contiguitatea"
+      - "Paginile sunt comprimate"
+      - "Frame-urile sunt mai mari"
+    corect: 1
+    explicatie: "Frame-urile au dimensiune fixă și sunt interschimbabile; nu e nevoie de blocuri contigue."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este segmentarea și cum diferă de paginare?"
+    optiuni:
+      - "Este identică cu paginarea"
+      - "Segmentare: unități logice de dimensiuni variabile (cod, date, stack); paginare: blocuri fixe"
+      - "Segmentarea este mai rapidă"
+      - "Paginarea nu există pe sisteme moderne"
+    corect: 1
+    explicatie: "Segmentare: divizare logică, dimensiuni variabile. Paginare: divizare fizică, dimensiuni fixe."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "Ce rol are MMU (Memory Management Unit)?"
+    optiuni:
+      - "Gestionează rețeaua"
+      - "Traduce adrese logice în adrese fizice în hardware"
+      - "Compilează programele"
+      - "Stochează parole"
+    corect: 1
+    explicatie: "MMU = hardware dedicat pentru traducere adrese și verificare protecție la fiecare acces."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "De ce dimensiunea paginii este de obicei o putere a lui 2 (ex: 4KB)?"
+    optiuni:
+      - "Pentru estetică"
+      - "Permite extragerea offset-ului și page number-ului prin operații simple pe biți"
+      - "Economisește energie"
+      - "Este o tradiție fără motiv tehnic"
+    corect: 1
+    explicatie: "Putere de 2: offset = ultimii k biți, page number = restul. Operații rapide, fără diviziune."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Un sistem are adrese de 32 biți și pagini de 4KB. Câte intrări poate avea page table-ul?"
+    optiuni:
+      - "1024"
+      - "1 milion (2^20)"
+      - "4 miliarde"
+      - "4096"
+    corect: 1
+    explicatie: "4KB = 2^12 offset. 32-12 = 20 biți pentru page number → 2^20 ≈ 1 milion intrări posibile."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "De ce se folosesc page table-uri pe mai multe niveluri?"
+    optiuni:
+      - "Pentru viteză"
+      - "Pentru a economisi memorie: nu alocăm intrări pentru paginile nefolosite"
+      - "Pentru securitate"
+      - "Nu se folosesc în practică"
+    corect: 1
+    explicatie: "PT multi-nivel: alocăm tabele doar pentru regiunile folosite, nu pentru întreg spațiul de adrese."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Care este trade-off-ul pentru dimensiunea paginii: mică vs mare?"
+    optiuni:
+      - "Nu există trade-off"
+      - "Mică: mai puțină fragmentare internă, dar mai multe intrări PT. Mare: mai puțin overhead PT, dar mai multă fragmentare internă"
+      - "Mare este întotdeauna mai bună"
+      - "Mică este întotdeauna mai bună"
+    corect: 1
+    explicatie: "Pagini mici: eficiență memorie, PT mare. Pagini mari: PT mic, transfer I/O eficient, fragmentare."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Adresa logică 0x00003A7F pe un sistem cu pagini de 4KB (offset 12 biți). Care este page number?"
+    optiuni:
+      - "0x3A7F"
+      - "0x3"
+      - "0xA7F"
+      - "0x00003"
+    corect: 1
+    explicatie: "0x00003A7F: ultimii 12 biți (0xA7F) = offset. Restul (0x3) = page number."

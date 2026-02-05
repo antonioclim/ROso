@@ -1,0 +1,178 @@
+# C07_05_EVALUARE_FORMATIVA.yaml
+# Curs 7: Sincronizare (Part 2 - Semafoare, Buffer)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 7
+  subiect: "Sincronizare (Part 2 - Semafoare, Buffer)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un semafor?"
+    optiuni:
+      - "Un tip de memorie"
+      - "O variabilă întreagă accesată prin operații atomice wait() și signal()"
+      - "Un algoritm de sortare"
+      - "Un tip de fișier"
+    corect: 1
+    explicatie: "Semafor = variabilă cu operații atomice P(wait)/V(signal) pentru sincronizare și mutual exclusion."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce face operația wait() (P) pe un semafor?"
+    optiuni:
+      - "Incrementează valoarea"
+      - "Decrementează valoarea; dacă devine negativă, procesul se blochează"
+      - "Șterge semaforul"
+      - "Afișează valoarea"
+    corect: 1
+    explicatie: "wait(): S--; if (S < 0) block(). Procesul așteaptă dacă resursa nu e disponibilă."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Care este diferența între semafor binar și semafor contor?"
+    optiuni:
+      - "Nu există diferență"
+      - "Binar: valori 0/1 (mutex). Contor: orice valoare întreagă (resurse multiple)"
+      - "Contor este mai lent"
+      - "Binar nu există în practică"
+    corect: 1
+    explicatie: "Binar = 0/1, echivalent mutex. Contor = N, pentru N instanțe ale unei resurse."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "În problema Producer-Consumer cu buffer finit, de ce avem nevoie de 3 semafoare?"
+    optiuni:
+      - "Un semafor este suficient"
+      - "mutex (acces buffer), empty (sloturi libere), full (sloturi ocupate)"
+      - "Pentru viteză"
+      - "Nu avem nevoie de semafoare"
+    corect: 1
+    explicatie: "mutex = exclusivitate buffer, empty = producer așteaptă slot liber, full = consumer așteaptă date."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un monitor în context de sincronizare?"
+    optiuni:
+      - "Un dispozitiv de afișare"
+      - "O construcție de nivel înalt care încapsulează date și proceduri cu mutual exclusion implicit"
+      - "Un tip de semafor"
+      - "Un proces de sistem"
+    corect: 1
+    explicatie: "Monitor = ADT cu sincronizare încorporată; doar un thread poate executa o metodă la un moment dat."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce rol au variabilele condiție (condition variables) într-un monitor?"
+    optiuni:
+      - "Stochează date"
+      - "Permit thread-urilor să aștepte până când o condiție devine adevărată"
+      - "Numără procesele"
+      - "Sincronizează ceasul"
+    corect: 1
+    explicatie: "Condition variables: wait() eliberează lock-ul și blochează; signal() trezește un thread în așteptare."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "De ce trebuie să verificăm condiția într-un while loop și nu cu if când folosim condition variables?"
+    optiuni:
+      - "If este mai lent"
+      - "Spurious wakeups: thread-ul poate fi trezit fără ca condiția să fie adevărată"
+      - "While este mai sigur sintactic"
+      - "If nu funcționează"
+    corect: 1
+    explicatie: "Spurious wakeups și faptul că alt thread poate modifica condiția impun reverificarea în while."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Ce problemă rezolvă semafoarele counting pentru problema Dining Philosophers?"
+    optiuni:
+      - "Viteza de execuție"
+      - "Limitarea numărului de filozofi care pot încerca să mănânce simultan, prevenind deadlock"
+      - "Consumul de memorie"
+      - "Ordinea de servire"
+    corect: 1
+    explicatie: "Permițând doar N-1 filozofi să ia furculițe simultan, se previne circular wait și deadlock."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "De ce ordinea wait() pe semafoare este critică pentru evitarea deadlock-ului?"
+    optiuni:
+      - "Nu contează ordinea"
+      - "Ordinea greșită poate duce la circular wait: fiecare proces ține o resursă și așteaptă alta"
+      - "Pentru viteză"
+      - "Pentru economie de memorie"
+    corect: 1
+    explicatie: "Ex: P1: wait(A), wait(B); P2: wait(B), wait(A) → deadlock posibil. Ordinea consistentă previne."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "În problema Readers-Writers, de ce soluția poate cauza starvation pentru writers?"
+    optiuni:
+      - "Writers sunt mai lenți"
+      - "Dacă readers vin continuu, niciun writer nu poate obține acces exclusiv"
+      - "Writers nu folosesc semafoare"
+      - "Este o eroare de implementare"
+    corect: 1
+    explicatie: "Cu preferință pentru readers, un flux continuu de readers poate bloca indefinit writers."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Compară eficiența: semafor cu busy-wait vs semafor cu blocking."
+    optiuni:
+      - "Busy-wait este întotdeauna mai bun"
+      - "Blocking este mai bun pe single-core; pe multi-core, busy-wait poate fi mai bun pentru așteptări foarte scurte"
+      - "Blocking nu funcționează"
+      - "Nu există diferență"
+    corect: 1
+    explicatie: "Single-core: busy-wait irosește singurul CPU. Multi-core: pentru așteptări < context switch, busy-wait poate câștiga."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Implementezi un bounded buffer cu capacitate 10. Cu ce valori inițializezi semafoarele?"
+    optiuni:
+      - "mutex=0, empty=0, full=10"
+      - "mutex=1, empty=10, full=0"
+      - "mutex=10, empty=1, full=1"
+      - "mutex=1, empty=0, full=10"
+    corect: 1
+    explicatie: "mutex=1 (exclusivitate), empty=10 (10 sloturi libere inițial), full=0 (0 elemente inițial)."

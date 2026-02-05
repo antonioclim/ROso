@@ -1,0 +1,178 @@
+# C08_05_EVALUARE_FORMATIVA.yaml
+# Curs 8: Interblocare (Deadlock)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 8
+  subiect: "Interblocare (Deadlock)"
+  versiune: "1.0"
+  data_creare: "2026-02-03"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este interblocarea (deadlock)?"
+    optiuni:
+      - "Un proces care consumă prea mult CPU"
+      - "Un set de procese blocate permanent, fiecare așteptând resurse deținute de altul"
+      - "O eroare de memorie"
+      - "Un tip de întrerupere hardware"
+    corect: 1
+    explicatie: "Deadlock = procese blocate circular, fiecare așteaptă ce deține altul."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Câte condiții Coffman sunt necesare pentru deadlock?"
+    optiuni:
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+    corect: 2
+    explicatie: "Cele 4 condiții Coffman: excludere mutuală, posesie și așteptare, fără preempțiune, așteptare circulară."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Care NU este o condiție Coffman?"
+    optiuni:
+      - "Excludere mutuală"
+      - "Așteptare circulară"
+      - "Time sharing"
+      - "Posesie și așteptare"
+    corect: 2
+    explicatie: "Time sharing nu este condiție Coffman. Cele 4 sunt: mutual exclusion, hold and wait, no preemption, circular wait."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Ce reprezintă un ciclu în Resource Allocation Graph (pentru single-instance)?"
+    optiuni:
+      - "O coadă de procese ready"
+      - "Un deadlock"
+      - "O secvență de I/O"
+      - "Un context switch"
+    corect: 1
+    explicatie: "În RAG cu resurse single-instance, ciclul implică deadlock."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Care este scopul algoritmului Banker?"
+    optiuni:
+      - "Detectarea deadlock după ce apare"
+      - "Evitarea deadlock prin verificarea safe state înainte de alocare"
+      - "Terminarea proceselor blocate"
+      - "Compactarea memoriei"
+    corect: 1
+    explicatie: "Banker = algoritm de evitare; verifică dacă cererea menține sistemul în safe state."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce înseamnă safe state?"
+    optiuni:
+      - "Niciun proces nu rulează"
+      - "Există o secvență în care toate procesele pot termina"
+      - "Toate resursele sunt libere"
+      - "CPU-ul este idle"
+    corect: 1
+    explicatie: "Safe state = există secvență sigură de terminare a tuturor proceselor."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "Cum funcționează prevenirea deadlock prin 'ordonarea resurselor'?"
+    optiuni:
+      - "Se alocă toate resursele simultan"
+      - "Se impune o ordine de cerere a resurselor, eliminând circular wait"
+      - "Se permite preempțiunea resurselor"
+      - "Se termină procese aleatoriu"
+    corect: 1
+    explicatie: "Ordonarea resurselor neagă condiția de circular wait."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Care este diferența între prevenire și evitare?"
+    optiuni:
+      - "Nu există diferență"
+      - "Prevenirea neagă condiții Coffman, evitarea verifică safe state dinamic"
+      - "Prevenirea este mai rapidă"
+      - "Evitarea necesită mai puțină memorie"
+    corect: 1
+    explicatie: "Prevenire = elimină posibilitatea deadlock (condiții); Evitare = decizii dinamice (safe state)."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "De ce SO-urile moderne NU folosesc algoritmul Banker?"
+    optiuni:
+      - "Este incorect matematic"
+      - "Necesită cunoașterea Max în avans și are overhead mare"
+      - "Nu funcționează cu mai mult de 2 procese"
+      - "A fost declarat nesigur"
+    corect: 1
+    explicatie: "Banker necesită Max predeclarat (nerealist) și are overhead O(n²m) la fiecare cerere."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "În problema filozofilor, de ce 'fiecare ia furculița din dreapta întâi' duce la deadlock?"
+    optiuni:
+      - "Furculițele sunt prea grele"
+      - "Se creează circular wait: fiecare are dreapta și așteaptă stânga"
+      - "Filozofii gândesc prea mult"
+      - "Masa este prea mică"
+    corect: 1
+    explicatie: "Toți iau dreapta simultan → fiecare așteaptă stânga → circular wait → deadlock."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Care este trade-off-ul principal al detectării vs. prevenire?"
+    optiuni:
+      - "Detectarea este mai rapidă"
+      - "Prevenirea permite mai mult paralelism dar detectarea are overhead mai mic"
+      - "Detectarea permite mai mult paralelism dar necesită recuperare"
+      - "Nu există trade-off"
+    corect: 2
+    explicatie: "Detectarea permite mai mult paralelism (nu restricționează), dar trebuie să recuperezi din deadlock."
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Ai 3 procese și 3 resurse. P1 cere R1,R2; P2 cere R2,R3; P3 cere R1,R3. P1 deține R1, P2 deține R2, P3 deține R3. Este deadlock?"
+    optiuni:
+      - "Nu, resursele sunt suficiente"
+      - "Da, există circular wait: P1→R2→P2→R3→P3→R1→P1"
+      - "Nu, procesele pot preempta"
+      - "Depinde de scheduler"
+    corect: 1
+    explicatie: "Circular wait: P1(are R1, vrea R2) → P2(are R2, vrea R3) → P3(are R3, vrea R1) → ciclu complet."
