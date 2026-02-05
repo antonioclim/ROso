@@ -1,0 +1,748 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Quiz Formativ - Seminarul 02: Operatori, Redirecționare, Filtre, Bucle
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Sisteme de Operare | ASE București - CSIE
+# Format: YAML rulabil cu quiz_runner.py
+# Total: 25 întrebări | Durată estimată: 20-30 minute
+#
+# Distribuție Bloom (ajustată pentru începători):
+#   REMEMBER:    5 întrebări (20%)
+#   UNDERSTAND:  7 întrebări (28%)
+#   APPLY:       8 întrebări (32%)
+#   ANALYSE:     4 întrebări (16%)
+#   EVALUATE:    1 întrebare (4%)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+metadata:
+  seminar: 2
+  subject: "Operatori de Control, Redirecționare I/O, Filtre și Bucle"
+  version: "1.0"
+  date: "2025-01"
+  author: "Kit Pedagogic SO | ASE București - CSIE"
+  language: "ro"
+  estimated_time_minutes: 25
+  distributie_bloom:
+    remember: 5
+    understand: 7
+    apply: 8
+    analyse: 4
+    evaluate: 1
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECȚIUNEA 1: OPERATORI DE CONTROL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+questions:
+
+  # --- REMEMBER ---
+  
+  - id: q01
+    type: mcq
+    bloom: remember
+    category: "operatori"
+    text: |
+      Care operator execută a doua comandă DOAR dacă prima reușește (exit code 0)?
+    options:
+      - ";"
+      - "&&"
+      - "||"
+      - "&"
+    correct: 1
+    explanation: |
+      Operatorul && (AND logic) execută comanda din dreapta DOAR dacă cea din stânga
+      returnează exit code 0 (succes). Este util pentru lanțuri de comenzi dependente.
+    misconceptions:
+      0: "Operatorul ; execută întotdeauna ambele comenzi, indiferent de rezultat"
+      2: "Operatorul || execută a doua comandă când prima EȘUEAZĂ"
+      3: "Operatorul & lansează comanda în background, nu verifică exit code"
+
+  - id: q02
+    type: mcq
+    bloom: remember
+    category: "operatori"
+    text: |
+      Ce face operatorul & plasat la sfârșitul unei comenzi?
+    options:
+      - "Execută comanda de două ori"
+      - "Lansează comanda în background"
+      - "Conectează stdout la stdin-ul altei comenzi"
+      - "Redirecționează stderr la stdout"
+    correct: 1
+    explanation: |
+      Operatorul & lansat la sfârșitul comenzii o trimite în background, 
+      eliberând imediat terminalul pentru alte comenzi.
+    misconceptions:
+      0: "Confuzie cu alte operatori"
+      2: "Acesta e operatorul pipe |"
+      3: "Aceasta e sintaxa 2>&1"
+
+  # --- UNDERSTAND ---
+
+  - id: q03
+    type: mcq
+    bloom: understand
+    category: "operatori"
+    text: |
+      ```bash
+      mkdir test && echo "Creat" || echo "Eroare"
+      ```
+      Dacă directorul `test` DEJA EXISTĂ, ce se afișează?
+    options:
+      - "Creat"
+      - "Eroare"
+      - "Creat și Eroare"
+      - "Nimic (comanda eșuează silențios)"
+    correct: 1
+    explanation: |
+      mkdir eșuează (exit code non-zero) când directorul există.
+      && nu se execută (echo "Creat" sărit).
+      || SE execută deoarece lanțul anterior a eșuat.
+      Rezultat: "Eroare"
+    misconceptions:
+      0: "Nu înțelege că mkdir returnează eroare când directorul există"
+      2: "Crede că || se execută întotdeauna după &&"
+      3: "Confuzie cu suprimarea erorilor prin 2>/dev/null"
+
+  - id: q04
+    type: mcq
+    bloom: understand
+    category: "operatori"
+    text: |
+      ```bash
+      ls /inexistent | wc -l
+      echo "Exit code: $?"
+      ```
+      Ce va fi exit code-ul afișat?
+    options:
+      - "Exit code-ul lui ls (non-zero, eroare)"
+      - "Exit code-ul lui wc (0, succes)"
+      - "Suma exit code-urilor"
+      - "Eroare de sintaxă"
+    correct: 1
+    explanation: |
+      $? returnează doar exit code-ul ULTIMEI comenzi din pipeline.
+      wc -l reușește (chiar dacă primește input gol), deci returnează 0.
+      Pentru toate exit code-urile: ${PIPESTATUS[@]}
+    misconceptions:
+      0: "Crede că pipe-ul transmite exit code-ul primei comenzi"
+      2: "Inventează un comportament inexistent"
+      3: "Confuzie despre sintaxa pipe"
+
+  - id: q05
+    type: mcq
+    bloom: understand
+    category: "operatori"
+    text: |
+      ```bash
+      x=1
+      { x=2; echo "În acolade: $x"; }
+      echo "După acolade: $x"
+      
+      y=1
+      ( y=2; echo "În paranteze: $y"; )
+      echo "După paranteze: $y"
+      ```
+      Care sunt valorile finale pentru x și y în shell-ul principal?
+    options:
+      - "x=2, y=2"
+      - "x=2, y=1"
+      - "x=1, y=2"
+      - "x=1, y=1"
+    correct: 1
+    explanation: |
+      {} execută în shell-ul CURENT - modificările persistă (x=2).
+      () execută în SUBSHELL - modificările se pierd (y rămâne 1).
+    misconceptions:
+      0: "Nu înțelege că () creează subshell"
+      2: "Inversează comportamentul {} și ()"
+      3: "Crede că ambele creează subshell"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECȚIUNEA 2: REDIRECȚIONARE I/O
+# ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: q06
+    type: mcq
+    bloom: remember
+    category: "redirectare"
+    text: |
+      Care operator adaugă text la SFÂRȘITUL unui fișier existent (fără a-l suprascrie)?
+    options:
+      - ">"
+      - ">>"
+      - "<"
+      - "2>"
+    correct: 1
+    explanation: |
+      >> (append) adaugă la sfârșitul fișierului.
+      > suprascrie fișierul complet.
+      < redirecționează input.
+      2> redirecționează stderr.
+    misconceptions:
+      0: "> suprascrie fișierul"
+      2: "< e pentru input, nu output"
+      3: "2> e pentru stderr"
+
+  - id: q07
+    type: mcq
+    bloom: understand
+    category: "redirectare"
+    text: |
+      ```bash
+      # Varianta A:
+      ls /home /inexistent > out.txt 2>&1
+      
+      # Varianta B:
+      ls /home /inexistent 2>&1 > out.txt
+      ```
+      Care variantă trimite AMBELE (stdout și stderr) în out.txt?
+    options:
+      - "Varianta A"
+      - "Varianta B"
+      - "Ambele variante"
+      - "Niciuna - trebuie &>"
+    correct: 0
+    explanation: |
+      Redirecționările se evaluează de la stânga la dreapta!
+      
+      Varianta A: 
+      1. > out.txt: stdout → out.txt
+      2. 2>&1: stderr → unde e stdout ACUM (out.txt)
+      
+      Varianta B:
+      1. 2>&1: stderr → unde e stdout ACUM (terminal)
+      2. > out.txt: stdout → out.txt (stderr rămâne pe terminal!)
+    misconceptions:
+      1: "Nu înțelege ordinea evaluării redirecționărilor"
+      2: "Crede că ordinea nu contează"
+      3: "Nu știe sintaxa clasică, crede că doar &> funcționează"
+
+  - id: q08
+    type: mcq
+    bloom: understand
+    category: "redirectare"
+    text: |
+      ```bash
+      ls /inexistent 2>/dev/null
+      echo $?
+      ```
+      Ce valoare va avea $? (exit code)?
+    options:
+      - "0 (succes, pentru că eroarea a fost suprimată)"
+      - "Non-zero (eroare, pentru că directorul nu există)"
+      - "Nimic - $? nu e definit"
+      - "Eroare de sintaxă"
+    correct: 1
+    explanation: |
+      2>/dev/null suprimă doar OUTPUT-ul erorii, nu și exit code-ul!
+      Comanda tot eșuează (exit code non-zero), doar nu vedem mesajul.
+    misconceptions:
+      0: "FRECVENTĂ: Crede că suprimarea mesajului = succes"
+      2: "Confuzie despre $?"
+      3: "Nu cunoaște sintaxa"
+
+  - id: q09
+    type: mcq
+    bloom: apply
+    category: "redirectare"
+    text: |
+      Cum salvezi ATÂT stdout CÂT ȘI stderr într-un fișier log.txt folosind Bash?
+    options:
+      - "cmd > log.txt 2> log.txt"
+      - "cmd &> log.txt"
+      - "cmd 2> log.txt 1> log.txt"
+      - "cmd | tee log.txt"
+    correct: 1
+    explanation: |
+      &> este sintaxa Bash pentru a redirecționa ambele stream-uri.
+      Echivalent cu: cmd > log.txt 2>&1
+      
+      Opțiunea A/C poate cauza probleme de suprascriere.
+      Opțiunea D (tee) nu capturează stderr.
+    misconceptions:
+      0: "Poate cauza probleme de concurență la scriere"
+      2: "Aceeași problemă ca opțiunea A"
+      3: "tee nu redirecționează stderr"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECȚIUNEA 3: FILTRE DE TEXT
+# ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: q10
+    type: mcq
+    bloom: understand
+    category: "filtre"
+    text: |
+      ```bash
+      echo -e "a\nb\na\nb" | uniq
+      ```
+      Ce afișează această comandă?
+    options:
+      - "a\nb"
+      - "a\nb\na\nb"
+      - "a\na\nb\nb"
+      - "Eroare - uniq necesită fișier"
+    correct: 1
+    explanation: |
+      CAPCANĂ CLASICĂ: uniq elimină doar duplicatele CONSECUTIVE!
+      Input: a, b, a, b - niciuna nu e consecutivă cu alta identică.
+      Toate rămân.
+      Pattern corect: sort | uniq sau sort -u
+    misconceptions:
+      0: "80% cred asta! Nu știu că uniq elimină doar CONSECUTIVE"
+      2: "Crede că uniq și sortează"
+      3: "Nu cunoaște pipe-uri"
+
+  - id: q11
+    type: mcq
+    bloom: understand
+    category: "filtre"
+    text: |
+      ```bash
+      echo "one two three" | cut -f2
+      ```
+      Ce afișează?
+    options:
+      - "two"
+      - "one two three"
+      - "Eroare"
+      - "(nimic/linie goală)"
+    correct: 1
+    explanation: |
+      cut -f folosește TAB ca delimitator implicit, nu spațiu!
+      Stringul "one two three" nu conține TAB.
+      Fără TAB găsit, returnează întreaga linie.
+      Pentru spații: cut -d' ' -f2
+    misconceptions:
+      0: "Crede că cut împarte după spații implicit"
+      2: "Inventează o eroare"
+      3: "Confuzie cu output gol"
+
+  - id: q12
+    type: mcq
+    bloom: apply
+    category: "filtre"
+    text: |
+      Care comandă numără câte linii UNICE (fără duplicate) conține un fișier?
+    options:
+      - "wc -l fisier.txt"
+      - "sort fisier.txt | uniq | wc -l"
+      - "uniq fisier.txt | wc -l"
+      - "cat fisier.txt | wc -u"
+    correct: 1
+    explanation: |
+      sort | uniq elimină toate duplicatele (sortând mai întâi).
+      wc -l numără liniile rezultate.
+      
+      Opțiunea A numără TOATE liniile.
+      Opțiunea C nu sortează, deci uniq nu elimină toate duplicatele.
+      Opțiunea D - wc nu are flag -u.
+    misconceptions:
+      0: "Numără toate liniile, inclusiv duplicate"
+      2: "uniq fără sort nu elimină toate duplicatele"
+      3: "wc -u nu există"
+
+  - id: q13
+    type: mcq
+    bloom: apply
+    category: "filtre"
+    text: |
+      Cum extragi DOAR coloana 3 dintr-un fișier CSV (separator virgulă)?
+    options:
+      - "cut -f3 fisier.csv"
+      - "cut -d',' -f3 fisier.csv"
+      - "awk '{print $3}' fisier.csv"
+      - "grep -o ',[^,]*,' fisier.csv"
+    correct: 1
+    explanation: |
+      cut -d',' setează delimitatorul la virgulă.
+      -f3 selectează câmpul 3.
+      
+      Opțiunea A folosește TAB implicit (greșit pentru CSV).
+      Opțiunea C: awk implicit folosește spații/tab-uri.
+      Opțiunea D: regex complicat și incorect.
+    misconceptions:
+      0: "cut implicit folosește TAB, nu virgulă"
+      2: "awk implicit nu folosește virgulă ca separator"
+      3: "Regex-ul nu extrage corect coloana"
+
+  - id: q14
+    type: mcq
+    bloom: remember
+    category: "filtre"
+    text: |
+      Care comandă afișează ultimele 20 de linii dintr-un fișier?
+    options:
+      - "head -20 fisier.txt"
+      - "tail -20 fisier.txt"
+      - "cat -n 20 fisier.txt"
+      - "less -20 fisier.txt"
+    correct: 1
+    explanation: |
+      tail -N afișează ultimele N linii.
+      head -N afișează PRIMELE N linii.
+      cat -n numerotează liniile, nu le limitează.
+      less -20 nu e sintaxă validă pentru acest scop.
+    misconceptions:
+      0: "head afișează de la ÎNCEPUT"
+      2: "cat -n numerotează, nu limitează"
+      3: "less e pentru vizualizare interactivă"
+
+  - id: q15
+    type: mcq
+    bloom: apply
+    category: "filtre"
+    text: |
+      ```bash
+      echo "hello" | tr 'a-z' 'A-Z'
+      ```
+      Ce afișează?
+    options:
+      - "hello"
+      - "HELLO"
+      - "Hello"
+      - "hELLO"
+    correct: 1
+    explanation: |
+      tr 'a-z' 'A-Z' transformă TOATE literele mici în majuscule.
+      Fiecare caracter din primul set e înlocuit cu corespondentul din al doilea.
+    misconceptions:
+      0: "Nu înțelege funcția tr"
+      2: "Confuzie cu capitalizare parțială"
+      3: "Confuzie cu ordinea transformării"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECȚIUNEA 4: BUCLE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: q16
+    type: mcq
+    bloom: understand
+    category: "bucle"
+    text: |
+      ```bash
+      N=5
+      for i in {1..$N}; do
+          echo $i
+      done
+      ```
+      Ce afișează acest script?
+    options:
+      - "1 2 3 4 5 (pe linii separate)"
+      - "{1..5}"
+      - "Eroare de sintaxă"
+      - "Nimic (buclă goală)"
+    correct: 1
+    explanation: |
+      CAPCANĂ: Brace expansion se face ÎNAINTE de variable expansion!
+      {1..$N} nu poate fi expandat deoarece $N nu e încă interpretat.
+      Rămâne literal: "{1..5}"
+      Bucla iterează o singură dată cu i="{1..5}"
+      
+      Soluții: seq, for ((i=1; i<=N; i++))
+    misconceptions:
+      0: "70% cred asta! Nu știu ordinea expansion-ului"
+      2: "Crede că e sintaxă greșită"
+      3: "Crede că bucla nu se execută deloc"
+
+  - id: q17
+    type: mcq
+    bloom: analyse
+    category: "bucle"
+    text: |
+      ```bash
+      count=0
+      echo -e "a\nb\nc" | while read line; do
+          ((count++))
+      done
+      echo "Count: $count"
+      ```
+      Ce afișează?
+    options:
+      - "Count: 3"
+      - "Count: 0"
+      - "Count: 1"
+      - "Eroare - count nu e definit"
+    correct: 1
+    explanation: |
+      SUBSHELL PROBLEM: Partea dreaptă a pipe-ului rulează în SUBSHELL!
+      Modificările la count se fac în subshell.
+      Când subshell-ul se termină, modificările se PIERD.
+      Shell-ul principal vede count=0.
+      
+      Soluție: while read line; do ... done < <(echo -e "a\nb\nc")
+    misconceptions:
+      0: "65% cred asta! Nu cunosc subshell problem"
+      2: "Înțelege parțial dar numără greșit"
+      3: "Confuzie despre scope-ul variabilelor"
+
+  - id: q18
+    type: mcq
+    bloom: understand
+    category: "bucle"
+    text: |
+      ```bash
+      for i in 1 2 3; do
+          if [ $i -eq 2 ]; then
+              break
+          fi
+          echo $i
+      done
+      echo "După buclă"
+      ```
+      Ce se afișează?
+    options:
+      - "1\nDupă buclă"
+      - "1 (nimic mai mult - scriptul s-a oprit)"
+      - "1\n2\nDupă buclă"
+      - "1\n2\n3\nDupă buclă"
+    correct: 0
+    explanation: |
+      break iese doar din buclă, nu din script!
+      La i=1: echo 1
+      La i=2: break (ieșire din buclă înainte de echo)
+      Continuă cu "După buclă"
+      
+      exit ar fi oprit scriptul complet.
+    misconceptions:
+      1: "Confundă break cu exit"
+      2: "Crede că echo se execută înainte de break"
+      3: "Nu înțelege break"
+
+  - id: q19
+    type: mcq
+    bloom: apply
+    category: "bucle"
+    text: |
+      Care este modalitatea CORECTĂ de a itera prin fișierele .txt din directorul curent?
+    options:
+      - "for f in $(ls *.txt); do"
+      - "for f in *.txt; do"
+      - "for f in `cat *.txt`; do"
+      - "while f in *.txt; do"
+    correct: 1
+    explanation: |
+      for f in *.txt folosește glob expansion care păstrează numele întregi.
+      
+      Opțiunea A: $(ls *.txt) se split-uiește greșit pe spații în nume.
+      Opțiunea C: cat citește CONȚINUTUL fișierelor, nu numele.
+      Opțiunea D: sintaxă invalidă pentru while.
+    misconceptions:
+      0: "$(ls *.txt) cauzează probleme cu spații în nume"
+      2: "cat citește conținut, nu nume de fișiere"
+      3: "while nu are această sintaxă"
+
+  - id: q20
+    type: mcq
+    bloom: apply
+    category: "bucle"
+    text: |
+      Cum citești un fișier linie cu linie în Bash?
+    options:
+      - "for line in $(cat fisier.txt); do"
+      - "while read line; do ... done < fisier.txt"
+      - "cat fisier.txt | for line; do"
+      - "read fisier.txt line"
+    correct: 1
+    explanation: |
+      while read line; do ... done < fisier.txt e pattern-ul corect.
+      
+      Opțiunea A: $(cat) split-uiește pe spații și newlines.
+      Opțiunea C: sintaxă invalidă.
+      Opțiunea D: sintaxă invalidă pentru read.
+    misconceptions:
+      0: "$(cat) nu păstrează liniile intacte"
+      2: "Sintaxă for invalidă cu pipe"
+      3: "Sintaxă read invalidă"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECȚIUNEA 5: ÎNTREBĂRI INTEGRATE / AVANSATE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+  - id: q21
+    type: mcq
+    bloom: analyse
+    category: "integrat"
+    text: |
+      ```bash
+      cat access.log | grep "404" | cut -d' ' -f1 | sort | uniq -c | sort -rn | head -5
+      ```
+      Ce face acest pipeline?
+    options:
+      - "Afișează primele 5 linii cu erori 404"
+      - "Afișează top 5 IP-uri cu cele mai multe erori 404"
+      - "Numără total de erori 404 în log"
+      - "Sortează fișierul și afișează primele 5 linii"
+    correct: 1
+    explanation: |
+      Pas cu pas:
+      1. cat access.log: citește fișierul
+      2. grep "404": filtrează liniile cu 404
+      3. cut -d' ' -f1: extrage primul câmp (IP)
+      4. sort: sortează IP-urile (necesar pentru uniq)
+      5. uniq -c: numără ocurențele
+      6. sort -rn: sortează numeric descrescător
+      7. head -5: primele 5 rezultate
+      
+      Rezultat: Top 5 IP-uri cu cele mai multe erori 404
+    misconceptions:
+      0: "Nu înțelege că uniq -c numără"
+      2: "Nu urmărește tot pipeline-ul"
+      3: "Confuzie despre funcția sort -rn"
+
+  - id: q22
+    type: mcq
+    bloom: analyse
+    category: "integrat"
+    text: |
+      Care comandă este echivalentă cu `cat file.txt | grep pattern`?
+    options:
+      - "grep pattern file.txt"
+      - "grep file.txt pattern"
+      - "pattern | grep file.txt"
+      - "file.txt | grep pattern"
+    correct: 0
+    explanation: |
+      grep pattern file.txt este forma directă, fără cat inutil (UUOC).
+      grep acceptă fișierul ca argument, nu necesită pipe de la cat.
+      Aceasta e forma recomandată pentru eficiență.
+    misconceptions:
+      1: "Ordinea argumentelor la grep: pattern APOI fișier"
+      2: "Sintaxă inversată, imposibilă"
+      3: "Nu poți pipe un nume de fișier"
+
+  - id: q23
+    type: mcq
+    bloom: apply
+    category: "integrat"
+    text: |
+      Cum rulezi o comandă în background și o faci imună la închiderea terminalului?
+    options:
+      - "cmd &"
+      - "nohup cmd &"
+      - "bg cmd"
+      - "daemon cmd"
+    correct: 1
+    explanation: |
+      nohup cmd & face comanda imună la SIGHUP (signal de hangup la închidere terminal).
+      
+      cmd & doar trimite în background, dar procesul moare la închidere terminal.
+      bg mută un job DEJA suspendat în background.
+      daemon nu e o comandă standard.
+    misconceptions:
+      0: "& singur nu protejează de SIGHUP"
+      2: "bg e pentru job-uri suspendate, nu pentru lansare"
+      3: "daemon nu există ca comandă standard"
+
+  - id: q24
+    type: mcq
+    bloom: remember
+    category: "integrat"
+    text: |
+      Ce conține variabila specială $? în Bash?
+    options:
+      - "PID-ul procesului curent"
+      - "Exit code-ul ultimei comenzi executate"
+      - "Numărul de argumente primite"
+      - "Numele scriptului"
+    correct: 1
+    explanation: |
+      $? conține exit code-ul ultimei comenzi.
+      $$ = PID-ul procesului curent
+      $# = numărul de argumente
+      $0 = numele scriptului
+    misconceptions:
+      0: "$$ e pentru PID"
+      2: "$# e pentru număr argumente"
+      3: "$0 e pentru nume script"
+
+  - id: q25
+    type: mcq
+    bloom: evaluate
+    category: "integrat"
+    text: |
+      Un coleg a scris:
+      ```bash
+      for f in $(find . -name "*.log"); do
+          rm "$f"
+      done
+      ```
+      Care e cea mai bună practică pentru ștergerea fișierelor .log?
+    options:
+      - "Codul este corect și sigur"
+      - "find . -name '*.log' -delete"
+      - "rm *.log"
+      - "ls *.log | xargs rm"
+    correct: 1
+    explanation: |
+      find -delete e cel mai sigur și eficient:
+      - Gestionează corect spațiile și caracterele speciale în nume
+      - Un singur proces, nu fork pentru fiecare fișier
+      - Atomic: șterge exact ce găsește
+      
+      Codul colegului: probleme cu spații în nume fișiere.
+      rm *.log: nu e recursiv, poate eșua cu "argument list too long".
+      ls | xargs rm: probleme cu spații și caractere speciale.
+    misconceptions:
+      0: "$(find) cauzează probleme cu spații în nume"
+      2: "rm *.log nu e recursiv și are limite"
+      3: "ls | xargs are probleme cu caractere speciale"
+
+  - id: q26
+    type: mcq
+    bloom: analyse
+    category: "evaluare_llm"
+    text: |
+      Un LLM a generat acest script de backup:
+      ```bash
+      #!/bin/bash
+      for f in *; do
+          cp $f backup_$f
+      done
+      echo "Done"
+      ```
+      Care este problema CEA MAI CRITICĂ cu acest cod?
+    options:
+      - "Lipsește shebang-ul"
+      - "Variabila $f neînchisă în ghilimele eșuează pentru fișiere cu spații"
+      - "Lipsește verificarea erorilor pentru comanda cp"
+      - "Scriptul nu are comentarii"
+    correct: 1
+    explanation: |
+      Problema cea mai critică este variabila $f fără ghilimele.
+      Când numele fișierelor conțin spații, $f fără ghilimele cauzează word splitting.
+      Exemplu: "fișierul meu.txt" devine două argumente: "fișierul" și "meu.txt".
+      
+      Corect: cp "$f" "backup_$f"
+      
+      Shebang-ul ESTE prezent (#!/bin/bash).
+      Verificarea erorilor e importantă dar mai puțin critică decât funcționalitatea stricată.
+      Comentariile sunt practică bună dar nu afectează funcționalitatea.
+    misconceptions:
+      0: "Shebang-ul ESTE prezent în cod"
+      2: "Verificarea erorilor e importantă dar mai puțin critică decât funcționalitatea de bază stricată"
+      3: "Comentariile sunt stil, nu funcționalitate"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CONFIGURARE SCORING
+# ═══════════════════════════════════════════════════════════════════════════════
+
+scoring:
+  points_per_question: 4
+  total_maximum: 104
+  thresholds:
+    excelent: 90
+    bine: 75
+    satisfacator: 60
+    insuficient: 0
+  feedback:
+    excelent: "Felicitări! Stăpânești foarte bine conceptele de shell scripting."
+    bine: "Bun nivel! Revizuiește pipe-urile și subshell-urile pentru perfecționare."
+    satisfacator: "Progres bun! Practică mai mult cu redirecționare și bucle."
+    insuficient: "Necesită studiu suplimentar. Revizuiește materialul și exersează."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FIN
+# ═══════════════════════════════════════════════════════════════════════════════
