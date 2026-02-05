@@ -1,0 +1,588 @@
+metadata:
+  seminar: 5
+  title: Scripting Bash avansat
+  subtitle: Funcții, arrays, robustețe, gestionarea erorilor
+  version: 1.1.0
+  author: ing. dr. Antonio Clim
+  institution: ASE București - CSIE
+  date: 2025-01
+  duration_minutes: 25
+  question_count: 18
+  total_points: 100
+  passing_threshold: 60
+  bloom_distribution:
+    remember: 2
+    understand: 8
+    apply: 5
+    analyse: 2
+    evaluate: 1
+  topics:
+  - name: Funcții
+    questions:
+    - q01
+    - q02
+    - q03
+  - name: Arrays
+    questions:
+    - q04
+    - q05
+    - q06
+    - q07
+  - name: Stabilitate
+    questions:
+    - q08
+    - q09
+    - q10
+    - q11
+    - q12
+  - name: Trap și Error Handling
+    questions:
+    - q13
+    - q14
+  - name: Consolidare
+    questions:
+    - q15
+    - q16
+    - q17
+    - q18
+questions:
+- id: q01
+  topic: Funcții
+  title: Variabile în Funcții
+  bloom: understand
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: 80% cred că variabilele sunt locale by default
+  code: "#!/bin/bash\ncount=10\n\nincrement() {\n    count=$((count + 1))\n    echo\
+    \ \"În funcție: $count\"\n}\n\nincrement\necho \"După funcție: $count\"\n"
+  question: Ce afișează ultima linie?
+  options:
+  - text: 'După funcție: 10'
+    explanation: Crede că variabilele sunt locale by default
+  - text: 'După funcție: 11'
+    explanation: CORECT - variabilele din funcții sunt GLOBALE by default
+  - text: 'După funcție: (gol)'
+    explanation: Confundă cu comportament undefined
+  - text: Eroare - count nu e definit în main
+    explanation: Nu înțelege că variabilele sunt globale
+  correct_answer: 1
+  explanation: 'În Bash, variabilele din funcții sunt GLOBALE by default.
+
+    Aceasta e opusul comportamentului din Python/Java/C.
+
+    Pentru variabile locale, folosește: local count=$((count + 1))
+
+    '
+  followup: Cum facem ca variabila să rămână locală?
+  followup_answer: local count=$((count + 1))
+- id: q02
+  topic: Funcții
+  title: Return vs Echo
+  bloom: understand
+  points: 6
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: 75% cred că return funcționează ca în alte limbaje
+  code: "#!/bin/bash\n\nget_value() {\n    return 42\n}\n\nresult=$(get_value)\necho\
+    \ \"Result: '$result'\"\n"
+  question: Ce afișează?
+  options:
+  - text: 'Result: ''42'''
+    explanation: Confundă return cu echo/print din alte limbaje
+  - text: 'Result: '''' (string gol)'
+    explanation: CORECT - return setează exit code, $() capturează stdout
+  - text: 'Result: ''0'''
+    explanation: Confundă cu exit code default
+  - text: Eroare de sintaxă
+    explanation: Sintaxa e validă
+  correct_answer: 1
+  explanation: '`return` în Bash setează doar exit code (0-255), nu returnează valori.
+
+    $() capturează stdout, nu exit code-ul.
+
+    Pentru a "returna" valori, folosește echo în funcție.
+
+    '
+- id: q03
+  topic: Funcții
+  title: Argumente Funcție vs Script
+  bloom: understand
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: 65% confundă $1 din funcție cu $1 din script
+  code: "#!/bin/bash\n# Script: test.sh, rulat cu: ./test.sh SCRIPT_ARG\n\nshow_arg()\
+    \ {\n    echo \"Funcție vede: $1\"\n}\n\necho \"Script vede: $1\"\nshow_arg \"\
+    FUNC_ARG\"\n"
+  question: Rulat cu ./test.sh SCRIPT_ARG, ce afișează a doua linie?
+  options:
+  - text: 'Funcție vede: SCRIPT_ARG'
+    explanation: Confundă scope-ul argumentelor
+  - text: 'Funcție vede: FUNC_ARG'
+    explanation: CORECT - $1 în funcție e argumentul funcției
+  - text: 'Funcție vede: (gol)'
+    explanation: Funcția primește argument explicit
+  - text: 'Funcție vede: $1'
+    explanation: Variabilele se expandează
+  correct_answer: 1
+  explanation: '$1 în funcție se referă la argumentul funcției, nu al scriptului.
+
+    Funcțiile au propriul set de argumente poziționale.
+
+    '
+- id: q04
+  topic: Arrays
+  title: Indexare Arrays
+  bloom: remember
+  points: 4
+  difficulty: usor
+  time_seconds: 45
+  targeted_misconception: 55% cred că arrays încep de la 1
+  code: '#!/bin/bash
+
+    arr=("first" "second" "third")
+
+    echo "${arr[1]}"
+
+    '
+  question: Ce afișează?
+  options:
+  - text: first
+    explanation: Crede că indexarea începe de la 1
+  - text: second
+    explanation: CORECT - arrays în Bash încep de la 0
+  - text: third
+    explanation: Confuzie de indexare
+  - text: Eroare - indexul 1 nu există
+    explanation: Indexul 1 există (al doilea element)
+  correct_answer: 1
+  explanation: 'Arrays în Bash încep de la index 0.
+
+    arr[0]="first", arr[1]="second", arr[2]="third"
+
+    '
+- id: q05
+  topic: Arrays
+  title: declare -A
+  bloom: understand
+  points: 6
+  difficulty: greu
+  time_seconds: 90
+  targeted_misconception: 70% cred că declare -A e opțional pentru hash
+  code: '#!/bin/bash
+
+    # Fără declare -A
+
+    config[host]="localhost"
+
+    config[port]="8080"
+
+    echo "Chei: ${!config[@]}"
+
+    '
+  question: Ce afișează?
+  options:
+  - text: 'Chei: host port'
+    explanation: Așa ar fi cu declare -A
+  - text: 'Chei: 0'
+    explanation: CORECT - fără declare -A, 'host' și 'port' devin 0
+  - text: 'Chei: 0 0'
+    explanation: Doar o cheie rămâne (suprascrisă)
+  - text: Eroare - config nu e declarat
+    explanation: Arrays indexate se creează implicit
+  correct_answer: 1
+  explanation: 'Fără declare -A, Bash tratează config ca array INDEXAT.
+
+    ''host'' și ''port'' sunt evaluate ca variabile (nedefinite = 0).
+
+    Ambele asignări scriu la config[0], ultima suprascrie prima.
+
+    '
+- id: q06
+  topic: Arrays
+  title: Iterare cu Ghilimele
+  bloom: apply
+  points: 6
+  difficulty: medie
+  time_seconds: 75
+  targeted_misconception: 65% uită ghilimelele la iterare
+  code: "#!/bin/bash\nfiles=(\"file one.txt\" \"file two.txt\")\n\ncount=0\nfor f\
+    \ in ${files[@]}; do\n    ((count++))\ndone\necho \"Iterații: $count\"\n"
+  question: Câte iterații are loop-ul?
+  options:
+  - text: '2'
+    explanation: Așa ar fi CU ghilimele
+  - text: '4'
+    explanation: CORECT - word splitting separă fiecare element
+  - text: '1'
+    explanation: Nu înțelege iterarea peste array
+  - text: Eroare
+    explanation: Codul e valid sintactic
+  correct_answer: 1
+  explanation: 'Fără ghilimele, Bash aplică word splitting.
+
+    "file one.txt" devine 2 cuvinte: "file" și "one.txt"
+
+    REGULĂ: ÎNTOTDEAUNA folosește "${arr[@]}" cu ghilimele!
+
+    '
+- id: q07
+  topic: Arrays
+  title: Ștergere Element din Array
+  bloom: apply
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: 50% cred că unset reindexează automat
+  code: '#!/bin/bash
+
+    arr=("a" "b" "c" "d" "e")
+
+    unset arr[2]
+
+    echo "Indici: ${!arr[@]}"
+
+    echo "Lungime: ${#arr[@]}"
+
+    '
+  question: Ce afișează?
+  options:
+  - text: 'Indici: 0 1 2 3 și Lungime: 4'
+    explanation: Crede că array-ul se reindexează
+  - text: 'Indici: 0 1 3 4 și Lungime: 4'
+    explanation: CORECT - array devine sparse, indicii nu se schimbă
+  - text: 'Indici: 0 1 2 3 4 și Lungime: 5'
+    explanation: Nu înțelege efectul unset
+  - text: Eroare
+    explanation: Codul e valid
+  correct_answer: 1
+  explanation: 'unset arr[2] șterge elementul, dar NU reindexează.
+
+    Array-ul devine "sparse" (cu gap).
+
+    Pentru iterare sigură, folosește: for i in "${!arr[@]}"
+
+    '
+- id: q08
+  topic: Stabilitate
+  title: set -u (nounset)
+  bloom: understand
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: Mulți nu știu cum să folosească variabile opționale
+  code: '#!/bin/bash
+
+    set -euo pipefail
+
+
+    x="${UNDEFINED_VAR}"
+
+    echo "Continuă..."
+
+    '
+  question: Ce se întâmplă?
+  options:
+  - text: Afișează Continuă... cu x=""
+    explanation: Așa ar fi FĂRĂ set -u
+  - text: 'Eroare: unbound variable'
+    explanation: CORECT - set -u oprește la variabile nedefinite
+  - text: Afișează Continuă... cu x="UNDEFINED_VAR"
+    explanation: Variabilele se expandează, nu rămân literal
+  - text: Depinde de versiunea Bash
+    explanation: Comportamentul e consistent
+  correct_answer: 1
+  explanation: 'set -u face ca variabilele nedefinite să cauzeze eroare.
+
+    Pentru variabile opționale, folosește: x="${VAR:-default}"
+
+    '
+- id: q09
+  topic: Stabilitate
+  title: set -e în if
+  bloom: understand
+  points: 6
+  difficulty: greu
+  time_seconds: 75
+  targeted_misconception: 75% cred că set -e oprește la ORICE eroare
+  code: "#!/bin/bash\nset -e\n\nif false; then\n    echo \"În if\"\nfi\necho \"După\
+    \ if\"\n"
+  question: Ce se întâmplă?
+  options:
+  - text: Script se oprește la false
+    explanation: set -e NU se aplică în condiții if
+  - text: Afișează După if
+    explanation: CORECT - set -e nu funcționează în context de test
+  - text: Afișează În if apoi După if
+    explanation: Condiția false e falsă, corpul if nu se execută
+  - text: Eroare de sintaxă
+    explanation: Sintaxa e validă
+  correct_answer: 1
+  explanation: 'set -e NU funcționează pentru comenzi în condiții if/while/until.
+
+    De asemenea nu funcționează după || sau && sau cu !.
+
+    '
+- id: q10
+  topic: Stabilitate
+  title: set -e cu ||
+  bloom: apply
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: Pattern || true nu e înțeles
+  code: '#!/bin/bash
+
+    set -e
+
+
+    false || echo "Rescued"
+
+    echo "Continuă"
+
+    '
+  question: Ce afișează?
+  options:
+  - text: Nimic - script se oprește
+    explanation: '|| salvează eroarea'
+  - text: Rescued apoi Continuă
+    explanation: CORECT - || dezactivează set -e pentru acea comandă
+  - text: Doar Continuă
+    explanation: Rescued se afișează pentru că false eșuează
+  - text: Doar Rescued
+    explanation: Scriptul continuă după ||
+  correct_answer: 1
+  explanation: '|| "salvează" eroarea - set -e nu se aplică.
+
+    Pattern util: command_that_might_fail || handle_error
+
+    '
+- id: q11
+  topic: Stabilitate
+  title: pipefail
+  bloom: understand
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: 50% nu știu ce face pipefail
+  code: '#!/bin/bash
+
+    set -o pipefail
+
+
+    false | true | true
+
+    echo "Exit: $?"
+
+    '
+  question: Ce afișează?
+  options:
+  - text: 'Exit: 0'
+    explanation: Așa ar fi FĂRĂ pipefail
+  - text: 'Exit: 1'
+    explanation: CORECT - pipefail returnează prima eroare din pipe
+  - text: 'Exit: 2'
+    explanation: Doar primul exit code non-zero contează
+  - text: Nimic - script se oprește
+    explanation: fără set -e, scriptul continuă
+  correct_answer: 1
+  explanation: 'Cu pipefail, pipeline returnează exit code-ul primei comenzi care
+    eșuează.
+
+    Fără pipefail, ar fi returnat 0 (de la ultimul true).
+
+    '
+- id: q12
+  topic: Stabilitate
+  title: set -e + pipefail
+  bloom: apply
+  points: 6
+  difficulty: greu
+  time_seconds: 75
+  targeted_misconception: Combinația set -e + pipefail
+  code: '#!/bin/bash
+
+    set -eo pipefail
+
+
+    cat /nonexistent | grep "pattern"
+
+    echo "După pipe"
+
+    '
+  question: Ce se întâmplă?
+  options:
+  - text: Afișează eroarea de la cat, apoi După pipe
+    explanation: set -e oprește scriptul
+  - text: Script se oprește la eroarea cat
+    explanation: CORECT - set -e + pipefail = erori din pipe opresc
+  - text: Afișează După pipe (grep salvează)
+    explanation: pipefail propagă eroarea din cat
+  - text: Depinde de existența fișierului pattern
+    explanation: Eroarea cat apare prima
+  correct_answer: 1
+  explanation: 'set -e + pipefail = erori din pipe opresc scriptul.
+
+    cat /nonexistent eșuează, pipefail propagă eroarea, set -e oprește.
+
+    '
+- id: q13
+  topic: Trap și Error Handling
+  title: Trap EXIT
+  bloom: apply
+  points: 6
+  difficulty: medie
+  time_seconds: 75
+  targeted_misconception: 55% cred că trap EXIT nu se execută la erori
+  code: "#!/bin/bash\nset -e\n\ncleanup() {\n    echo \"Cleanup executat\"\n}\ntrap\
+    \ cleanup EXIT\n\necho \"Start\"\nfalse\necho \"End\"\n"
+  question: Ce afișează?
+  options:
+  - text: Start apoi Cleanup executat
+    explanation: CORECT - trap EXIT se execută ÎNTOTDEAUNA
+  - text: Start, End, Cleanup executat
+    explanation: set -e oprește la false, End nu se afișează
+  - text: Doar Start
+    explanation: trap EXIT tot se execută
+  - text: Cleanup executat apoi Start
+    explanation: trap se execută la EXIT, nu la start
+  correct_answer: 0
+  explanation: 'trap cleanup EXIT se execută ÎNTOTDEAUNA la ieșire:
+
+    - La ieșire normală
+
+    - La erori (set -e)
+
+    - La Ctrl+C (dacă ai și trap INT)
+
+    '
+- id: q14
+  topic: Trap și Error Handling
+  title: Trap și Subshell
+  bloom: understand
+  points: 6
+  difficulty: greu
+  time_seconds: 90
+  targeted_misconception: 45% cred că trap se moștenește în subshell
+  code: "#!/bin/bash\n\ncleanup() { echo \"Cleanup\"; }\ntrap cleanup EXIT\n\n(\n\
+    \    echo \"În subshell\"\n    exit 1\n)\n\necho \"După subshell: $?\"\n"
+  question: Câte Cleanup apar?
+  options:
+  - text: '0'
+    explanation: Trap-ul din scriptul principal tot se execută
+  - text: '1'
+    explanation: CORECT - trap NU se moștenește în subshell
+  - text: '2'
+    explanation: Trap-ul nu se moștenește
+  - text: Depinde de versiunea Bash
+    explanation: Comportamentul e consistent
+  correct_answer: 1
+  explanation: 'Trap-urile NU se moștenesc în subshell-uri.
+
+    Cleanup apare doar o dată, când scriptul principal se termină.
+
+    '
+- id: q15
+  topic: Consolidare
+  title: Template Profesional
+  bloom: remember
+  points: 5
+  difficulty: medie
+  time_seconds: 60
+  targeted_misconception: Ordinea secțiunilor în scripturi
+  question: Care e ordinea corectă a secțiunilor într-un script profesional?
+  options:
+  - text: Shebang → Main → Functions → Trap → Constants
+    explanation: Main trebuie la final
+  - text: Shebang → Constants → Functions → Trap → Main
+    explanation: Lipsește set -euo pipefail
+  - text: Shebang → set -euo pipefail → Constants → Functions → Trap → Parse Args
+      → Main
+    explanation: CORECT - structura standard profesională
+  - text: Main → Functions → Shebang → Trap
+    explanation: Shebang trebuie prima linie
+  correct_answer: 2
+  explanation: "Structura profesională: Shebang → strict mode → constante → \nfuncții\
+    \ → cleanup → trap → argument parsing → main → execuție main\n"
+- id: q16
+  topic: Consolidare
+  title: Identifică Bug-urile
+  bloom: analyse
+  points: 8
+  difficulty: greu
+  time_seconds: 120
+  targeted_misconception: Pattern-uri greșite comune
+  code: "#!/bin/bash\nset -euo pipefail\n\ndeclare -a files\nfiles=$(find . -name\
+    \ \"*.txt\")\n\nfor f in ${files[@]}; do\n    process \"$f\"\ndone\n"
+  question: Câte bug-uri are acest cod?
+  options:
+  - text: '1'
+    explanation: Sunt mai multe probleme
+  - text: '2'
+    explanation: Mai e una
+  - text: '3'
+    explanation: CORECT - assignment greșit, lipsă ghilimele, declare redundant
+  - text: 4 sau mai multe
+    explanation: Sunt exact 3 principale
+  correct_answer: 2
+  explanation: 'Bug 1: files=$(...) - ar trebui mapfile -t files < <(find...)
+
+    Bug 2: ${files[@]} fără ghilimele - ar trebui "${files[@]}"
+
+    Bug 3: declare -a redundant pentru arrays indexate
+
+    '
+- id: q17
+  topic: Consolidare
+  title: Best Practice - Adevărat/Fals
+  bloom: evaluate
+  points: 6
+  difficulty: medie
+  time_seconds: 75
+  targeted_misconception: Excepțiile set -e
+  question: Care afirmație este FALSĂ despre best practices în Bash?
+  options:
+  - text: local trebuie folosit pentru toate variabilele din funcții
+    explanation: ADEVĂRAT - previne efecte secundare
+  - text: declare -A e obligatoriu pentru arrays asociative
+    explanation: ADEVĂRAT - altfel sunt tratate ca indexate
+  - text: set -e oprește scriptul la absolut orice eroare
+    explanation: FALS - are multiple excepții (if, ||, &&, !, etc.)
+  - text: '"${arr[@]}" cu ghilimele e necesar pentru iterare corectă'
+    explanation: ADEVĂRAT - previne word splitting
+  correct_answer: 2
+  explanation: 'set -e are excepții: comenzi în if/while, după || sau &&,
+
+    comenzi negate cu !, funcții în context de test.
+
+    '
+- id: q18
+  topic: Consolidare
+  title: Pattern Debug
+  bloom: analyse
+  points: 6
+  difficulty: medie
+  time_seconds: 75
+  targeted_misconception: Pattern-ul de debug condiționat
+  code: "#!/bin/bash\nDEBUG=\"${DEBUG:-false}\"\n\nprocess() {\n    local file=\"\
+    $1\"\n    $DEBUG && echo \"[DEBUG] Processing: $file\" >&2\n    # ... procesare\n\
+    }\n"
+  question: Ce face $DEBUG && echo ...?
+  options:
+  - text: Întotdeauna afișează mesajul debug
+    explanation: Depinde de valoarea DEBUG
+  - text: Afișează mesajul doar dacă DEBUG="true"
+    explanation: CORECT - $DEBUG se execută ca comandă
+  - text: Afișează mesajul dacă DEBUG e orice valoare non-goală
+    explanation: false ca string nu e comandă validă
+  - text: Eroare de sintaxă
+    explanation: Sintaxa e validă
+  correct_answer: 1
+  explanation: '$DEBUG se execută ca COMANDĂ.
+
+    DEBUG="true" → comanda "true" reușește → echo se execută
+
+    DEBUG="false" → comanda "false" eșuează → echo nu se execută
+
+    '
