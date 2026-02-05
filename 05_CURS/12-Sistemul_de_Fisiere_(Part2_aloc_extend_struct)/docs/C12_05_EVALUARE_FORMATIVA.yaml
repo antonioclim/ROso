@@ -1,0 +1,162 @@
+# C12_05_EVALUARE_FORMATIVA.yaml
+# Curs 12: Sistemul de Fișiere (Part 2 - Alocare, Structuri)
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 12
+  subiect: "Sistemul de Fișiere (Part 2 - Alocare, Structuri)"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Care sunt cele 3 metode principale de alocare a spațiului pe disk pentru fișiere?"
+    optiuni:
+      - "Fast, slow, medium"
+      - "Contiguă, linked, indexed"
+      - "FIFO, LIFO, random"
+      - "Read, write, execute"
+    corect: 1
+    explicatie: "Contiguă: blocuri consecutive. Linked: liste înlănțuite. Indexed: tabel de pointeri (ex: inode)."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un bitmap în contextul managementului spațiului liber?"
+    optiuni:
+      - "O imagine grafică"
+      - "Un vector de biți unde fiecare bit indică dacă un bloc este liber (0) sau ocupat (1)"
+      - "Un algoritm de compresie"
+      - "Un tip de fișier"
+    corect: 1
+    explicatie: "Bitmap: eficient în spațiu (1 bit/bloc), permite găsirea rapidă a blocurilor libere consecutive."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce este FAT (File Allocation Table)?"
+    optiuni:
+      - "Un tip de partiție"
+      - "O tabelă care conține pentru fiecare bloc numărul blocului următor din fișier"
+      - "Un algoritm de sortare"
+      - "Un protocol de rețea"
+    corect: 1
+    explicatie: "FAT: linked allocation centralizată. FAT[i] = următorul bloc al fișierului care folosește blocul i."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Care este avantajul principal al alocării contigue?"
+    optiuni:
+      - "Economie de spațiu"
+      - "Acces secvențial și random foarte rapid (un singur seek)"
+      - "Ușurință la extindere"
+      - "Nu are avantaje"
+    corect: 1
+    explicatie: "Contiguă: un singur seek pentru orice acces, performanță excelentă. Dezavantaj: fragmentare externă."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "De ce linked allocation are acces random lent?"
+    optiuni:
+      - "Este mai sigură"
+      - "Trebuie să parcurgi lista de la început până la blocul dorit"
+      - "Folosește criptare"
+      - "Nu este lentă"
+    corect: 1
+    explicatie: "Pentru blocul N, trebuie citite N-1 blocuri pentru a urmări pointerii. O(n) vs O(1)."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce problemă rezolvă extents în filesystems moderne (ext4)?"
+    optiuni:
+      - "Securitatea"
+      - "Reduce overhead-ul pentru fișiere mari contigue (stochează interval start:length în loc de pointeri individuali)"
+      - "Crește viteza rețelei"
+      - "Compresia automată"
+    corect: 1
+    explicatie: "Extent = (start_block, length). Un fișier contiguu de 1GB: 1 extent vs mii de pointeri."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "De ce VFS (Virtual File System) este util în Linux?"
+    optiuni:
+      - "Crește viteza"
+      - "Oferă o interfață uniformă pentru toate filesystemurile (ext4, FAT, NFS...)"
+      - "Criptează datele"
+      - "Gestionează memoria"
+    corect: 1
+    explicatie: "VFS: abstracție. Aplicațiile folosesc aceleași syscalls indiferent de filesystem-ul fizic."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este un mount point?"
+    optiuni:
+      - "Un tip de hardware"
+      - "Directorul unde un filesystem devine accesibil în ierarhia de fișiere"
+      - "O partiție de boot"
+      - "Un server de rețea"
+    corect: 1
+    explicatie: "Mount: atașează filesystem-ul la un director. Ex: /mnt/usb face USB-ul accesibil."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Un fișier de 1MB pe FAT32 cu clustere de 32KB. Câte intrări FAT sunt necesare?"
+    optiuni:
+      - "1"
+      - "32"
+      - "1024"
+      - "1048576"
+    corect: 1
+    explicatie: "1MB / 32KB = 32 clustere. Fiecare cluster are o intrare în FAT, deci 32 intrări."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "De ce journaling metadata-only este mai rapid decât full journaling?"
+    optiuni:
+      - "Nu este mai rapid"
+      - "Scrie în jurnal doar metadatele (inode-uri, directoare), nu și datele fișierelor"
+      - "Folosește compresie"
+      - "Șterge jurnalul mai des"
+    corect: 1
+    explicatie: "Metadata journaling: mai puțin I/O de jurnal. Risc: datele pot fi corupte, metadatele sunt OK."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "Care este trade-off-ul pentru block size mare vs mic?"
+    optiuni:
+      - "Nu există trade-off"
+      - "Mare: mai puțin overhead management, dar mai multă fragmentare internă. Mic: invers"
+      - "Mare este întotdeauna mai bun"
+      - "Mic este întotdeauna mai bun"
+    corect: 1
+    explicatie: "Block mare: eficient pentru fișiere mari, risipă pentru mici. Block mic: invers."
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Ai un SSD și HDD. Ce filesystem feature-uri preferi pentru fiecare?"
+    optiuni:
+      - "Aceleași pentru ambele"
+      - "SSD: TRIM support, fără defragmentare. HDD: defragmentare periodică, cache de scriere"
+      - "HDD: TRIM. SSD: defragmentare"
+      - "Nu contează tipul de stocare"
+    corect: 1
+    explicatie: "SSD: TRIM pentru garbage collection, wear leveling. HDD: defragmentare (seek time matters)."

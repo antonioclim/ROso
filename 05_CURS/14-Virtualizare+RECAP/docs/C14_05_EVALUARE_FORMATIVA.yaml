@@ -1,0 +1,162 @@
+# C14_05_EVALUARE_FORMATIVA.yaml
+# Curs 14: Virtualizare + Recapitulare
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 14
+  subiect: "Virtualizare + Recapitulare"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un hypervisor (VMM - Virtual Machine Monitor)?"
+    optiuni:
+      - "Un tip de procesor"
+      - "Software care creează și gestionează mașini virtuale, oferind abstracție hardware"
+      - "Un protocol de rețea"
+      - "Un tip de memorie"
+    corect: 1
+    explicatie: "Hypervisor = layer care permite rularea mai multor SO-uri pe același hardware fizic."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Care este diferența între hypervisor Type 1 și Type 2?"
+    optiuni:
+      - "Nu există diferență"
+      - "Type 1 (bare-metal): rulează direct pe hardware. Type 2 (hosted): rulează peste un SO gazdă"
+      - "Type 2 este mai rapid"
+      - "Type 1 este software, Type 2 este hardware"
+    corect: 1
+    explicatie: "Type 1: VMware ESXi, Xen (performanță). Type 2: VirtualBox, VMware Workstation (convenience)."
+
+  - id: q03
+    bloom: remember
+    dificultate: usor
+    text: "Ce înseamnă paravirtualizare?"
+    optiuni:
+      - "Virtualizare foarte rapidă"
+      - "Guest OS-ul este modificat să știe că rulează virtualizat și comunică direct cu hypervisor-ul"
+      - "Virtualizare doar pentru rețea"
+      - "Virtualizare hardware"
+    corect: 1
+    explicatie: "Paravirtualizare: guest OS modificat folosește hypercalls în loc de instrucțiuni privilegiate."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Cum ajută Intel VT-x/AMD-V la virtualizare?"
+    optiuni:
+      - "Cresc viteza CPU-ului"
+      - "Adaugă un nou ring (ring -1) pentru hypervisor, permițând trapuri eficiente"
+      - "Criptează datele"
+      - "Gestionează memoria"
+    corect: 1
+    explicatie: "Hardware virtualization: hypervisor în VMX root mode, guest în VMX non-root. VM exits eficiente."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este shadow page table și de ce este necesară?"
+    optiuni:
+      - "O copie de backup"
+      - "Hypervisor-ul menține traducerea guest-virtual → host-physical pentru performanță"
+      - "Un tip de criptare"
+      - "Nu este necesară"
+    corect: 1
+    explicatie: "Guest are PT propriu (guest VA→guest PA). Shadow PT: guest VA→host PA, pentru MMU hardware."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce avantaj oferă EPT/NPT (Extended Page Tables)?"
+    optiuni:
+      - "Mai multă memorie"
+      - "Hardware gestionează guest→host address translation, eliminând shadow PT"
+      - "Securitate îmbunătățită"
+      - "Nu oferă avantaje"
+    corect: 1
+    explicatie: "EPT/NPT: MMU hardware face două traduceri (guest VA→guest PA→host PA), fără overhead software."
+
+  - id: q07
+    bloom: understand
+    dificultate: mediu
+    text: "De ce containerele sunt mai lightweight decât VM-urile?"
+    optiuni:
+      - "Nu sunt mai lightweight"
+      - "Containerele partajează kernelul host-ului; VM-urile au fiecare propriul kernel și SO"
+      - "Containerele nu au izolare"
+      - "VM-urile sunt mai vechi"
+    corect: 1
+    explicatie: "Container: procese izolate (namespaces, cgroups), fără overhead de SO complet."
+
+  - id: q08
+    bloom: understand
+    dificultate: mediu
+    text: "Ce mecanisme Linux folosesc containerele pentru izolare?"
+    optiuni:
+      - "Virtualizare hardware"
+      - "Namespaces (izolare resurse) și cgroups (limite resurse)"
+      - "Shadow page tables"
+      - "Hypervisor Type 2"
+    corect: 1
+    explicatie: "Namespaces: izolează PID, network, mount, etc. Cgroups: limitează CPU, memorie, I/O."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Când este preferată virtualizarea completă față de containere?"
+    optiuni:
+      - "Întotdeauna"
+      - "Când trebuie să rulezi SO-uri diferite sau ai nevoie de izolare maximă (security boundaries)"
+      - "Când vrei performanță maximă"
+      - "Niciodată"
+    corect: 1
+    explicatie: "VM: izolare kernel-level, SO diferite. Container: același kernel, izolare mai slabă dar eficientă."
+
+  - id: q10
+    bloom: analyse
+    dificultate: greu
+    text: "Care este overhead-ul principal al virtualizării complete fără hardware support?"
+    optiuni:
+      - "Nu există overhead"
+      - "Trap-and-emulate pentru instrucțiuni privilegiate: fiecare trap este costisitor"
+      - "Consum de rețea"
+      - "Spațiu pe disk"
+    corect: 1
+    explicatie: "Fără VT-x: trap la fiecare instrucțiune privilegiată, hypervisor emulează. Cu VT-x: exit rapid."
+
+  - id: q11
+    bloom: analyse
+    dificultate: greu
+    text: "De ce live migration (mutarea VM fără downtime) este posibilă?"
+    optiuni:
+      - "Nu este posibilă"
+      - "Memoria este copiată incremental în timp ce VM rulează, apoi scurt freeze pentru stare finală"
+      - "VM-ul nu are stare"
+      - "Folosește criptare"
+    corect: 1
+    explicatie: "Pre-copy: copiază RAM iterativ. Stop VM scurt, copiază dirty pages rămase, resume pe noul host."
+
+  - id: q12
+    bloom: apply
+    dificultate: greu
+    text: "Ai un server cu 64GB RAM și vrei să rulezi 100 de instanțe izolate ale aceleiași aplicații. Ce alegi?"
+    optiuni:
+      - "100 VM-uri complete"
+      - "Containere: partajează kernel și libraries, overhead ~MB per instanță vs ~GB per VM"
+      - "100 procese fără izolare"
+      - "Nu este posibil"
+    corect: 1
+    explicatie: "Container: ~10-50MB overhead vs VM ~1GB. 100 containere în 64GB posibil; 100 VM-uri - imposibil."
