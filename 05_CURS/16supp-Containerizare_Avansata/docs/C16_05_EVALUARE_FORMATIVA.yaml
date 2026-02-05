@@ -1,0 +1,138 @@
+# C16_05_EVALUARE_FORMATIVA.yaml
+# Curs 16 Suplimentar: Containerizare Avansată
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 16
+  subiect: "Containerizare Avansată"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 10
+  timp_estimat_minute: 12
+  distributie_bloom:
+    remember: 2
+    understand: 4
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un Linux namespace?"
+    optiuni:
+      - "Un tip de fișier"
+      - "Mecanism kernel pentru izolarea și virtualizarea resurselor sistem pentru grupuri de procese"
+      - "Un protocol de rețea"
+      - "Un tip de memorie"
+    corect: 1
+    explicatie: "Namespace: izolează PID, network, mount, user, IPC, cgroup, UTS pentru containere."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce este cgroups (control groups)?"
+    optiuni:
+      - "Un tip de container"
+      - "Mecanism kernel pentru limitarea și monitorizarea resurselor (CPU, memorie, I/O) per grup de procese"
+      - "Un protocol de comunicare"
+      - "Un tip de filesystem"
+    corect: 1
+    explicatie: "Cgroups: limitează și contabilizează resurse. Containere: namespace + cgroups."
+
+  - id: q03
+    bloom: understand
+    dificultate: mediu
+    text: "Ce izolează PID namespace?"
+    optiuni:
+      - "Rețeaua"
+      - "Spațiul de PID-uri: procesele din container văd doar procesele din container, cu PID 1 propriu"
+      - "Memoria"
+      - "Fișierele"
+    corect: 1
+    explicatie: "PID namespace: proces init (PID 1) în container. Containerul nu vede procesele host."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "De ce network namespace este important pentru izolarea containerelor?"
+    optiuni:
+      - "Nu este important"
+      - "Fiecare container are propriul stack de rețea: interfețe, IP-uri, routing tables izolate"
+      - "Pentru viteză"
+      - "Pentru stocare"
+    corect: 1
+    explicatie: "Network NS: container cu eth0 propriu, IP propriu, iptables proprii. Izolare completă."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce face comanda unshare în Linux?"
+    optiuni:
+      - "Șterge fișiere"
+      - "Creează noi namespaces și execută un program în ele"
+      - "Partajează memorie"
+      - "Configurează rețeaua"
+    corect: 1
+    explicatie: "unshare: creează namespace(s) nou(i) și rulează comandă. Baza pentru containere simple."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este overlay filesystem și de ce Docker îl folosește?"
+    optiuni:
+      - "Un tip de RAID"
+      - "Filesystem care stratifică multiple directoare: layers read-only cu un layer writable deasupra"
+      - "Filesystem criptat"
+      - "Filesystem de rețea"
+    corect: 1
+    explicatie: "Overlay: image layers (ro) + container layer (rw). Eficient pentru imagini partajate."
+
+  - id: q07
+    bloom: analyse
+    dificultate: greu
+    text: "De ce containerele au nevoie de user namespace pentru rootless containers?"
+    optiuni:
+      - "Nu au nevoie"
+      - "User NS mapează UID 0 în container la UID non-root pe host, permițând operații 'root' sigure"
+      - "Pentru viteză"
+      - "Pentru networking"
+    corect: 1
+    explicatie: "User NS: root în container = user normal pe host. Securitate: escape din container nu dă root."
+
+  - id: q08
+    bloom: analyse
+    dificultate: greu
+    text: "Care este diferența de securitate între container escape și VM escape?"
+    optiuni:
+      - "Nu există diferență"
+      - "Container: kernel partajat, escape = acces la host direct. VM: trebuie să spargi hypervisor-ul"
+      - "VM escape este mai ușor"
+      - "Container este mai sigur"
+    corect: 1
+    explicatie: "Container: kernel vulnerability = host access. VM: izolare hardware, escape mult mai greu."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "Ce limitări impune cgroups v2 față de v1?"
+    optiuni:
+      - "v2 este mai lent"
+      - "v2: ierarhie unificată (un proces în exact un cgroup), controller per subtree. v1: ierarhii separate"
+      - "v2 nu suportă memorie"
+      - "Nu există diferențe"
+    corect: 1
+    explicatie: "Cgroups v2: organizare mai clară, un singur arbore, controllers activate per subtree."
+
+  - id: q10
+    bloom: apply
+    dificultate: greu
+    text: "Vrei să limitezi un container la 512MB RAM și 0.5 CPU cores. Ce cgroup controllers folosești?"
+    optiuni:
+      - "Doar memory"
+      - "memory controller pentru RAM, cpu controller pentru CPU shares/quota"
+      - "Doar cpu"
+      - "Nu poți limita"
+    corect: 1
+    explicatie: "memory.max=512M, cpu.max=50000 100000 (50% dintr-un core). Cgroups v2 syntax."

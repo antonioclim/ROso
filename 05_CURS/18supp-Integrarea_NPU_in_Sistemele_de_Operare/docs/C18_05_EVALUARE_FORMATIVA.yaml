@@ -1,0 +1,138 @@
+# C18_05_EVALUARE_FORMATIVA.yaml
+# Curs 18 Suplimentar: Integrarea NPU în Sistemele de Operare
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 18
+  subiect: "Integrarea NPU în Sistemele de Operare"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  numar_intrebari: 10
+  timp_estimat_minute: 12
+  distributie_bloom:
+    remember: 2
+    understand: 4
+    analyse: 3
+    apply: 1
+
+intrebari:
+  - id: q01
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un NPU (Neural Processing Unit)?"
+    optiuni:
+      - "Un tip de RAM"
+      - "Procesor specializat pentru operații de machine learning/AI (multiplicări de matrici, convoluții)"
+      - "Un protocol de rețea"
+      - "Un tip de stocare"
+    corect: 1
+    explicatie: "NPU: hardware optimizat pentru inferență AI, eficient energetic pentru workloads ML."
+
+  - id: q02
+    bloom: remember
+    dificultate: usor
+    text: "Ce subsistem Linux kernel expune NPU-urile moderne?"
+    optiuni:
+      - "/dev/gpu"
+      - "Accel subsystem (/dev/accel/*) introdus în Linux 6.2+"
+      - "/dev/cpu"
+      - "/dev/mem"
+    corect: 1
+    explicatie: "Accel subsystem: API unificat pentru acceleratoare AI (Intel VPU, AMD XDNA, etc.)."
+
+  - id: q03
+    bloom: understand
+    dificultate: mediu
+    text: "De ce NPU-urile sunt mai eficiente energetic decât CPU-urile pentru AI inference?"
+    optiuni:
+      - "Nu sunt mai eficiente"
+      - "Arhitectură specializată: multe unități MAC paralele, fără overhead de instrucțiuni generale"
+      - "Folosesc mai puțină memorie"
+      - "Sunt mai noi"
+    corect: 1
+    explicatie: "NPU: mii de MAC units (Multiply-Accumulate) optimizate pentru tensor ops. CPU: general-purpose overhead."
+
+  - id: q04
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este OpenVINO în contextul NPU-urilor Intel?"
+    optiuni:
+      - "Un sistem de operare"
+      - "Runtime și toolkit pentru optimizarea și rularea modelelor AI pe hardware Intel (CPU, GPU, NPU)"
+      - "Un limbaj de programare"
+      - "Un driver video"
+    corect: 1
+    explicatie: "OpenVINO: convertește modele, optimizează pentru hardware Intel, API unificat pentru inference."
+
+  - id: q05
+    bloom: understand
+    dificultate: mediu
+    text: "Ce face driver-ul ivpu în Linux?"
+    optiuni:
+      - "Gestionează audio"
+      - "Driver pentru Intel NPU (Vision Processing Unit), expune device prin accel subsystem"
+      - "Gestionează rețeaua"
+      - "Gestionează memoria"
+    corect: 1
+    explicatie: "ivpu: kernel driver pentru Intel Meteor Lake NPU. Expune /dev/accel/accel0."
+
+  - id: q06
+    bloom: understand
+    dificultate: mediu
+    text: "De ce firmware-ul NPU trebuie încărcat de SO?"
+    optiuni:
+      - "Nu trebuie firmware"
+      - "NPU-ul nu are memorie non-volatilă; firmware-ul definește comportamentul și trebuie încărcat la boot"
+      - "Pentru securitate doar"
+      - "Pentru viteză"
+    corect: 1
+    explicatie: "NPU firmware (/lib/firmware): microcode pentru NPU. Driver-ul îl încarcă la inițializare."
+
+  - id: q07
+    bloom: analyse
+    dificultate: greu
+    text: "Când este preferabil să folosești CPU vs NPU pentru AI inference?"
+    optiuni:
+      - "Întotdeauna NPU"
+      - "NPU: modele mari, batch processing, eficiență energetică. CPU: modele mici, latență minimă, flexibilitate"
+      - "Întotdeauna CPU"
+      - "Nu contează"
+    corect: 1
+    explicatie: "NPU: throughput, eficiență. CPU: overhead de transfer poate depăși beneficiul pentru modele mici."
+
+  - id: q08
+    bloom: analyse
+    dificultate: greu
+    text: "Care este overhead-ul principal când folosești NPU din userspace?"
+    optiuni:
+      - "Nu există overhead"
+      - "Transferul datelor între RAM și memoria NPU, plus latența de dispatch job"
+      - "Compilarea codului"
+      - "Consumul de energie"
+    corect: 1
+    explicatie: "Data movement: PCIe/memory bandwidth bottleneck. Pentru modele mici, transfer > compute."
+
+  - id: q09
+    bloom: analyse
+    dificultate: greu
+    text: "De ce modelele AI trebuie 'compilate' pentru NPU?"
+    optiuni:
+      - "Nu trebuie compilate"
+      - "NPU-ul are set de instrucțiuni și layout de memorie specific; modelul trebuie optimizat pentru hardware"
+      - "Pentru securitate"
+      - "Pentru debugging"
+    corect: 1
+    explicatie: "Compilare: graph optimization, quantization, memory planning pentru arhitectura NPU specifică."
+
+  - id: q10
+    bloom: apply
+    dificultate: greu
+    text: "Ai o aplicație care face inferență AI continuă pe un laptop. De ce preferi NPU față de GPU?"
+    optiuni:
+      - "GPU este întotdeauna mai bun"
+      - "NPU: consum energetic mult mai mic (1-5W vs 15-50W GPU), baterie mai lungă, fără throttling termic"
+      - "NPU este mai rapid"
+      - "GPU nu poate face AI"
+    corect: 1
+    explicatie: "Laptop: termal și baterie limitează GPU. NPU: eficiență energetică pentru sustained inference."
