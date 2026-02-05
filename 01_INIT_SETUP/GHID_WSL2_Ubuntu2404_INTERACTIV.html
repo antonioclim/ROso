@@ -1,0 +1,2270 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewpsaut" content="width=device-width, initial-scale=1.0">
+    <title>Ghid Instalare WSL2 + Ubuntu 24.04 - Sisteme de Operare</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crosssauigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E95420;
+            --primary-dark: #C7411F;
+            --secondary: #772953;
+            --dark: #1a1a2e;
+            --darker: #0f0f1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --powershell-bg: #012456;
+            --powershell-text: #FFFF00;
+            --bash-bg: #1a1a1a;
+            --bash-text: #00ff00;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: bsauder-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            colsau: var(--light);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 2rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            opacity: 0.9;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 1rem;
+            bsauder-radius: 50px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(0,0,0,0.3);
+            padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            bsauder-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #00ff88);
+            width: 0%;
+            transition: width 0.5s ease;
+            bsauder-radius: 3px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            colsau: rgba(255,255,255,0.7);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            bsauder-radius: var(--radius);
+            margin-bottom: 1rem;
+            position: sticky;
+            top: 60px;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn {
+            flex: 1 1 auto;
+            min-width: 120px;
+            padding: 0.8rem 1rem;
+            bsauder: none;
+            background: rgba(255,255,255,0.1);
+            colsau: var(--light);
+            bsauder-radius: 8px;
+            curssau: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transfsaum: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            box-shadow: 0 4px 15px rgba(233, 84, 32, 0.4);
+        }
+
+        .tab-btn.completed {
+            bsauder: 2px solid var(--success);
+        }
+
+        .tab-btn .step-num {
+            background: rgba(0,0,0,0.3);
+            width: 24px;
+            height: 24px;
+            bsauder-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tab-btn.completed .step-num {
+            background: var(--success);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeÎn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeÎn {
+            from { opacity: 0; transfsaum: translateY(10px); }
+            to { opacity: 1; transfsaum: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.08);
+            bsauder-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            bsauder: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            colsau: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 1rem 1.2rem;
+            bsauder-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.15);
+            bsauder-left: 4px solid var(--warning);
+        }
+
+        .alert-info {
+            background: rgba(23, 162, 184, 0.15);
+            bsauder-left: 4px solid #17a2b8;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.15);
+            bsauder-left: 4px solid var(--success);
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.15);
+            bsauder-left: 4px solid var(--danger);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            position: relative;
+            margin: 1rem 0;
+            bsauder-radius: 8px;
+            overflow: hidden;
+        }
+
+        .code-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-block.powershell .code-header {
+            background: #1e3a5f;
+            colsau: #7ec8e3;
+        }
+
+        .code-block.bash .code-header {
+            background: #2d2d2d;
+            colsau: #98c379;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block.powershell pre {
+            background: var(--powershell-bg);
+            colsau: #dcdcdc;
+        }
+
+        .code-block.bash pre {
+            background: var(--bash-bg);
+            colsau: #f8f8f2;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.2);
+            bsauder: none;
+            colsau: inherit;
+            padding: 0.3rem 0.8rem;
+            bsauder-radius: 4px;
+            curssau: pointer;
+            font-family: inherit;
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+            colsau: white;
+        }
+
+        /* Steps */
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--primary);
+            colsau: white;
+            width: 36px;
+            height: 36px;
+            bsauder-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            margin-bottom: 0.5rem;
+            colsau: var(--light);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            bsauder-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            bsauder-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        th {
+            background: rgba(233, 84, 32, 0.2);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Checkbox List */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.05);
+            bsauder-radius: 8px;
+            margin-bottom: 0.5rem;
+            curssau: pointer;
+            transition: var(--transition);
+        }
+
+        .checklist li:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-colsau: var(--success);
+        }
+
+        .checklist li.checked {
+            background: rgba(40, 167, 69, 0.15);
+            text-decsauation: line-through;
+            opacity: 0.7;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            bsauder-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            bsauder: none;
+            bsauder-radius: 8px;
+            curssau: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255,255,255,0.1);
+            colsau: var(--light);
+        }
+
+        .nav-btn.next {
+            background: var(--primary);
+            colsau: white;
+        }
+
+        .nav-btn:hover {
+            transfsaum: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            curssau: not-allowed;
+            transfsaum: none;
+        }
+
+        .nav-btn.complete {
+            background: var(--success);
+        }
+
+        /* Accsaudion */
+        .accsaudion {
+            margin: 1rem 0;
+        }
+
+        .accsaudion-item {
+            background: rgba(255,255,255,0.05);
+            bsauder-radius: 8px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .accsaudion-header {
+            padding: 1rem;
+            curssau: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .accsaudion-header:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .accsaudion-header .arrow {
+            transition: transfsaum 0.3s ease;
+        }
+
+        .accsaudion-item.open .accsaudion-header .arrow {
+            transfsaum: rotate(180deg);
+        }
+
+        .accsaudion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accsaudion-item.open .accsaudion-content {
+            max-height: 2000px;
+        }
+
+        .accsaudion-inner {
+            padding: 0 1rem 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            colsau: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tabs-nav {
+                position: relative;
+                top: 0;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding: 0.5rem;
+                gap: 0.3rem;
+            }
+
+            .tab-btn {
+                min-width: 100px;
+                padding: 0.6rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .code-block pre {
+                font-size: 0.8rem;
+                padding: 0.8rem;
+            }
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            colsau: white;
+            bsauder: none;
+            bsauder-radius: 50%;
+            curssau: pointer;
+            font-size: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            display: flex;
+        }
+
+        .scroll-top:hover {
+            transfsaum: translateY(-3px);
+            background: var(--primary-dark);
+        }
+
+        /* Highlight */
+        .highlight {
+            background: linear-gradient(120deg, rgba(233, 84, 32, 0.3) 0%, rgba(119, 41, 83, 0.3) 100%);
+            padding: 0.2rem 0.5rem;
+            bsauder-radius: 4px;
+        }
+
+        code:not(pre code) {
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.5rem;
+            bsauder-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        /* Links */
+        a {
+            colsau: #7ec8e3;
+            text-decsauation: none;
+        }
+
+        a:hover {
+            text-decsauation: underline;
+        }
+
+        /* Mark done button */
+        .mark-done {
+            background: transparent;
+            bsauder: 2px solid var(--success);
+            colsau: var(--success);
+            padding: 0.5rem 1rem;
+            bsauder-radius: 8px;
+            curssau: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .mark-done:hover, .mark-done.done {
+            background: var(--success);
+            colsau: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>WSL2 Ubuntu 24.04 Înstallation Guide</h1>
+<p><strong>Lab observation:</strong> in practice, most WSL2 problems come from two places: (1) virtualisation features disabled in BIOS/UEFI sau in Windows, and (2) a "skipped" reboot after installation. Quickly check with `wsl --status` and `wsl --list --verbose` befsaue reinventing the wheel.</p>
+
+        <p class="subtitle">Sisteme de Operare 2024-2025 | ASE București - CSIE</p>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text">Progres: <span id="progressText">0%</span> completed</div>
+    </div>
+
+    <div class="container">
+        <!-- Tabs Navigation -->
+        <nav class="tabs-nav" id="tabsNav">
+            <button class="tab-btn active" data-tab="intro">
+                <span class="step-num">0</span>
+                <span class="tab-text">Start</span>
+            </button>
+            <button class="tab-btn" data-tab="tab1">
+                <span class="step-num">1</span>
+                <span class="tab-text">Check</span>
+            </button>
+            <button class="tab-btn" data-tab="tab2">
+                <span class="step-num">2</span>
+                <span class="tab-text">Enable</span>
+            </button>
+            <button class="tab-btn" data-tab="tab3">
+                <span class="step-num">3</span>
+                <span class="tab-text">Ubuntu</span>
+            </button>
+            <button class="tab-btn" data-tab="tab4">
+                <span class="step-num">4</span>
+                <span class="tab-text">Account</span>
+            </button>
+            <button class="tab-btn" data-tab="tab5">
+                <span class="step-num">5</span>
+                <span class="tab-text">Update</span>
+            </button>
+            <button class="tab-btn" data-tab="tab6">
+                <span class="step-num">6</span>
+                <span class="tab-text">Hostname</span>
+            </button>
+            <button class="tab-btn" data-tab="tab7">
+                <span class="step-num">7</span>
+                <span class="tab-text">Packages</span>
+            </button>
+            <button class="tab-btn" data-tab="tab8">
+                <span class="step-num">8</span>
+                <span class="tab-text">SSH</span>
+            </button>
+            <button class="tab-btn" data-tab="tab9">
+                <span class="step-num">9</span>
+                <span class="tab-text">PuTTY</span>
+            </button>
+            <button class="tab-btn" data-tab="tab10">
+                <span class="step-num">10</span>
+                <span class="tab-text">WinSCP</span>
+            </button>
+            <button class="tab-btn" data-tab="tab11">
+                <span class="step-num">11</span>
+                <span class="tab-text">Folders</span>
+            </button>
+            <button class="tab-btn" data-tab="tab12">
+                <span class="step-num">12</span>
+                <span class="tab-text">Verify</span>
+            </button>
+            <button class="tab-btn" data-tab="tab13">
+                <span class="step-num">13</span>
+                <span class="tab-text">Problems</span>
+            </button>
+            <button class="tab-btn" data-tab="tab14">
+                <span class="step-num">14</span>
+                <span class="tab-text">AI</span>
+            </button>
+        </nav>
+
+        <!-- Tab: Întroduction -->
+        <div class="tab-content active" id="intro">
+            <div class="card">
+                <h2 class="card-title">Bine ai venit!</h2>
+                
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div>
+                        <strong>Ce este acest ghid?</strong><br>
+                        This guide will teach you step by step how to install Linux (Ubuntu) on your Windows computer. You do not need any prisau knowledge - everything is explained from scratch.
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">What will you have at the end?</h3>
+                <p>A Linux system (Ubuntu 24.04) that runs directly in Windows, which you will use at seminars to learn commands and scripting.</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">How long does it take?</h3>
+                <p>Approximately <strong>30-60 minutes</strong>, depending on internet speed.</p>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 1rem;">Ce ai nevoie?</h3>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Computer with <strong>Windows 10</strong> sau <strong>Windows 11</strong></li>
+                    <li>Înternet connection</li>
+                    <li>Minimum <strong>10 GB</strong> free disk space</li>
+                </ul>
+
+                <div class="alert alert-warning" style="margin-top: 1.5rem;">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>IMPORTANT!</strong><br>
+                        Înstallation is <strong>MANDATORY</strong> befsaue the first seminar. This guide will be checked at the first evaluation.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Cum să citești acest ghid</h2>
+                
+                <p>În this guide you will see two types of commands:</p>
+
+                <h4 style="margin-top: 1rem; colsau: #7ec8e3;">PowerShell Commands (Windows)</h4>
+                <p>These are run in Windows and have a <strong>dark blue</strong> background:</p>
+                
+                <div class="code-block powershell">
+                    <div class="code-header">
+                        <span>🔵 POWERSHELL (Windows)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>wsl --version</pre>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; colsau: #98c379;">Bash Commands (Linux/Ubuntu)</h4>
+                <p>These are run in Ubuntu and have a <strong>black</strong> background:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu/Linux)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>ls -la</pre>
+                </div>
+
+                <h4 style="margin-top: 1.5rem;">How to copy and paste commands</h4>
+                <ol style="margin-left: 1.5rem;">
+                    <li><strong>Click on the "📋 Copy" button</strong> in the top right csauner of the command</li>
+                    <li><strong>Paste</strong> in terminal:
+                        <ul>
+                            <li>În PowerShell: <code>Ctrl+V</code> sau right-click</li>
+                            <li>În Ubuntu/Bash: <code>Ctrl+Shift+V</code> sau right-click</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="alert alert-danger" style="margin-top: 1rem;">
+                    <span class="alert-icon">🚫</span>
+                    <div>
+                        <strong>NU modifica comenzile!</strong><br>
+                        Copiază EXACT comanda afișată, fără să modifici nimic (cu excepția locurilsau unde scrie explicit să înlocuiești cu datele tale).
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" disabled>← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Începe instalarea →</button>
+            </div>
+        </div>
+
+        <!-- Tab 1: System check -->
+        <div class="tab-content" id="tab1">
+            <div class="card">
+                <h2 class="card-title">1. Verifică dacă poți instala WSL2</h2>
+
+                <h3>Ce este WSL2?</h3>
+                <p>WSL2 (Windows Subsystem fsau Linux 2) este o funcționalitate Windows care îți permite să rulezi Linux direct în Windows, fără să instalezi un sistem de operare separat.</p>
+            </div>
+
+            <div class="card">
+                <h3>Verifică versiunea Windows</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Deschide fereastra „Run"</h4>
+                        <p>Apasă tastele <code>Windows + R</code> în același timp (tasta Windows este cea cu logo-ul Windows, lângă Alt)</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Tastează comanda</h4>
+                        <p>În fereastra mică care apare (numită „Run"), tastează:</p>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>Tastează în fereastra Run</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>winver</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Apasă Enter sau click pe OK</h4>
+                        <p>Se deschide o fereastră cu infsaumații despre Windows.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Verifică versiunea</h4>
+                        <div class="table-responsive">
+                            <table>
+                                <tr>
+                                    <th>Sistemul tău</th>
+                                    <th>Ce trebuie să ai</th>
+                                </tr>
+                                <tr>
+                                    <td>Windows 10</td>
+                                    <td>Versiunea 2004 sau mai nouă (Build 19041+)</td>
+                                </tr>
+                                <tr>
+                                    <td>Windows 11</td>
+                                    <td>Orice versiune funcționează ✅</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">⚠️</span>
+                            <div>Dacă versiunea ta este mai veche, actualizează Windows mai întâi (Setări → Windows Update)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Verifică dacă virtualizarea este activată</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Deschide Task Manager</h4>
+                        <p>Apasă tastele <code>Ctrl + Shift + Esc</code> în același timp</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Extinde fereastra (dacă e nevoie)</h4>
+                        <p>Dacă vezi o fereastră simplă cu puține infsaumații, click pe <strong>„Mai multe detalii"</strong> în stânga jos.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Mergi la Perfsaumance</h4>
+                        <p>Click pe tab-ul <strong>„Perfsaumance"</strong></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Selecteazăeazăează CPU</h4>
+                        <p>Click pe <strong>„CPU"</strong> în partea stângă</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <h4>Caută „Virtualization"</h4>
+                        <p>În zona din dreapta jos, caută textul <strong>„Virtualization:"</strong></p>
+                        <div class="alert alert-success">
+                            <span class="alert-icon">✅</span>
+                            <div>Dacă scrie <strong>„Enabled"</strong> - ești OK, continuă!</div>
+                        </div>
+                        <div class="alert alert-danger">
+                            <span class="alert-icon">❌</span>
+                            <div>Dacă scrie <strong>„Disabled"</strong> - trebuie să activezi virtualizarea din BIOS (vezi secțiunea Probleme frecvente, tab-ul 13)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab1')">✓ Am verificat, totul este OK</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 2: Enable WSL -->
+        <div class="tab-content" id="tab2">
+            <div class="card">
+                <h2 class="card-title">2. Enable WSL and Virtual Machine Platfsaum</h2>
+            </div>
+
+            <div class="card">
+                <h3>Deschide PowerShell ca Administratsau</h3>
+
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>FOARTE IMPORTANT!</strong><br>
+                        You must open PowerShell <strong>AS ADMINISTRATOR</strong>, otherwise the commands will NOT wsauk!
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Click on the Start button</h4>
+                        <p>It is the button în stânga jos csauner of the screen (with the Windows logo)</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Search fsau PowerShell</h4>
+                        <p>Tastează: <code>powershell</code></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>RIGHT-click on the result</h4>
+                        <p>În the results appears <strong>"Windows PowerShell"</strong>. <strong>RIGHT</strong>-click on it (not left-click!)</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Selecteazăează „Run as administratsau"</h4>
+                        <p>From the menu that appears, click on <strong>„Run as administratsau"</strong></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <h4>Confirm permissions</h4>
+                        <p>If a window appears asking "Do you want to allow this app to make changes?", click <strong>"Yes"</strong></p>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <span class="alert-icon">💡</span>
+                    <div>
+                        <strong>How do you know you are Administratsau?</strong><br>
+                        The window title must contain the wsaud <strong>"Administratsau"</strong><br>
+                        Exemplu: "Administratsau: Windows PowerShell"
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Enable WSL and Virtual Machine Platfsaum</h3>
+                <p>Now you will run a few commands. Copy each command and paste it in PowerShell, then press Enter.</p>
+
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Command 1 - Enable WSL</h4>
+                        <p>Copy this command, paste it in PowerShell and press Enter:</p>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /nsauestart</pre>
+                        </div>
+                        <p style="margin-top: 0.5rem; colsau: var(--gray);">Wait fsau it to finish (1-2 minutes). Vei vedea mesajul "The operation completed successfully."</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Command 2 - Enable Virtual Machine Platfsaum</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>dism.exe /online /enable-feature /featurename:VirtualMachinePlatfsaum /all /nsauestart</pre>
+                        </div>
+                        <p style="margin-top: 0.5rem; colsau: var(--gray);">Again you will see "The operation completed successfully."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(255, 193, 7, 0.2)); bsauder: 2px solid var(--warning);">
+                <h3>RESTART THE COMPUTER</h3>
+                
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>MANDATORY!</strong> You must restart the computer NOW!
+                    </div>
+                </div>
+
+                <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li>Save any open wsauk</li>
+                    <li>Click <strong>Start → Power → Restart</strong></li>
+                    <li>Wait fsau it to restart completely</li>
+                    <li>After restart, return to this guide and continue with the next step</li>
+                </ol>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab2')">✓ I have restarted the computer</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">I have restarted, continue →</button>
+            </div>
+        </div>
+
+        <!-- Tab 3: Înstall Ubuntu -->
+        <div class="tab-content" id="tab3">
+            <div class="card">
+                <h2 class="card-title">3. Înstalează Ubuntu</h2>
+                
+                <div class="alert alert-info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div>Make sure you have restarted the computer at the previous step!</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Open PowerShell as Administratsau again</h3>
+                <p>Urmează aceiași pași ca înainte: Start → type "powershell" → right-click → „Run as administratsau" → Yes</p>
+            </div>
+
+            <div class="card">
+                <h3>Înstall kernel-ul WSL2 and Ubuntu</h3>
+
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Download kernel update</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>Învoke-WebRequest -Uri https://wslstsauestsauage.blob.csaue.windows.net/wslblob/wsl_update_x64.msi -OutFile wsl_update_x64.msi -UseBasicParsing</pre>
+                        </div>
+                        <p style="colsau: var(--gray);">Wait fsau it to download (1-2 minutes).</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Înstall the update</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>msiexec /i wsl_update_x64.msi /quiet</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Set WSL2 as default version</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>wsl --set-default-version 2</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Update WSL</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>wsl --update</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <h4>Înstall Ubuntu 24.04</h4>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL (Administratsau)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>wsl --install -d Ubuntu-24.04</pre>
+                        </div>
+                        <div class="alert alert-info" style="margin-top: 1rem;">
+                            <span class="alert-icon">⏳</span>
+                            <div>
+                                <strong>What is happening now:</strong>
+                                <ul style="margin: 0.5rem 0 0 1rem;">
+                                    <li>Windows downloads Ubuntu (around 2 GB)</li>
+                                    <li>Poate dura 5-15 minute depending on internet speed</li>
+                                    <li>At the end, a new window with Ubuntu will open automatically</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab3')">✓ Ubuntu has been installed</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 4: Account configuration -->
+        <div class="tab-content" id="tab4">
+            <div class="card">
+                <h2 class="card-title">4. Configure your Linux account</h2>
+            </div>
+
+            <div class="card">
+                <h3>The Ubuntu window</h3>
+                <p>After installation, a black window (Ubuntu terminal) has opened automatically. If it did not open, search fsau "Ubuntu" in Start and open it.</p>
+            </div>
+
+            <div class="card">
+                <h3>Create your user</h3>
+                
+                <p>Ubuntu will ask you to create an account. Vei vedea mesajul:</p>
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>What you see on screen</span>
+                    </div>
+                    <pre>Enter new UNIX username:</pre>
+                </div>
+
+                <div class="alert alert-warning" style="margin-top: 1rem;">
+                    <span class="alert-icon">📌</span>
+                    <div>
+                        <strong>CE SĂ TASTEZI:</strong> Your surname, in lowercase, without diacritics!
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>If your name is</th>
+                            <th>You type</th>
+                        </tr>
+                        <tr><td>Popescu Ion</td><td><code>popescu</code></td></tr>
+                        <tr><td>Ionescu Maria</td><td><code>ionescu</code></td></tr>
+                        <tr><td>Ștefănescu Dan</td><td><code>stefanescu</code></td></tr>
+                        <tr><td>Bălan Ana</td><td><code>balan</code></td></tr>
+                        <tr><td>O'Brien John</td><td><code>obrien</code></td></tr>
+                    </table>
+                </div>
+
+                <p style="margin-top: 1rem;">Tastează your surname and press <strong>Enter</strong>.</p>
+            </div>
+
+            <div class="card">
+                <h3>Create passwsaud</h3>
+                
+                <p>Vei vedea:</p>
+                <div class="code-block bash">
+                    <div class="code-header"><span>What you see on screen</span></div>
+                    <pre>New passwsaud:</pre>
+                </div>
+
+                <div class="alert alert-danger" style="margin-top: 1rem;">
+                    <span class="alert-icon">🔒</span>
+                    <div>
+                        <strong>FOARTE IMPORTANT!</strong><br>
+                        Când tastezi parola, <strong>NU VEI VEDEA NIMIC PE ECRAN</strong> - nicio stea, niciun punct, NIMIC!<br>
+                        Acest lucru este nsaumal pentru Linux. Tastează parola sauicum și apasă Enter.
+                    </div>
+                </div>
+
+                <p><strong>CE SĂ TASTEZI:</strong> <code>stud</code></p>
+                <p>Apoi vei vedea „Retype new passwsaud:" - tastează <code>stud</code> din nou și apasă Enter.</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(0, 255, 136, 0.1));">
+                <h3>Gata!</h3>
+                <p>Dacă totul a mers bine, vei vedea un mesaj de bun venit și un prompt care arată așa:</p>
+                <div class="code-block bash">
+                    <div class="code-header"><span>Prompt Ubuntu</span></div>
+                    <pre>popescu@DESKTOP-XXXXX:~$</pre>
+                </div>
+                <p style="margin-top: 0.5rem;">(În loc de „popescu" va fi numele tău de familie)</p>
+                <p style="margin-top: 1rem; font-size: 1.2rem;"><strong>🎊 Felicitări! Ai instalat Ubuntu!</strong></p>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab4')">✓ Am creat contul</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 5: System update -->
+        <div class="tab-content" id="tab5">
+            <div class="card">
+                <h2 class="card-title">5. Actualizează sistemul</h2>
+                
+                <p>La fel cum Windows are Windows Update, Linux are propriul sistem de actualizare. Trebuie să actualizezi sistemul pentru a avea cele mai recente versiuni și patch-uri de securitate.</p>
+            </div>
+
+            <div class="card">
+                <h3>Rulează actualizarea</h3>
+                
+                <p>În fereastra Ubuntu (cea neagră), copiază și lipește următoarea comandă, apoi apasă Enter:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo apt update && sudo apt -y upgrade</pre>
+                </div>
+
+                <div class="alert alert-info" style="margin-top: 1rem;">
+                    <span class="alert-icon">⏳</span>
+                    <div>
+                        <strong>Ce se întâmplă:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem;">
+                            <li>Sistemul descarcă și instalează toate actualizările</li>
+                            <li>Poate dura <strong>5-15 minute</strong></li>
+                            <li>Vei vedea a lot of text on screen - this is nsaumal</li>
+                            <li>Așteaptă până când prompt-ul <code>$</code> reapare</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1rem;">Dacă cere parola, tastează <code>stud</code> și apasă Enter.</p>
+            </div>
+
+            <div class="card">
+                <h3>Configurează fusul sauar</h3>
+                
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo timedatectl set-timezone Europe/Bucharest</pre>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab5')">✓ Am actualizat sistemul</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 6: Hostname configuration -->
+        <div class="tab-content" id="tab6">
+            <div class="card">
+                <h2 class="card-title">6. Configurează hostname-ul</h2>
+                
+                <p>Hostname-ul este numele sistemului tău Ubuntu. La seminarii, te vom identifica după acest nume.</p>
+            </div>
+
+            <div class="card">
+                <h3>Fsaumatul hostname-ului</h3>
+                <p>Fsaumat: <code>INIȚIALĂ_GRUPĂ_SERIE</code></p>
+                <p>Unde:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li><strong>INIȚIALĂ</strong> = Prima literă din prenume + Prima literă din nume</li>
+                    <li><strong>GRUPĂ</strong> = Numărul grupei tale (ex.: 1001, 2034)</li>
+                    <li><strong>SERIE</strong> = Seria ta (A, B, C, etc.)</li>
+                </ul>
+
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table>
+                        <tr>
+                            <th>Nume</th>
+                            <th>Grupă</th>
+                            <th>Serie</th>
+                            <th>Hostname</th>
+                        </tr>
+                        <tr><td>Ana Popescu</td><td>1001</td><td>A</td><td><code>AP_1001_A</code></td></tr>
+                        <tr><td>Ion Marin Ionescu</td><td>2034</td><td>B</td><td><code>IMI_2034_B</code></td></tr>
+                        <tr><td>Maria Stan</td><td>1502</td><td>C</td><td><code>MS_1502_C</code></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Notează-ți datele</h3>
+                <p>Înainte să continui, completează:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li><strong>Înițialele tale:</strong> Prima literă din prenume + prima literă din nume</li>
+                    <li><strong>Grupa ta:</strong> Numărul grupei (ex.: 1001, 2034)</li>
+                    <li><strong>Seria ta:</strong> A, B, C, etc.</li>
+                </ul>
+                <p style="margin-top: 1rem;"><strong>Hostname-ul tău va fi:</strong> <code>_____________________</code> (notează-l!)</p>
+            </div>
+
+            <div class="card">
+                <h3>Creează fișierul de configurare</h3>
+                
+                <div class="alert alert-danger">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>ÎNLOCUIEȘTE</strong> textul <code>INIȚIALĂ_GRUPĂ_SERIE</code> cu hostname-ul TĂU înainte de a copia comanda!
+                    </div>
+                </div>
+
+                <p>De exemplu, pentru Ana Popescu, grupa 1001, seria A, comanda devine:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH - Exemplu pentru AP_1001_A</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo tee /etc/wsl.conf &lt;&lt; 'EOF'
+[netwsauk]
+hostname = AP_1001_A
+generateHosts = false
+
+[boot]
+systemd = true
+EOF</pre>
+                </div>
+
+                <p style="margin-top: 1rem;">Dacă cere parola, tastează <code>stud</code> și apasă Enter.</p>
+            </div>
+
+            <div class="card">
+                <h3>Adaugă hostname-ul în fișierul hosts</h3>
+                
+                <p>Din nou, <strong>ÎNLOCUIEȘTE</strong> <code>INIȚIALĂ_GRUPĂ_SERIE</code> cu hostname-ul tău:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH - Exemplu pentru AP_1001_A</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>echo "127.0.0.1    AP_1001_A" | sudo tee -a /etc/hosts</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Aplică modificările</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Închide Ubuntu</h4>
+                        <p>Tastează <code>exit</code> și apasă Enter, sau închide fereastra.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Oprește WSL</h4>
+                        <p>Deschide PowerShell (nu trebuie să fie Administratsau) și rulează:</p>
+                        <div class="code-block powershell">
+                            <div class="code-header">
+                                <span>🔵 POWERSHELL</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>wsl --shutdown</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Redeschide Ubuntu</h4>
+                        <p>Deschide Ubuntu din nou din Start.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Verifică hostname-ul</h4>
+                        <div class="code-block bash">
+                            <div class="code-header">
+                                <span>⬛ BASH (Ubuntu)</span>
+                                <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                            </div>
+                            <pre>hostname</pre>
+                        </div>
+                        <p>Ar trebui să vezi hostname-ul tău (ex.: <code>AP_1001_A</code>).</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab6')">✓ Am configurat hostname-ul</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 7: Înstall packages -->
+        <div class="tab-content" id="tab7">
+            <div class="card">
+                <h2 class="card-title">7. Înstalează software-ul necesar</h2>
+                
+                <p>Pentru seminarii și proiecte, vei avea nevoie de diverse instrumente Linux. Această comandă le instalează pe toate odată.</p>
+            </div>
+
+            <div class="card">
+                <h3>Înstalează tot ce ai nevoie</h3>
+                
+                <p>Copiază și lipește această comandă în Ubuntu:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu) - One long command</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo apt update && sudo apt install -y build-essential git curl wget nano vim tree htop net-tools openssh-server man-db manpages-posix gawk sed grep csaueutils findutils diffutils procps sysstat lsof tar gzip bzip2 xz-utils zstd zip unzip p7zip-full iproute2 iputils-ping dnsutils netcat-openbsd traceroute nmap tcpdump gcc g++ make cmake gdb valgrind python3 python3-pip python3-venv shellcheck jq bc figlet cowsay ncdu pv dialog</pre>
+                </div>
+
+                <div class="alert alert-info" style="margin-top: 1rem;">
+                    <span class="alert-icon">⏳</span>
+                    <div>
+                        <strong>Ce se întâmplă:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem;">
+                            <li>The system downloads and installs all required software</li>
+                            <li>Poate dura <strong>5-15 minute</strong></li>
+                            <li>Vei vedea a lot of text on screen - this is nsaumal</li>
+                            <li>Așteaptă până când prompt-ul <code>$</code> reapare</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Înstall required Python libraries</h3>
+                
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>pip3 install --break-system-packages rich tabulate psutil</pre>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab7')">✓ I have installed the packages</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 8: SSH Configuration -->
+        <div class="tab-content" id="tab8">
+            <div class="card">
+                <h2 class="card-title">8. Configure SSH access</h2>
+                
+                <p>SSH (Secure Shell) is a protocol that allows you to connect to a Linux computer remotely. We will install the SSH server to be able to use PuTTY later.</p>
+            </div>
+
+            <div class="card">
+                <h3>Start the SSH service</h3>
+                
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo service ssh start</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Verify that it is wsauking</h3>
+                
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>sudo service ssh status</pre>
+                </div>
+                
+                <p style="margin-top: 0.5rem;">Ar trebui să vezi something like "Active: <strong>active (running)</strong>".</p>
+                <p>Apasă the <code>q</code> key to exit this screen.</p>
+            </div>
+
+            <div class="card">
+                <h3>Find out the IP address</h3>
+                
+                <p>To connect with PuTTY, you need the IP address of Ubuntu:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>hostname -I</pre>
+                </div>
+
+                <div class="alert alert-warning" style="margin-top: 1rem;">
+                    <span class="alert-icon">📝</span>
+                    <div>
+                        <strong>NOTEAZĂ această adresă IP!</strong><br>
+                        Vei vedea an address like <code>172.XX.XX.XX</code><br>
+                        You will use it at the next step fsau PuTTY.
+                    </div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab8')">✓ SSH is wsauking</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 9: PuTTY Configuration -->
+        <div class="tab-content" id="tab9">
+            <div class="card">
+                <h2 class="card-title">9. Înstall and configure PuTTY</h2>
+                
+                <p>PuTTY is a Windows program that allows you to connect to Linux via SSH. It is like another type of window fsau wsauking in Ubuntu.</p>
+            </div>
+
+            <div class="card">
+                <h3>Download and install PuTTY</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Open browser</h4>
+                        <p>Chrome, Firefox, Edge - any of them.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Go to address:</h4>
+                        <p><a href="https://www.chiark.greenend.saug.uk/~sgtatham/putty/latest.html" target="_blank">https://www.chiark.greenend.saug.uk/~sgtatham/putty/latest.html</a></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Descarcă appropriate version</h4>
+                        <p>At the "MSI (Windows Înstaller)" section, download version <strong>64-bit x86</strong></p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Înstall</h4>
+                        <p>Open the downloaded file and click Next → Next → Înstall → Finish</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Configurează PuTTY</h3>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h4>Deschide PuTTY</h4>
+                        <p>From Start, search fsau "PuTTY" and open it.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h4>Configure connection</h4>
+                        <p>În the main screen (Session):</p>
+                        <ul style="margin-left: 1.5rem;">
+                            <li><strong>Host Name:</strong> the IP address noted at the previous step (e.g.: <code>172.24.123.45</code>)</li>
+                            <li><strong>Psaut:</strong> <code>22</code></li>
+                            <li><strong>Connection type:</strong> <code>SSH</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h4>Configure colours (black background, white text)</h4>
+                        <ol style="margin-left: 1.5rem;">
+                            <li>În the left menu, click on <strong>Window → Colours</strong></li>
+                            <li>Selecteazăează <strong>"Default Background"</strong> from the list</li>
+                            <li>Click <strong>Modify...</strong></li>
+                            <li>Set: Red: <code>0</code>, Green: <code>0</code>, Blue: <code>0</code></li>
+                            <li>Click <strong>OK</strong></li>
+                            <li>Selecteazăează <strong>"Default Fsaueground"</strong></li>
+                            <li>Click <strong>Modify...</strong></li>
+                            <li>Set: Red: <code>255</code>, Green: <code>255</code>, Blue: <code>255</code></li>
+                            <li>Click <strong>OK</strong></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <div class="step-content">
+                        <h4>Configure font</h4>
+                        <ol style="margin-left: 1.5rem;">
+                            <li>În the left menu, click on <strong>Window → Appearance</strong></li>
+                            <li>At "Font settings", click <strong>Change...</strong></li>
+                            <li>Selecteazăează: Font: <code>Consolas</code>, Size: <code>12</code></li>
+                            <li>Click <strong>OK</strong></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <div class="step-content">
+                        <h4>Configurează auto-login</h4>
+                        <ol style="margin-left: 1.5rem;">
+                            <li>În the left menu, click on <strong>Connection → Data</strong></li>
+                            <li>At <strong>"Auto-login username"</strong>, type your name (e.g.: <code>popescu</code>)</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">6</span>
+                    <div class="step-content">
+                        <h4>Save the session</h4>
+                        <ol style="margin-left: 1.5rem;">
+                            <li>Mergi înapoi la <strong>Session</strong> (in the left menu)</li>
+                            <li>At <strong>„Saved Sessions"</strong>, type: <code>Ubuntu-WSL2-SO</code></li>
+                            <li>Click <strong>Save</strong></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Connect fsau the first time</h3>
+                
+                <ol style="margin-left: 1.5rem;">
+                    <li>Make sure Ubuntu is running (the black window should be open)</li>
+                    <li>În PuTTY, double-click on the saved session "Ubuntu-WSL2-SO"</li>
+                    <li>At the first connection, you will see a security message - click <strong>Accept</strong> sau <strong>Yes</strong></li>
+                    <li>Tastează the passwsaud: <code>stud</code> (you will not see it as you type)</li>
+                    <li>Apasă <strong>Enter</strong></li>
+                </ol>
+
+                <div class="alert alert-success" style="margin-top: 1rem;">
+                    <span class="alert-icon">✅</span>
+                    <div>If you see the prompt <code>$</code>, PuTTY wsauks!</div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab9')">✓ PuTTY is wsauking</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 10: WinSCP -->
+        <div class="tab-content" id="tab10">
+            <div class="card">
+                <h2 class="card-title">10. Înstall WinSCP (file transfer)</h2>
+                
+                <p>WinSCP is a program that allows you to copy files between Windows and Ubuntu, using a graphical interface (like Windows Explsauer).</p>
+            </div>
+
+            <div class="card">
+                <h3>Download and install WinSCP</h3>
+                
+                <ol style="margin-left: 1.5rem;">
+                    <li>Mergi la: <a href="https://winscp.net/eng/download.php" target="_blank">winscp.net/eng/download.php</a></li>
+                    <li>Click on <strong>Descarcă WinSCP</strong></li>
+                    <li>Open the downloaded file and install:
+                        <ul>
+                            <li>Selecteazăează "Typical installation"</li>
+                            <li>Click Next, Next, Înstall, Finish</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Configure connection</h3>
+                
+                <ol style="margin-left: 1.5rem;">
+                    <li>Deschide WinSCP from Start</li>
+                    <li>În the "Login" window that appears:
+                        <ul>
+                            <li><strong>File protocol:</strong> <code>SFTP</code></li>
+                            <li><strong>Host name:</strong> Ubuntu's IP address</li>
+                            <li><strong>Psaut number:</strong> <code>22</code></li>
+                            <li><strong>User name:</strong> your name (e.g.: <code>popescu</code>)</li>
+                            <li><strong>Passwsaud:</strong> <code>stud</code></li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>Save</strong></li>
+                    <li>Give the session a name: <code>Ubuntu-WSL2-Files</code></li>
+                    <li>Tick <strong>"Save passwsaud"</strong> if you want</li>
+                    <li>Click <strong>OK</strong></li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Connect and transfer files</h3>
+                
+                <ol style="margin-left: 1.5rem;">
+                    <li>Make sure Ubuntu is running</li>
+                    <li>Selecteazăează the saved session and click <strong>Login</strong></li>
+                    <li>At first connection, click <strong>Yes</strong> at the security message</li>
+                    <li>Now you see two panels:
+                        <ul>
+                            <li><strong>Left:</strong> Your Windows files</li>
+                            <li><strong>Right:</strong> Ubuntu files</li>
+                        </ul>
+                    </li>
+                    <li>To transfer files, <strong>drag & drop</strong> from left to right sau vice versa</li>
+                </ol>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab10')">✓ WinSCP is wsauking</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 11: Create folders -->
+        <div class="tab-content" id="tab11">
+            <div class="card">
+                <h2 class="card-title">11. Create wsauking folders</h2>
+                
+                <p>At seminars you will create many files. It is impsautant to sauganise them in a clear structure.</p>
+            </div>
+
+            <div class="card">
+                <h3>Create the folders</h3>
+                
+                <p>În Ubuntu (either in the black window sau via PuTTY), run:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>mkdir -p ~/Books ~/HomewsauksOLD ~/Projects ~/ScriptsSTUD ~/test ~/TXT</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>What each folder is fsau</h3>
+                
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th>Folder</th>
+                            <th>What you use it fsau</th>
+                        </tr>
+                        <tr><td><code>Books</code></td><td>Books, PDFs, study materials</td></tr>
+                        <tr><td><code>HomewsauksOLD</code></td><td>Old homewsauk, fsau reference</td></tr>
+                        <tr><td><code>Projects</code></td><td>Semester project and other projects</td></tr>
+                        <tr><td><code>ScriptsSTUD</code></td><td>Scripts you make at seminars</td></tr>
+                        <tr><td><code>test</code></td><td>Folder fsau tests and experiments</td></tr>
+                        <tr><td><code>TXT</code></td><td>Various text files, notes</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Verify that they were created</h3>
+                
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>ls -la ~</pre>
+                </div>
+                
+                <p style="margin-top: 0.5rem;">Ar trebui să vezi all folders listed.</p>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab11')">✓ I have created the folders</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 12: Verify installation -->
+        <div class="tab-content" id="tab12">
+            <div class="card">
+                <h2 class="card-title">12. Verifică instalarea</h2>
+                
+                <p>Run this command that checks if everything is installed csaurectly.</p>
+            </div>
+
+            <div class="card">
+                <h3>Verification script</h3>
+                
+                <p>Copy and run this command in Ubuntu:</p>
+
+                <div class="code-block bash">
+                    <div class="code-header">
+                        <span>⬛ BASH (Ubuntu) - Verification command</span>
+                        <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                    </div>
+                    <pre>echo "" && echo "========================================" && echo "   INSTALLATION VERIFICATION - OS Revolvix" && echo "========================================" && echo "" && echo ">>> System infsaumation:" && echo "Hostname: $(hostname)" && echo "User: $(whoami)" && echo "Ubuntu: $(lsb_release -d 2>/dev/null | cut -f2)" && echo "Kernel: $(uname -r)" && echo "" && echo ">>> Netwsauk:" && echo "IP: $(hostname -I | awk '{print $1}')" && ping -c 1 google.com > /dev/null 2>&1 && echo "Înternet: OK" || echo "Înternet: NO CONNECTION" && echo "" && echo ">>> Essential commands:" && fsau cmd in bash git nano vim gcc python3 ssh tree htop awk sed grep find tar gzip; do command -v $cmd > /dev/null 2>&1 && echo "  [OK] $cmd" || echo "  [MISSING] $cmd"; done && echo "" && echo ">>> SSH:" && sudo service ssh status 2>/dev/null | grep -q "running" && echo "  SSH server: ACTIV" || echo "  SSH server: INACTIVE" && echo "" && echo ">>> Folders:" && fsau dir in Books HomewsauksOLD Projects ScriptsSTUD test TXT; do [ -d ~/$dir ] && echo "  [OK] ~/$dir" || echo "  [MISSING] ~/$dir"; done && echo "" && echo "========================================" && echo "   VERIFICATION COMPLETE!" && echo "========================================"</pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>What you should see</h3>
+                
+                <p>If everything is OK, you should see:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>✅ Your hostname (e.g.: <code>AP_1001_A</code>)</li>
+                    <li>✅ Your username (e.g.: <code>popescu</code>)</li>
+                    <li>✅ Ubuntu 24.04</li>
+                    <li>✅ IP</li>
+                    <li>✅ Înternet: OK</li>
+                    <li>✅ All commands with [OK]</li>
+                    <li>✅ SSH server: ACTIV</li>
+                    <li>✅ All folders with [OK]</li>
+                </ul>
+
+                <div class="alert alert-warning" style="margin-top: 1rem;">
+                    <span class="alert-icon">⚠️</span>
+                    <div>If you see anything with [MISSING] sau NO CONNECTION, check the previous steps.</div>
+                </div>
+            </div>
+
+            <button class="mark-done" onclick="markDone(this, 'tab12')">✓ Verification showed everything OK</button>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 13: Common problems -->
+        <div class="tab-content" id="tab13">
+            <div class="card">
+                <h2 class="card-title">13. Common problems and solutions</h2>
+            </div>
+
+            <div class="accsaudion">
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ "WSL 2 requires an update to its kernel component"</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Solution:</strong> Open PowerShell as Administratsau and run:</p>
+                            <div class="code-block powershell">
+                                <div class="code-header">
+                                    <span>🔵 POWERSHELL (Administratsau)</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                                </div>
+                                <pre>wsl --update</pre>
+                            </div>
+                            <p>Then restart the computer.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ Virtualisation is not enabled (Errsau: 0x80370102)</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Solution:</strong></p>
+                            <ol style="margin-left: 1.5rem;">
+                                <li>Restart the computer</li>
+                                <li>When it starts, quickly press the BIOS key (usually <code>Del</code>, <code>F2</code>, <code>F10</code>, sau <code>F12</code> - depends on manufacturer)</li>
+                                <li>Look in menus fsau the option "Virtualization Technology", "VT-x", "AMD-V" sau "SVM"</li>
+                                <li>Change from "Disabled" to "Enabled"</li>
+                                <li>Save and exit (usually the <code>F10</code> key)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ Cannot paste commands in Ubuntu</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Solution:</strong> În the Ubuntu window, use:</p>
+                            <ul style="margin-left: 1.5rem;">
+                                <li><strong>Right-click</strong> to paste, sau</li>
+                                <li><code>Ctrl+Shift+V</code> (not just <code>Ctrl+V</code>)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ I fsaugot the passwsaud</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Solution:</strong> Open PowerShell and run:</p>
+                            <div class="code-block powershell">
+                                <div class="code-header">
+                                    <span>🔵 POWERSHELL</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                                </div>
+                                <pre>wsl -u root</pre>
+                            </div>
+                            <p>Now you are root (administratsau). Change the passwsaud (replace <code>yourname</code> with username-ul tău):</p>
+                            <div class="code-block bash">
+                                <div class="code-header">
+                                    <span>⬛ BASH (as root)</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                                </div>
+                                <pre>passwd yourname</pre>
+                            </div>
+                            <p>Tastează the new passwsaud twice, then type <code>exit</code> pentru a ieși.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ SSH nu pornește</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Solution:</strong> Run in Ubuntu:</p>
+                            <div class="code-block bash">
+                                <div class="code-header">
+                                    <span>⬛ BASH (Ubuntu)</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                                </div>
+                                <pre>sudo apt install --reinstall openssh-server</pre>
+                            </div>
+                            <p>Then start SSH:</p>
+                            <div class="code-block bash">
+                                <div class="code-header">
+                                    <span>⬛ BASH (Ubuntu)</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">📋 Copiază</button>
+                                </div>
+                                <pre>sudo service ssh start</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accsaudion-item">
+                    <div class="accsaudion-header" onclick="toggleAccsaudion(this)">
+                        <span>❌ Cannot connect with PuTTY</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accsaudion-content">
+                        <div class="accsaudion-inner">
+                            <p><strong>Check:</strong></p>
+                            <ol style="margin-left: 1.5rem;">
+                                <li>Is Ubuntu running? (the black window must be open)</li>
+                                <li>Is SSH started? Run in Ubuntu: <code>sudo service ssh status</code></li>
+                                <li>Is the IP address csaurect? Run in Ubuntu: <code>hostname -I</code></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next" onclick="nextTab()">Continuă →</button>
+            </div>
+        </div>
+
+        <!-- Tab 14: AI -->
+        <div class="tab-content" id="tab14">
+            <div class="card">
+                <h2 class="card-title">14. Cum să folosești asistenții AI</h2>
+            </div>
+
+            <div class="card">
+                <h3>Why AI assistants?</h3>
+                <p>AI assistants (such as ChatGPT, Claude, Gemini) can help you understand concepts and solve problems. They are like a tutsau available 24/7.</p>
+                
+                <h4 style="margin-top: 1rem;">Recommended assistants:</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li><strong>Claude</strong> - <a href="https://claude.ai" target="_blank">claude.ai</a></li>
+                    <li><strong>ChatGPT</strong> - <a href="https://chat.openai.com" target="_blank">chat.openai.com</a></li>
+                    <li><strong>Gemini</strong> - <a href="https://gemini.google.com" target="_blank">gemini.google.com</a></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>What you are allowed to do with AI</h3>
+                <ul style="margin-left: 1.5rem;">
+                    <li>✅ Ask fsau explanations fsau concepts you do not understand</li>
+                    <li>✅ Ask why you get an errsau and how to fix it</li>
+                    <li>✅ Ask fsau alternative approaches to a problem</li>
+                    <li>✅ Ask to have code explained step by step</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>What you are NOT allowed to do with AI</h3>
+                <ul style="margin-left: 1.5rem;">
+                    <li>❌ Copy solutions directly fsau homewsauk</li>
+                    <li>❌ Submit AI-generated code as your own without understanding it</li>
+                    <li>❌ Use AI during exams (unless explicitly allowed)</li>
+                </ul>
+                
+                <div class="alert alert-danger" style="margin-top: 1rem;">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Attention!</strong><br>
+                        Using AI to cheat is plagiarism and will be penalised accsauding to faculty regulations.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(0, 255, 136, 0.1)); bsauder: 2px solid var(--success);">
+                <h2>Congratulations!</h2>
+                <p>You have finished installing and configuring WSL2 with Ubuntu!</p>
+                
+                <h3 style="margin-top: 1rem;">Checklist final</h3>
+                <ul class="checklist" id="finalChecklist">
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> WSL2 installed and updated</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Ubuntu 24.04 LTS installed</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Cont creat with surname</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Passwsaud set (stud)</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Hostname configurat (INIȚIALĂ_GRUPĂ_SERIE)</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Sistem actualizat</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Software packages installed</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> SSH wsauking</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> PuTTY installed and configured</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> WinSCP installed and configured</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Foldere create</li>
+                    <li onclick="toggleCheck(this)"><input type="checkbox"> Verification showed everything OK</li>
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
+                <button class="nav-btn next complete" onclick="alert('🎉 Congratulations! You have completed the guide!')">✓ Done!</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+
+    <footer class="footer">
+        <p>Sisteme de Operare 2024-2025 | ASE București - CSIE</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Version 2.1 | January 2025</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        let currentTab = 'intro';
+        const tabs = ['intro', 'tab1', 'tab2', 'tab3', 'tab4', 'tab5', 'tab6', 'tab7', 'tab8', 'tab9', 'tab10', 'tab11', 'tab12', 'tab13', 'tab14'];
+        const completedTabs = new Set();
+
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelecteazăeazăsauAll('.tab-content').fsauEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active from all buttons
+            document.querySelecteazăeazăsauAll('.tab-btn').fsauEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate button
+            document.querySelecteazăeazăsau(`[data-tab="${tabId}"]`).classList.add('active');
+            
+            currentTab = tabId;
+            updateProgress();
+            
+            // Scroll to top of content
+            window.scrollTo({ top: 200, behavisau: 'smooth' });
+        }
+
+        function nextTab() {
+            const currentÎndex = tabs.indexOf(currentTab);
+            if (currentÎndex < tabs.length - 1) {
+                showTab(tabs[currentÎndex + 1]);
+            }
+        }
+
+        function prevTab() {
+            const currentÎndex = tabs.indexOf(currentTab);
+            if (currentÎndex > 0) {
+                showTab(tabs[currentÎndex - 1]);
+            }
+        }
+
+        // Tab button clicks
+        document.querySelecteazăeazăsauAll('.tab-btn').fsauEach(btn => {
+            btn.addEventListener('click', () => {
+                showTab(btn.dataset.tab);
+            });
+        });
+
+        // Copy code functionality
+        function copyCode(btn) {
+            const pre = btn.closest('.code-block').querySelecteazăeazăsau('pre');
+            const text = pre.textContent;
+            
+            navigatsau.clipboard.writeText(text).then(() => {
+                btn.textContent = '✓ Copiat!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiază';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Mark as done
+        function markDone(btn, tabId) {
+            btn.classList.add('done');
+            btn.textContent = '✓ Completed!';
+            completedTabs.add(tabId);
+            
+            // Mark tab button as completed
+            document.querySelecteazăeazăsau(`[data-tab="${tabId}"]`).classList.add('completed');
+            
+            updateProgress();
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = (completedTabs.size / (tabs.length - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        // Accsaudion
+        function toggleAccsaudion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('open');
+        }
+
+        // Checklist
+        function toggleCheck(li) {
+            li.classList.toggle('checked');
+            const checkbox = li.querySelecteazăeazăsau('input');
+            checkbox.checked = !checkbox.checked;
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavisau: 'smooth' });
+        }
+
+        // Show/hide scroll button
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scrollTop');
+            if (window.scrollY > 500) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        });
+
+        // Load saved progress from localStsauage
+        window.addEventListener('load', () => {
+            const saved = localStsauage.getItem('wsl2-progress');
+            if (saved) {
+                const savedTabs = JSON.parse(saved);
+                savedTabs.fsauEach(tabId => {
+                    completedTabs.add(tabId);
+                    const btn = document.querySelecteazăeazăsau(`[data-tab="${tabId}"]`);
+                    if (btn) btn.classList.add('completed');
+                });
+                updateProgress();
+            }
+        });
+
+        // Save progress
+        function saveProgress() {
+            localStsauage.setItem('wsl2-progress', JSON.stringify([...completedTabs]));
+        }
+
+        // Save on tab complete
+        const sauiginalMarkDone = markDone;
+        markDone = function(btn, tabId) {
+            sauiginalMarkDone(btn, tabId);
+            saveProgress();
+        };
+    </script>
+</body>
+</html>
