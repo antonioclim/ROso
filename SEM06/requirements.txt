@@ -1,0 +1,54 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# requirements.txt — Python Dependencies pentru SEM06 CAPSTONE
+# ═══════════════════════════════════════════════════════════════════════════════
+# Sisteme de Operare | ASE București - CSIE
+# Instalare: pip install -r requirements.txt
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CORE DEPENDENCIES (necesare pentru funcționare)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# YAML parsing pentru quiz și configurări
+PyYAML>=6.0
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DEVELOPMENT DEPENDENCIES (opționale, pentru dezvoltare)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Linting Python
+ruff>=0.1.0
+flake8>=6.0.0
+
+# Formatare
+black>=23.0.0
+
+# Testing
+pytest>=7.0.0
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OPTIONAL DEPENDENCIES (pentru funcționalități avansate)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# JSON Schema validation (pentru quiz_lms.json)
+# jsonschema>=4.0.0
+
+# Rich terminal output (pentru quiz interactiv)
+# rich>=13.0.0
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NOTES
+# ═══════════════════════════════════════════════════════════════════════════════
+# 
+# Versiuni Python suportate: 3.9+
+#
+# Instalare minimală (doar pentru rulare quiz):
+#   pip install pyyaml
+#
+# Instalare completă (dezvoltare):
+#   pip install -r requirements.txt
+#
+# Verificare instalare:
+#   python3 -c "import yaml; print('PyYAML OK')"
+#
+# ═══════════════════════════════════════════════════════════════════════════════
