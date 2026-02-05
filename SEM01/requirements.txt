@@ -1,0 +1,14 @@
+# requirements.txt - Dependențe Python pentru SEM01
+# Sisteme de Operare | ASE București - CSIE
+
+# OBLIGATORIU - necesar pentru quiz_runner.py
+pyyaml>=6.0.1
+
+# RECOMANDAT - pentru teste
+pytest>=7.4.0
+
+# OPȚIONAL - pentru output colorat avansat
+rich>=13.0.0
+
+# OPȚIONAL - pentru linting Python
+ruff>=0.1.0

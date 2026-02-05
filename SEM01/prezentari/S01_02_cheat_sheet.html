@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheat Sheet - Shell Bash | SO ASE</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #3b82f6;
+            --accent2: #8b5cf6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --text: #f1f5f9;
+            --muted: #64748b;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle { color: var(--muted); margin-top: 10px; }
+        
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 25px;
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .tab:hover { border-color: var(--accent); }
+        .tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-icon { font-size: 1.5em; }
+        .card-title { font-weight: 700; font-size: 1.1em; }
+        .card-body { padding: 20px; }
+        
+        .cmd-list { list-style: none; }
+        .cmd-item {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: start;
+        }
+        .cmd-item:last-child { border-bottom: none; }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(59, 130, 246, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+        
+        .cmd-desc {
+            color: var(--muted);
+            font-size: 0.95em;
+        }
+        
+        .example {
+            background: #0d1424;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+        .example-label {
+            color: var(--success);
+            margin-bottom: 8px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tip {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        .tip-icon { margin-right: 8px; }
+        
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .table-container { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { 
+            background: rgba(59, 130, 246, 0.1);
+            font-weight: 600;
+        }
+        
+        .highlight-green { color: var(--success); }
+        .highlight-red { color: var(--error); }
+        .highlight-yellow { color: var(--warning); }
+        
+        .kbd {
+            display: inline-block;
+            background: var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            border: 1px solid #475569;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+        
+        @media print {
+            body { background: white; color: black; }
+            .card { break-inside: avoid; }
+            .search-container, .tabs { display: none; }
+        }
+        
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .cmd-item { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bash Cheat Sheet</h1>
+            <p class="subtitle">Seminar 1: Shell Bash | Sisteme de Operare | ASE București</p>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="🔍 Caută comandă..." id="search" onkeyup="filterCards()">
+        </div>
+        
+        <div class="tabs">
+            <span class="tab active" onclick="filterCategory('all')">Toate</span>
+            <span class="tab" onclick="filterCategory('nav')">🧭 Navigare</span>
+            <span class="tab" onclick="filterCategory('files')">📁 Fișiere</span>
+            <span class="tab" onclick="filterCategory('vars')">📦 Variabile</span>
+            <span class="tab" onclick="filterCategory('config')">⚙️ Configurare</span>
+            <span class="tab" onclick="filterCategory('glob')">✨ Globbing</span>
+        </div>
+        
+        <div class="grid" id="cards-container">
+            
+            <!-- Navigare -->
+            <div class="card" data-category="nav" data-keywords="navigare pwd cd ls director">
+                <div class="card-header">
+                    <span class="card-icon">🧭</span>
+                    <span class="card-title">Navigare</span>
+                </div>
+                <div class="card-body">
+                    <ul class="cmd-list">
+                        <li class="cmd-item">
+                            <code>pwd</code>
+                            <span class="cmd-desc">Print Working Directory - afișează directorul curent</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cd DIR</code>
+                            <span class="cmd-desc">Change Directory - schimbă directorul</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cd ~</code>
+                            <span class="cmd-desc">Mergi în directorul HOME</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cd ..</code>
+                            <span class="cmd-desc">Mergi în directorul părinte</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cd -</code>
+                            <span class="cmd-desc">Revino la directorul anterior</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>ls -la</code>
+                            <span class="cmd-desc">Listare detaliată cu fișiere ascunse</span>
+                        </li>
+                    </ul>
+                    <div class="example">
+                        <div class="example-label">Exemplu</div>
+                        <span style="color: #22c55e;">$</span> cd /var/log<br>
+                        <span style="color: #22c55e;">$</span> ls -lh *.log
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fișiere și Directoare -->
+            <div class="card" data-category="files" data-keywords="fisier director mkdir touch cp mv rm cat">
+                <div class="card-header">
+                    <span class="card-icon">📁</span>
+                    <span class="card-title">Fișiere & Directoare</span>
+                </div>
+                <div class="card-body">
+                    <ul class="cmd-list">
+                        <li class="cmd-item">
+                            <code>mkdir -p DIR</code>
+                            <span class="cmd-desc">Creează director(e) recursiv</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>touch FILE</code>
+                            <span class="cmd-desc">Creează fișier gol sau actualizează timestamp</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cp SRC DEST</code>
+                            <span class="cmd-desc">Copiază fișiere (-r pentru directoare)</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>mv SRC DEST</code>
+                            <span class="cmd-desc">Mută/Redenumește</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>rm FILE</code>
+                            <span class="cmd-desc">Șterge fișier (-rf pentru directoare)</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>cat FILE</code>
+                            <span class="cmd-desc">Afișează conținutul fișierului</span>
+                        </li>
+                    </ul>
+                    <div class="warning">
+                        <span class="tip-icon">⚠️</span>
+                        <strong>Capcană:</strong> <code>rm -rf</code> șterge permanent! Nu există Recycle Bin.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Variabile -->
+            <div class="card" data-category="vars" data-keywords="variabile export echo env local">
+                <div class="card-header">
+                    <span class="card-icon">📦</span>
+                    <span class="card-title">Variabile</span>
+                </div>
+                <div class="card-body">
+                    <ul class="cmd-list">
+                        <li class="cmd-item">
+                            <code>VAR="val"</code>
+                            <span class="cmd-desc">Setare variabilă locală (fără spații!)</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>export VAR</code>
+                            <span class="cmd-desc">Face variabila accesibilă în subprocese</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>echo $VAR</code>
+                            <span class="cmd-desc">Afișează valoarea variabilei</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>unset VAR</code>
+                            <span class="cmd-desc">Șterge variabila</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>env</code>
+                            <span class="cmd-desc">Afișează toate variabilele de mediu</span>
+                        </li>
+                    </ul>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Variabilă</th><th>Semnificație</th></tr>
+                            <tr><td><code>$HOME</code></td><td>Directorul home</td></tr>
+                            <tr><td><code>$USER</code></td><td>Utilizatorul curent</td></tr>
+                            <tr><td><code>$PATH</code></td><td>Căile de căutare executabile</td></tr>
+                            <tr><td><code>$?</code></td><td>Exit code ultima comandă</td></tr>
+                            <tr><td><code>$$</code></td><td>PID-ul shell-ului curent</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quoting -->
+            <div class="card" data-category="vars" data-keywords="quoting ghilimele single double">
+                <div class="card-header">
+                    <span class="card-icon">💬</span>
+                    <span class="card-title">Quoting</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Tip</th>
+                                <th>Comportament</th>
+                                <th>Exemplu</th>
+                            </tr>
+                            <tr>
+                                <td><code>'single'</code></td>
+                                <td>Totul literal</td>
+                                <td><span class="highlight-yellow">'$VAR'</span> → $VAR</td>
+                            </tr>
+                            <tr>
+                                <td><code>"double"</code></td>
+                                <td>Expandează variabile</td>
+                                <td><span class="highlight-green">"$VAR"</span> → valoare</td>
+                            </tr>
+                            <tr>
+                                <td>fără quotes</td>
+                                <td>Expandează + word split</td>
+                                <td><span class="highlight-red">$VAR</span> → probleme cu spații</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tip">
+                        <span class="tip-icon">💡</span>
+                        <strong>Regulă:</strong> Folosește întotdeauna <code>"$VAR"</code> pentru fișiere cu spații!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Configurare -->
+            <div class="card" data-category="config" data-keywords="bashrc alias source config">
+                <div class="card-header">
+                    <span class="card-icon">⚙️</span>
+                    <span class="card-title">Configurare ~/.bashrc</span>
+                </div>
+                <div class="card-body">
+                    <ul class="cmd-list">
+                        <li class="cmd-item">
+                            <code>alias ll='ls -la'</code>
+                            <span class="cmd-desc">Definește o scurtătură</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>source ~/.bashrc</code>
+                            <span class="cmd-desc">Aplică modificările imediat</span>
+                        </li>
+                        <li class="cmd-item">
+                            <code>export PATH="..."</code>
+                            <span class="cmd-desc">Modifică căile de căutare</span>
+                        </li>
+                    </ul>
+                    <div class="example">
+                        <div class="example-label">Funcție utilă</div>
+                        mkcd() {<br>
+                        &nbsp;&nbsp;mkdir -p "$1" && cd "$1"<br>
+                        }
+                    </div>
+                    <div class="tip">
+                        <span class="tip-icon">💡</span>
+                        <strong>Backup:</strong> <code>cp ~/.bashrc ~/.bashrc.backup</code> înainte de modificări!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Globbing -->
+            <div class="card" data-category="glob" data-keywords="wildcard glob pattern asterisk">
+                <div class="card-header">
+                    <span class="card-icon">✨</span>
+                    <span class="card-title">Globbing (Wildcards)</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Pattern</th>
+                                <th>Potrivește</th>
+                                <th>Exemplu</th>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>Zero sau mai multe caractere</td>
+                                <td><code>*.txt</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>?</code></td>
+                                <td>Exact UN caracter</td>
+                                <td><code>file?.txt</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>[abc]</code></td>
+                                <td>Un caracter din set</td>
+                                <td><code>file[123].txt</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>[a-z]</code></td>
+                                <td>Un caracter din range</td>
+                                <td><code>file[a-c].txt</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>{a,b}</code></td>
+                                <td>Brace expansion</td>
+                                <td><code>{src,docs}</code></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="warning">
+                        <span class="tip-icon">⚠️</span>
+                        <code>*</code> NU include fișierele ascunse (cele cu <code>.</code> la început)!
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FHS -->
+            <div class="card" data-category="nav" data-keywords="fhs director etc var tmp home">
+                <div class="card-header">
+                    <span class="card-icon">🗂️</span>
+                    <span class="card-title">Structura FHS</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Director</th><th>Conținut</th></tr>
+                            <tr><td><code>/</code></td><td>Rădăcina sistemului</td></tr>
+                            <tr><td><code>/etc</code></td><td>Configurări sistem</td></tr>
+                            <tr><td><code>/home</code></td><td>Directoare utilizatori</td></tr>
+                            <tr><td><code>/tmp</code></td><td>Fișiere temporare (șters!)</td></tr>
+                            <tr><td><code>/var</code></td><td>Date variabile, logs</td></tr>
+                            <tr><td><code>/usr</code></td><td>Programe utilizator</td></tr>
+                            <tr><td><code>/bin</code></td><td>Executabile esențiale</td></tr>
+                        </table>
+                    </div>
+                    <div class="tip">
+                        <span class="tip-icon">💡</span>
+                        <strong>/etc</strong> = <strong>E</strong>ditable <strong>T</strong>ext <strong>C</strong>onfiguration
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shortcuts Terminal -->
+            <div class="card" data-category="config" data-keywords="shortcut terminal ctrl tab">
+                <div class="card-header">
+                    <span class="card-icon">⌨️</span>
+                    <span class="card-title">Shortcut-uri Terminal</span>
+                </div>
+                <div class="card-body">
+                    <ul class="cmd-list">
+                        <li class="cmd-item">
+                            <span class="kbd">Tab</span>
+                            <span class="cmd-desc">Autocompletare comandă/cale</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">Ctrl+C</span>
+                            <span class="cmd-desc">Întrerupe comanda curentă</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">Ctrl+L</span>
+                            <span class="cmd-desc">Curăță ecranul (clear)</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">Ctrl+R</span>
+                            <span class="cmd-desc">Căutare în istoric</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">↑ ↓</span>
+                            <span class="cmd-desc">Navighează prin istoric</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">Ctrl+A</span>
+                            <span class="cmd-desc">Salt la începutul liniei</span>
+                        </li>
+                        <li class="cmd-item">
+                            <span class="kbd">Ctrl+E</span>
+                            <span class="cmd-desc">Salt la sfârșitul liniei</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        
+        <footer>
+            <p>Sisteme de Operare | ASE București - CSIE</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                <span class="kbd">Ctrl+P</span> pentru a printa acest cheat sheet
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        function filterCards() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const keywords = card.dataset.keywords.toLowerCase();
+                const content = card.textContent.toLowerCase();
+                const visible = keywords.includes(query) || content.includes(query);
+                card.style.display = visible ? '' : 'none';
+            });
+        }
+        
+        function filterCategory(category) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
