@@ -1,0 +1,217 @@
+# C02_05_EVALUARE_FORMATIVA.yaml
+# Curs 2: Concepte de Bază ale SO
+# Evaluare Formativă — Quiz Conceptual
+
+metadata:
+  curs: 2
+  subiect: "Concepte de Bază ale SO"
+  versiune: "2.0"
+  data_creare: "2026-01-28"
+  autor: "by Revolvix"
+  tip: "quiz_conceptual"
+  numar_intrebari: 12
+  timp_estimat_minute: 15
+  distributie_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+
+intrebari:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # REMEMBER (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q01
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Ce este un interrupt (întrerupere)?"
+    optiuni:
+      - "O eroare fatală de sistem"
+      - "Un semnal hardware/software care solicită atenția CPU-ului"
+      - "O instrucțiune de salt"
+      - "Un tip de memorie"
+    corect: 1
+    explicatie: "Întreruperile sunt semnale care determină CPU-ul să suspende execuția curentă și să execute un handler."
+    referinta: "README.md, secțiunea 'Întreruperi'"
+
+  - id: q02
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Care este diferența între interrupt și trap?"
+    optiuni:
+      - "Sunt identice"
+      - "Interrupt-ul e hardware, trap-ul e software (sincron)"
+      - "Trap-ul e mai rapid"
+      - "Interrupt-ul e generat de aplicații"
+    corect: 1
+    explicatie: "Interrupt = asincron, generat de hardware. Trap = sincron, generat de software (system call, excepție)."
+    referinta: "README.md, secțiunea 'Interrupt vs Trap'"
+
+  - id: q03
+    tip: mcq
+    bloom: remember
+    dificultate: usor
+    text: "Ce conține Interrupt Vector Table (IVT)?"
+    optiuni:
+      - "Lista tuturor proceselor"
+      - "Adresele rutinelor de tratare pentru fiecare tip de întrerupere"
+      - "Parole de sistem"
+      - "Configurația hardware"
+    corect: 1
+    explicatie: "IVT mapează fiecare număr de întrerupere la adresa handler-ului corespunzător."
+    referinta: "README.md, secțiunea 'Interrupt Vector Table'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # UNDERSTAND (5 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q04
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "De ce trebuie salvat contextul procesorului la tratarea unei întreruperi?"
+    optiuni:
+      - "Pentru a șterge memoria"
+      - "Pentru a putea reveni la starea exactă de dinaintea întreruperii"
+      - "Pentru a accelera procesarea"
+      - "Nu este necesar"
+    corect: 1
+    explicatie: "Contextul (registre, PC, flags) trebuie salvat pentru ca procesul întrerupt să poată continua corect."
+    referinta: "README.md, secțiunea 'Context Switching'"
+
+  - id: q05
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Ce înseamnă DMA (Direct Memory Access)?"
+    optiuni:
+      - "Un tip de RAM"
+      - "Transfer de date între I/O și memorie fără implicarea CPU-ului"
+      - "Un protocol de rețea"
+      - "O metodă de criptare"
+    corect: 1
+    explicatie: "DMA permite dispozitivelor I/O să transfere date direct în/din memorie, eliberând CPU-ul."
+    referinta: "README.md, secțiunea 'DMA'"
+
+  - id: q06
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Ce este polling și de ce este ineficient?"
+    optiuni:
+      - "Polling = așteptare activă, CPU-ul verifică repetat, irosind cicluri"
+      - "Polling = întreruperi hardware"
+      - "Polling este foarte eficient"
+      - "Polling = transfer DMA"
+    corect: 0
+    explicatie: "În polling, CPU-ul verifică constant starea dispozitivului (busy-wait), irosind cicluri pentru așteptare."
+    referinta: "README.md, secțiunea 'Polling vs Interrupts'"
+
+  - id: q07
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "Ce rol are registrul Program Counter (PC)?"
+    optiuni:
+      - "Stochează rezultatul ultimei operații"
+      - "Conține adresa următoarei instrucțiuni de executat"
+      - "Numără procesele active"
+      - "Gestionează memoria cache"
+    corect: 1
+    explicatie: "PC (sau IP - Instruction Pointer) indică adresa următoarei instrucțiuni pe care CPU-ul o va executa."
+    referinta: "README.md, secțiunea 'Registre CPU'"
+
+  - id: q08
+    tip: mcq
+    bloom: understand
+    dificultate: mediu
+    text: "De ce întreruperile au priorități?"
+    optiuni:
+      - "Pentru a le ordona alfabetic"
+      - "Pentru a permite întreruperilor critice să preempte pe cele mai puțin importante"
+      - "Pentru a le executa în ordine FIFO"
+      - "Nu au priorități"
+    corect: 1
+    explicatie: "Prioritățile permit întreruperilor urgente (ex: eroare hardware) să întrerupă handler-e mai puțin critice."
+    referinta: "README.md, secțiunea 'Priorități Întreruperi'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # ANALYSE (3 întrebări)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q09
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "Un sistem primește întreruperi de la tastatură (prioritate 2) și disk (prioritate 5). În timpul handler-ului de tastatură, sosește o întrerupere de disk. Ce se întâmplă?"
+    optiuni:
+      - "Disk-ul așteaptă până termină tastatura"
+      - "Întreruperea de disk preemptă handler-ul de tastatură (5 > 2)"
+      - "Ambele se execută simultan"
+      - "Sistemul se blochează"
+    corect: 1
+    explicatie: "Întreruperile cu prioritate mai mare pot preempta handler-e cu prioritate mai mică (nested interrupts)."
+    referinta: "README.md, secțiunea 'Nested Interrupts'"
+
+  - id: q10
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "De ce bottom-half processing (tasklets, workqueues) este folosit în tratarea întreruperilor?"
+    optiuni:
+      - "Pentru a elimina complet întreruperile"
+      - "Pentru a minimiza timpul în care întreruperile sunt dezactivate"
+      - "Pentru a crește numărul de întreruperi"
+      - "Nu se folosește în sisteme moderne"
+    corect: 1
+    explicatie: "Bottom-half amână lucrul non-critic, permițând handler-ului să termine rapid și să reactiveze întreruperile."
+    referinta: "README.md, secțiunea 'Top-half vs Bottom-half'"
+
+  - id: q11
+    tip: mcq
+    bloom: analyse
+    dificultate: greu
+    text: "Ce se întâmplă dacă un handler de întrerupere nu curăță flag-ul de întrerupere al dispozitivului?"
+    optiuni:
+      - "Nimic, sistemul continuă normal"
+      - "Sistemul poate intra în buclă infinită de întreruperi"
+      - "Dispozitivul se oprește"
+      - "Se generează automat un trap"
+    corect: 1
+    explicatie: "Dacă flag-ul rămâne setat, dispozitivul continuă să genereze întreruperi → interrupt storm."
+    referinta: "README.md, secțiunea 'Acknowledging Interrupts'"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # APPLY (1 întrebare)
+  # ═══════════════════════════════════════════════════════════════════════════
+
+  - id: q12
+    tip: mcq
+    bloom: apply
+    dificultate: greu
+    text: "Proiectezi un driver pentru un senzor care trimite date la fiecare 100μs. Ce strategie de I/O alegi?"
+    context: |
+      Senzorul generează date foarte frecvent. CPU-ul trebuie să rămână disponibil pentru alte taskuri.
+    optiuni:
+      - "Polling la fiecare 50μs"
+      - "DMA cu buffer circular și întrerupere la buffer plin"
+      - "Întrerupere pentru fiecare pachet de date"
+      - "Ignorarea senzorului"
+    corect: 1
+    explicatie: "DMA cu buffering reduce overhead-ul; întreruperea doar când buffer-ul e plin minimizează context switch-uri."
+    referinta: "README.md, secțiunea 'Strategii I/O'"
+
+statistici:
+  total_intrebari: 12
+  by_bloom:
+    remember: 3
+    understand: 5
+    analyse: 3
+    apply: 1
+  by_dificultate:
+    usor: 3
+    mediu: 5
+    greu: 4
