@@ -132,12 +132,14 @@ sudo apt update
 14. [Conectare cu WinSCP (Windows)](#14-conectare-cu-winscp-windows)
 15. [Conectare de pe macOS sau Linux](#15-conectare-de-pe-macos-sau-linux)
 
-**PARTEA 6: FINALIZARE**
-16. [Creează folderele de lucru](#16-creează-folderele-de-lucru)
-17. [Verifică instalarea](#17-verifică-instalarea)
-18. [Probleme frecvente și soluții](#18-probleme-frecvente-și-soluții)
-19. [Greșeli frecvente pe care le văd în fiecare an](#19-greșeli-frecvente-pe-care-le-văd-în-fiecare-an)
-20. [Cum să folosești asistenții AI](#20-cum-să-folosești-asistenții-ai)
+**PARTEA 6: VERIFICARE & FINALIZARE**
+16. [Verifică shell-ul implicit Bash](#16-verifică-shell-ul-implicit-bash)
+17. [Test practic de transfer bidirectional](#17-test-practic-de-transfer-bidirectional)
+18. [Creează folderele de lucru](#18-creează-folderele-de-lucru)
+19. [Verifică instalarea](#19-verifică-instalarea)
+20. [Probleme frecvente și soluții](#20-probleme-frecvente-și-soluții)
+21. [Greșeli frecvente pe care le văd în fiecare an](#21-greșeli-frecvente-pe-care-le-văd-în-fiecare-an)
+22. [Cum să folosești asistenții AI](#22-cum-să-folosești-asistenții-ai)
 
 ---
 
@@ -892,7 +894,162 @@ sftp popescu@192.168.1.105
 
 ---
 
-# 16. Creează folderele de lucru
+# 16. Verifică shell-ul implicit Bash
+
+> **De ce contează:** Folosim **Bash** (Bourne Again Shell) — standardul industrial pe serverele de producție. Dacă shell-ul implicit al VM-ului este altceva, scripturile noastre s-ar putea să nu funcționeze corect.
+
+## Verifică shell-ul implicit în VM
+
+```bash
+# BASH (Ubuntu VM) - Verifică shell-ul implicit
+echo $SHELL
+```
+
+**Rezultat așteptat:** `/bin/bash`
+
+Verifică și:
+
+```bash
+# BASH (Ubuntu VM) - Verifică ce rulează efectiv
+echo $0
+```
+
+**Rezultat așteptat:** `-bash` sau `bash`
+
+## Schimbă la Bash dacă e necesar
+
+Dacă `$SHELL` a arătat altceva decât `/bin/bash`:
+
+```bash
+# BASH (Ubuntu VM) - Schimbă shell-ul implicit la Bash
+chsh -s /bin/bash
+```
+
+Apoi deloghează-te și reloghează-te pentru ca schimbarea să aibă efect.
+
+## Notă pentru utilizatorii macOS și Linux
+
+Calculatorul tău **gazdă** (calculatorul fizic) ar putea folosi Zsh ca shell implicit (acest lucru este normal pe macOS de la Catalina). **Este perfect în regulă** — doar **VM-ul** trebuie să folosească Bash pentru acest curs.
+
+Dacă ai nevoie să folosești temporar Bash pe gazda ta pentru unele comenzi, scrie doar `bash` în terminalul tău — te vei întoarce la shell-ul implicit când scrii `exit`.
+
+## Verificare rapidă
+
+```bash
+# BASH (Ubuntu VM) - Verificare completă shell
+echo "Implicit: $SHELL | Rulează: $0 | Versiune: $BASH_VERSION"
+```
+
+> ✅ **Punct de control:** Shell-ul implicit este `/bin/bash` și versiunea începe cu `5.x`.
+
+# 17. Test practic de transfer bidirectional
+
+> **De ce contează:** La seminarii vei transfera constant scripturi în VM și vei recupera rezultate înapoi. Acest test verifică că transferul de fișiere funcționează **în ambele direcții** înainte să ai nevoie de el sub presiune.
+
+## Pregătire (în VM)
+
+Asigură-te că SSH rulează și creează un fișier test:
+
+```bash
+# BASH (Ubuntu VM) - Pregătire pentru testul de transfer
+mkdir -p ~/test
+echo "Acest fisier a fost creat in VM la $(date)" > ~/test/transfer_test_din_vm.txt
+cat ~/test/transfer_test_din_vm.txt
+hostname -I
+```
+
+Notează adresa IP a VM-ului.
+
+## PENTRU UTILIZATORII WINDOWS: Test cu WinSCP
+
+### Upload (Windows → VM)
+
+1. Pe Desktop, creează `transfer_test_din_windows.txt` cu conținutul: `Salut din Windows!`
+2. Deschide WinSCP, conectează-te la VM folosind IP-ul lui
+3. Panoul stâng → Desktop, Panoul drept → `~/test/`
+4. Trage fișierul din stânga în dreapta
+5. Verifică în VM:
+
+```bash
+# BASH (Ubuntu VM) - Verifică upload-ul
+cat ~/test/transfer_test_din_windows.txt
+```
+
+### Download (VM → Windows)
+
+1. În WinSCP, trage `transfer_test_din_vm.txt` din dreapta în stânga (pe Desktop)
+2. Deschide pe Desktop — verifică mesajul cu data
+
+## PENTRU UTILIZATORII macOS/Linux: Test cu scp
+
+### Upload (Gazdă → VM)
+
+```bash
+# TERMINAL GAZDĂ (macOS/Linux) - Încarcă fișier test în VM
+echo "Salut din gazda $(hostname)!" > /tmp/test_din_host.txt
+scp /tmp/test_din_host.txt numeletau@IP_VM:~/test/
+```
+
+Înlocuiește `numeletau` cu numele tău de utilizator Ubuntu și `IP_VM` cu adresa IP a VM-ului.
+
+Verifică în VM:
+
+```bash
+# BASH (Ubuntu VM) - Verifică upload-ul
+cat ~/test/test_din_host.txt
+```
+
+### Download (VM → Gazdă)
+
+```bash
+# TERMINAL GAZDĂ (macOS/Linux) - Descarcă fișier test din VM
+scp numeletau@IP_VM:~/test/transfer_test_din_vm.txt /tmp/
+cat /tmp/transfer_test_din_vm.txt
+```
+
+### Alternativă: modul interactiv sftp
+
+```bash
+# TERMINAL GAZDĂ (macOS/Linux) - Sesiune SFTP interactivă
+sftp numeletau@IP_VM
+# Odată conectat:
+#   cd test
+#   ls
+#   get transfer_test_din_vm.txt /tmp/
+#   put /tmp/test_din_host.txt
+#   bye
+```
+
+## Verificare cu checksums (opțional)
+
+```bash
+# BASH (Ubuntu VM) - Generează checksum
+sha256sum ~/test/transfer_test_din_windows.txt    # utilizatori Windows
+sha256sum ~/test/test_din_host.txt                 # utilizatori macOS/Linux
+```
+
+**Windows (compară în PowerShell):**
+```powershell
+# POWERSHELL (Windows) - Compară checksum
+Get-FileHash "$env:USERPROFILE\Desktop\transfer_test_din_windows.txt" -Algorithm SHA256
+```
+
+**macOS/Linux (compară pe gazdă):**
+```bash
+# TERMINAL GAZDĂ - Compară checksum
+sha256sum /tmp/test_din_host.txt
+```
+
+## Curățare
+
+```bash
+# BASH (Ubuntu VM) - Șterge fișierele de test
+rm -f ~/test/transfer_test_din_vm.txt ~/test/transfer_test_din_windows.txt ~/test/test_din_host.txt
+```
+
+> ✅ **Punct de control:** Fișierele călătoresc în ambele direcții între gazdă și VM. Ești pregătit pentru seminarii.
+
+# 18. Creează folderele de lucru
 
 În Ubuntu (prin SSH sau direct în VM), rulează:
 
@@ -917,7 +1074,7 @@ ls -la ~
 
 ---
 
-# 17. Verifică instalarea
+# 19. Verifică instalarea
 
 ## Opțiunea 1 — Script complet de verificare
 
@@ -943,7 +1100,7 @@ hostname && whoami && lsb_release -d && hostname -I && echo "---" && ls ~/Books 
 
 ---
 
-# 18. Probleme frecvente și soluții
+# 20. Probleme frecvente și soluții
 
 ## VirtualBox nu pornește — eroare virtualizare
 
@@ -1019,7 +1176,7 @@ Oprește VM-ul. În VirtualBox, pornește VM-ul în recovery mode:
 
 ---
 
-# 19. Greșeli frecvente pe care le văd în fiecare an
+# 21. Greșeli frecvente pe care le văd în fiecare an
 
 Acestea sunt greșelile pe care le văd cel mai des la studenți. Învață din experiența lor.
 
@@ -1065,7 +1222,7 @@ sudo systemctl start ssh
 
 ---
 
-# 20. Cum să folosești asistenții AI
+# 22. Cum să folosești asistenții AI
 
 ## Asistenți recomandați
 
@@ -1155,7 +1312,9 @@ Răspunde sincer la următoarele întrebări. Dacă nu poți bifa toate, revizit
 
 - [ ] Am rulat cu succes scriptul de verificare (toate cu [OK])
 - [ ] M-am conectat SSH din PuTTY/Terminal fără ajutor
-- [ ] Am transferat un fișier test cu WinSCP/scp (din host în VM)
+- [ ] Am transferat un fișier test cu WinSCP (sau scp pe macOS/Linux)
+- [ ] Am transferat un fișier din VM înapoi pe gazda mea (test bidirectional)
+- [ ] Am verificat că shell-ul implicit al VM-ului este Bash (`echo $SHELL` → `/bin/bash`)/scp (din host în VM)
 - [ ] Știu ce să fac dacă VM-ul nu primește IP (rețea Bridge)
 - [ ] Pot porni/opri VM-ul headless din linia de comandă
 
@@ -1200,7 +1359,7 @@ Document pentru:
 Academia de Studii Economice București - CSIE
 Sisteme de Operare - Anul universitar 2024-2025
 
-**Versiune:** 2.1 | **Ultima actualizare:** Ianuarie 2025
+**Versiune:** 3.0 | **Ultima actualizare:** Februarie 2025
 
 ---
 

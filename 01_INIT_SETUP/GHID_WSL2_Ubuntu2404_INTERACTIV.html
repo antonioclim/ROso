@@ -690,18 +690,26 @@
             </button>
             <button class="tab-btn" data-tab="tab11">
                 <span class="step-num">11</span>
-                <span class="tab-text">Folders</span>
+                <span class="tab-text">Bash</span>
             </button>
             <button class="tab-btn" data-tab="tab12">
                 <span class="step-num">12</span>
-                <span class="tab-text">Verify</span>
+                <span class="tab-text">Transfer</span>
             </button>
             <button class="tab-btn" data-tab="tab13">
                 <span class="step-num">13</span>
-                <span class="tab-text">Problems</span>
+                <span class="tab-text">Folders</span>
             </button>
             <button class="tab-btn" data-tab="tab14">
                 <span class="step-num">14</span>
+                <span class="tab-text">Verify</span>
+            </button>
+            <button class="tab-btn" data-tab="tab15">
+                <span class="step-num">15</span>
+                <span class="tab-text">Problems</span>
+            </button>
+            <button class="tab-btn" data-tab="tab16">
+                <span class="step-num">16</span>
                 <span class="tab-text">AI</span>
             </button>
         </nav>
@@ -1793,7 +1801,78 @@ EOF</pre>
         </div>
 
         <!-- Tab 11: Create folders -->
+        <!-- Tab 11: Verificare Shell Bash -->
         <div class="tab-content" id="tab11">
+            <div class="card">
+                <h2 class="card-title">11. Verifică că shell-ul implicit este Bash</h2>
+                <p>La acest curs folosim <strong>Bash</strong> (Bourne Again Shell) — standardul industrial pe servere. Dacă shell-ul implicit nu este Bash, scripturile noastre s-ar putea să nu funcționeze corect.</p>
+            </div>
+            <div class="card">
+                <h3>Verifică shell-ul implicit curent</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>echo $SHELL</pre></div>
+                <p>Trebuie să vezi: <code>/bin/bash</code></p>
+                <p>Verifică și ce rulează efectiv:</p>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>echo $0</pre></div>
+                <p>Trebuie să vezi: <code>-bash</code> sau <code>bash</code></p>
+            </div>
+            <div class="card">
+                <h3>Schimbă la Bash dacă e necesar</h3>
+                <p>Dacă <code>$SHELL</code> a arătat altceva decât <code>/bin/bash</code>:</p>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>chsh -s /bin/bash</pre></div>
+                <div class="warning-box"><strong>⚠️ După schimbare:</strong> Închide Ubuntu, rulează <code>wsl --shutdown</code> în PowerShell, apoi redeschide Ubuntu. Verifică din nou.</div>
+            </div>
+            <div class="card">
+                <h3>Verificare rapidă</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>echo "Shell: $SHELL | Rulează: $0 | Versiune Bash: $BASH_VERSION"</pre></div>
+                <p>Așteptat: <code>/bin/bash</code> pentru Shell, <code>bash</code> pentru Rulează, versiune ca <code>5.2.x</code></p>
+            </div>
+            <button class="mark-done" onclick="markDone(this, 'tab11')">✓ Bash este shell-ul meu implicit</button>
+            <div class="nav-buttons"><button class="nav-btn prev" onclick="prevTab()">← Înapoi</button><button class="nav-btn next" onclick="nextTab()">Continuă →</button></div>
+        </div>
+
+        <!-- Tab 12: Test Transfer Bidirecțional -->
+        <div class="tab-content" id="tab12">
+            <div class="card">
+                <h2 class="card-title">12. Test practic: Transfer bidirecțional cu WinSCP</h2>
+                <p>Verifică că WinSCP funcționează <strong>în ambele direcții</strong>. La seminarii va trebui să trimiți scripturi în Ubuntu și să recuperezi rezultate.</p>
+            </div>
+            <div class="card">
+                <h3>Pregătire</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>sudo service ssh start
+echo "Creat in Ubuntu la $(date)" > ~/test/transfer_test_din_ubuntu.txt
+hostname -I</pre></div>
+            </div>
+            <div class="card">
+                <h3>Test 1: Windows → Ubuntu (upload)</h3>
+                <ol>
+                    <li>Pe Desktop, creează <code>transfer_test_din_windows.txt</code> cu: <code>Salut din Windows!</code></li>
+                    <li>În WinSCP: Stânga → Desktop, Dreapta → <code>~/test/</code></li>
+                    <li>Trage fișierul din stânga în dreapta</li>
+                    <li>Verifică: <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>cat ~/test/transfer_test_din_windows.txt</pre></div></li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Test 2: Ubuntu → Windows (download)</h3>
+                <ol>
+                    <li>În WinSCP, trage <code>transfer_test_din_ubuntu.txt</code> din dreapta în stânga</li>
+                    <li>Deschide pe Desktop-ul Windows — verifică mesajul cu data</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Verificare cu checksums (opțional)</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>sha256sum ~/test/transfer_test_din_windows.txt</pre></div>
+                <div class="cmd-block powershell"><div class="cmd-header">POWERSHELL (Windows)</div><pre>Get-FileHash "$env:USERPROFILE\Desktop\transfer_test_din_windows.txt" -Algorithm SHA256</pre></div>
+                <p>Dacă se potrivesc → transfer perfect!</p>
+            </div>
+            <div class="card">
+                <h3>Curățare</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu)</div><pre>rm ~/test/transfer_test_din_windows.txt ~/test/transfer_test_din_ubuntu.txt</pre></div>
+            </div>
+            <button class="mark-done" onclick="markDone(this, 'tab12')">✓ Transferul bidirecțional funcționează</button>
+            <div class="nav-buttons"><button class="nav-btn prev" onclick="prevTab()">← Înapoi</button><button class="nav-btn next" onclick="nextTab()">Continuă →</button></div>
+        </div>
+
+        <div class="tab-content" id="tab13">
             <div class="card">
                 <h2 class="card-title">11. Create wsauking folders</h2>
                 
@@ -1847,7 +1926,7 @@ EOF</pre>
                 <p style="margin-top: 0.5rem;">Ar trebui să vezi all folders listed.</p>
             </div>
 
-            <button class="mark-done" onclick="markDone(this, 'tab11')">✓ I have created the folders</button>
+            <button class="mark-done" onclick="markDone(this, 'tab13')">✓ I have created the folders</button>
 
             <div class="nav-buttons">
                 <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
@@ -1856,9 +1935,9 @@ EOF</pre>
         </div>
 
         <!-- Tab 12: Verify installation -->
-        <div class="tab-content" id="tab12">
+        <div class="tab-content" id="tab14">
             <div class="card">
-                <h2 class="card-title">12. Verifică instalarea</h2>
+                <h2 class="card-title">14. Verifică instalarea</h2>
                 
                 <p>Run this command that checks if everything is installed csaurectly.</p>
             </div>
@@ -1898,7 +1977,7 @@ EOF</pre>
                 </div>
             </div>
 
-            <button class="mark-done" onclick="markDone(this, 'tab12')">✓ Verification showed everything OK</button>
+            <button class="mark-done" onclick="markDone(this, 'tab14')">✓ Verification showed everything OK</button>
 
             <div class="nav-buttons">
                 <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
@@ -1907,7 +1986,7 @@ EOF</pre>
         </div>
 
         <!-- Tab 13: Common problems -->
-        <div class="tab-content" id="tab13">
+        <div class="tab-content" id="tab15">
             <div class="card">
                 <h2 class="card-title">13. Common problems and solutions</h2>
             </div>
@@ -2048,9 +2127,9 @@ EOF</pre>
         </div>
 
         <!-- Tab 14: AI -->
-        <div class="tab-content" id="tab14">
+        <div class="tab-content" id="tab16">
             <div class="card">
-                <h2 class="card-title">14. Cum să folosești asistenții AI</h2>
+                <h2 class="card-title">16. Cum să folosești asistenții AI</h2>
             </div>
 
             <div class="card">
@@ -2124,7 +2203,7 @@ EOF</pre>
 
     <footer class="footer">
         <p>Sisteme de Operare 2024-2025 | ASE București - CSIE</p>
-        <p style="margin-top: 0.5rem; opacity: 0.7;">Version 2.1 | January 2025</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Version 3.0 | February 2025</p>
     </footer>
 
     <script>

@@ -720,9 +720,11 @@
             <button class="tab-btn" data-tab="tab9"><span class="step-num">9</span><span>Pachete</span></button>
             <button class="tab-btn" data-tab="tab10"><span class="step-num">10</span><span>SSH</span></button>
             <button class="tab-btn" data-tab="tab11"><span class="step-num">11</span><span>Conectare</span></button>
-            <button class="tab-btn" data-tab="tab12"><span class="step-num">12</span><span>Foldere</span></button>
-            <button class="tab-btn" data-tab="tab13"><span class="step-num">13</span><span>Verificare</span></button>
-            <button class="tab-btn" data-tab="tab14"><span class="step-num">14</span><span>Probleme</span></button>
+            <button class="tab-btn" data-tab="tab12"><span class="step-num">12</span><span>Bash</span></button>
+            <button class="tab-btn" data-tab="tab13"><span class="step-num">13</span><span>Test Transfer</span></button>
+            <button class="tab-btn" data-tab="tab14"><span class="step-num">14</span><span>Foldere</span></button>
+            <button class="tab-btn" data-tab="tab15"><span class="step-num">15</span><span>Verificare</span></button>
+            <button class="tab-btn" data-tab="tab16"><span class="step-num">16</span><span>Probleme</span></button>
         </nav>
 
         <!-- Tab: Intro -->
@@ -1510,9 +1512,62 @@
         </div>
 
         <!-- Tab 12: Folders -->
+        <!-- Tab 12: Verificare Shell Bash -->
         <div class="tab-content" id="tab12">
             <div class="card">
-                <h2 class="card-title">12. Creează folderele de lucru</h2>
+                <h2 class="card-title">12. Verifică că shell-ul implicit este Bash</h2>
+                <p>Folosim <strong>Bash</strong> — standardul industrial pe servere.</p>
+            </div>
+            <div class="card">
+                <h3>Verifică shell-ul implicit</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu VM)</div><pre>echo $SHELL</pre></div>
+                <p>Trebuie: <code>/bin/bash</code>. De asemenea: <code>echo $0</code> → trebuie <code>bash</code></p>
+                <p>Dacă nu e Bash: <code>chsh -s /bin/bash</code> apoi deloghează-te și reloghează-te.</p>
+                <p><strong>Utilizatori macOS/Linux:</strong> Gazda ta poate folosi Zsh — e OK. VM-ul trebuie să folosească Bash. Scrie <code>bash</code> pe gazdă pentru mod Bash temporar.</p>
+            </div>
+            <button class="mark-done" onclick="markDone(this, 'tab12')">✓ Bash este shell-ul meu implicit</button>
+            <div class="nav-buttons"><button class="nav-btn prev" onclick="prevTab()">← Înapoi</button><button class="nav-btn next" onclick="nextTab()">Continuă →</button></div>
+        </div>
+
+        <!-- Tab 13: Test Transfer Bidirecțional -->
+        <div class="tab-content" id="tab13">
+            <div class="card">
+                <h2 class="card-title">13. Test practic: Transfer bidirecțional de fișiere</h2>
+                <p>Verifică transferul <strong>în ambele direcții</strong> între gazdă și VM.</p>
+            </div>
+            <div class="card">
+                <h3>Pregătire (în VM)</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu VM)</div><pre>echo "Creat in VM la $(date)" > ~/test/transfer_test_din_vm.txt
+hostname -I</pre></div>
+            </div>
+            <div class="card">
+                <h3>PENTRU WINDOWS: Test cu WinSCP</h3>
+                <ol>
+                    <li><strong>Upload:</strong> Creează fișier pe Desktop → trage în Ubuntu prin WinSCP</li>
+                    <li><strong>Download:</strong> Trage fișierul din VM pe Desktop</li>
+                    <li>Verifică conținutul pe ambele părți</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>PENTRU macOS/Linux: Test cu scp</h3>
+                <p><strong>Upload:</strong></p>
+                <div class="cmd-block bash"><div class="cmd-header">TERMINAL GAZDĂ</div><pre>echo "Salut din gazda!" > /tmp/test_din_host.txt
+scp /tmp/test_din_host.txt numeletau@IP_VM:~/test/</pre></div>
+                <p><strong>Download:</strong></p>
+                <div class="cmd-block bash"><div class="cmd-header">TERMINAL GAZDĂ</div><pre>scp numeletau@IP_VM:~/test/transfer_test_din_vm.txt /tmp/
+cat /tmp/transfer_test_din_vm.txt</pre></div>
+            </div>
+            <div class="card">
+                <h3>Curățare</h3>
+                <div class="cmd-block bash"><div class="cmd-header">BASH (Ubuntu VM)</div><pre>rm ~/test/test_din_host.txt ~/test/transfer_test_din_vm.txt</pre></div>
+            </div>
+            <button class="mark-done" onclick="markDone(this, 'tab13')">✓ Transferul bidirecțional funcționează</button>
+            <div class="nav-buttons"><button class="nav-btn prev" onclick="prevTab()">← Înapoi</button><button class="nav-btn next" onclick="nextTab()">Continuă →</button></div>
+        </div>
+
+        <div class="tab-content" id="tab14">
+            <div class="card">
+                <h2 class="card-title">14. Creează folderele de lucru</h2>
             </div>
 
             <div class="card">
@@ -1533,7 +1588,7 @@
                 </div>
             </div>
 
-            <button class="mark-done" onclick="markDone(this, 'tab12')">✓ Foldere create</button>
+            <button class="mark-done" onclick="markDone(this, 'tab14')">✓ Foldere create</button>
 
             <div class="nav-buttons">
                 <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
@@ -1542,9 +1597,9 @@
         </div>
 
         <!-- Tab 13: Verify -->
-        <div class="tab-content" id="tab13">
+        <div class="tab-content" id="tab15">
             <div class="card">
-                <h2 class="card-title">13. Verifică instalarea</h2>
+                <h2 class="card-title">15. Verifică instalarea</h2>
             </div>
 
             <div class="card">
@@ -1555,7 +1610,7 @@
                 </div>
             </div>
 
-            <button class="mark-done" onclick="markDone(this, 'tab13')">✓ Verificare OK</button>
+            <button class="mark-done" onclick="markDone(this, 'tab15')">✓ Verificare OK</button>
 
             <div class="nav-buttons">
                 <button class="nav-btn prev" onclick="prevTab()">← Înapoi</button>
@@ -1564,9 +1619,9 @@
         </div>
 
         <!-- Tab 14: Problems -->
-        <div class="tab-content" id="tab14">
+        <div class="tab-content" id="tab16">
             <div class="card">
-                <h2 class="card-title">14. Probleme frecvente</h2>
+                <h2 class="card-title">16. Probleme frecvente</h2>
             </div>
 
             <div class="accordion">
@@ -1675,7 +1730,7 @@
 
     <footer class="footer">
         <p>Sisteme de Operare 2024-2025 | ASE București - CSIE</p>
-        <p style="margin-top: 0.5rem; opacity: 0.7;">Versiunea 2.1 | Ianuarie 2025</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7;">Versiunea 3.0 | Februarie 2025</p>
     </footer>
 
     <script>

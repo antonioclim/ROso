@@ -75,11 +75,13 @@ La finalul acestui ghid, vei putea:
 8. [Configurează accesul SSH](#8-configurează-accesul-ssh)
 9. [Instalează și configurează PuTTY](#9-instalează-și-configurează-putty)
 10. [Instalează și configurează WinSCP](#10-instalează-și-configurează-winscp)
-11. [Creează folderele de lucru](#11-creează-folderele-de-lucru)
-12. [Verifică instalarea](#12-verifică-instalarea)
-13. [Probleme frecvente și soluții](#13-probleme-frecvente-și-soluții)
-14. [Greșeli frecvente pe care le văd în fiecare an](#14-greșeli-frecvente-pe-care-le-văd-în-fiecare-an)
-15. [Cum să folosești asistenții AI](#15-cum-să-folosești-asistenții-ai)
+11. [Verifică shell-ul implicit Bash](#11-verifică-shell-ul-implicit-bash)
+12. [Test practic de transfer bidirectional](#12-test-practic-de-transfer-bidirectional)
+13. [Creează folderele de lucru](#13-creează-folderele-de-lucru)
+14. [Verifică instalarea](#14-verifică-instalarea)
+15. [Probleme frecvente și soluții](#15-probleme-frecvente-și-soluții)
+16. [Greșeli frecvente pe care le văd în fiecare an](#16-greșeli-frecvente-pe-care-le-văd-în-fiecare-an)
+17. [Cum să folosești asistenții AI](#17-cum-să-folosești-asistenții-ai)
 
 ---
 
@@ -656,7 +658,120 @@ WinSCP este un program care îți permite să transferi fișiere între Windows 
 
 ---
 
-# 11. Creează folderele de lucru
+# 11. Verifică shell-ul implicit Bash
+
+> **De ce contează:** La acest curs folosim **Bash** (Bourne Again Shell) — standardul industrial pe serverele de producție din întreaga lume. Dacă shell-ul tău implicit este altceva (de ex. Zsh, Fish, Dash), scripturile și exercițiile noastre s-ar putea să nu funcționeze corect. Această verificare de 2 minute te poate scuti de ore de depanare ulterior.
+
+## Verifică shell-ul implicit curent
+
+```bash
+# BASH (Ubuntu) - Verifică shell-ul implicit
+echo $SHELL
+```
+
+**Rezultat așteptat:** `/bin/bash`
+
+Verifică și ce rulează efectiv acum:
+
+```bash
+# BASH (Ubuntu) - Verifică shell-ul care rulează
+echo $0
+```
+
+**Rezultat așteptat:** `-bash` sau `bash`
+
+## Schimbă la Bash dacă e necesar
+
+Dacă `$SHELL` a arătat altceva decât `/bin/bash` (de exemplu `/bin/zsh` sau `/bin/sh`):
+
+```bash
+# BASH (Ubuntu) - Schimbă shell-ul implicit la Bash
+chsh -s /bin/bash
+```
+
+> ⚠️ **După schimbarea shell-ului:** Închide complet fereastra Ubuntu, apoi deschide PowerShell și rulează `wsl --shutdown`. Redeschide Ubuntu și verifică din nou cu `echo $SHELL`.
+
+## Verificare rapidă combinată
+
+Rulează această singură comandă pentru a vedea totul odată:
+
+```bash
+# BASH (Ubuntu) - Verificare completă shell
+echo "Shell implicit: $SHELL | Rulează: $0 | Versiune Bash: $BASH_VERSION"
+```
+
+**Rezultat așteptat:** Shell implicit: `/bin/bash` | Rulează: `bash` | Versiune Bash: ceva de genul `5.2.21(1)-release`
+
+> ✅ **Punct de control:** Dacă vezi `/bin/bash` pentru shell-ul implicit și o versiune care începe cu `5.x`, ești pregătit.
+
+# 12. Test practic de transfer bidirectional
+
+> **De ce contează:** La seminarii vei trimite constant scripturi ÎN Ubuntu și vei recupera rezultate ÎNAPOI în Windows. Dacă transferul funcționează doar într-o direcție, vei pierde timp. Acest test verifică că WinSCP funcționează **în ambele direcții** înainte să ai nevoie de el sub presiune.
+
+## Pregătire
+
+Asigură-te că SSH rulează și creează un fișier test în Ubuntu:
+
+```bash
+# BASH (Ubuntu) - Pregătire pentru testul de transfer
+sudo service ssh start
+mkdir -p ~/test
+echo "Acest fisier a fost creat in Ubuntu la $(date)" > ~/test/transfer_test_din_ubuntu.txt
+cat ~/test/transfer_test_din_ubuntu.txt
+hostname -I
+```
+
+Notează adresa IP afișată — o vei folosi în WinSCP.
+
+## Test 1: Windows → Ubuntu (upload)
+
+1. Pe Desktop-ul Windows, creează un fișier text numit `transfer_test_din_windows.txt`
+2. Scrie în el: `Salut din Windows! Creat pe [data de azi]`
+3. Deschide WinSCP și conectează-te la Ubuntu (folosește IP-ul de mai sus)
+4. În WinSCP: navighează **panoul din stânga** (Windows) la Desktop, și **panoul din dreapta** (Ubuntu) la `~/test/`
+5. **Trage** fișierul din stânga în dreapta
+6. Verifică în Ubuntu:
+
+```bash
+# BASH (Ubuntu) - Verifică fișierul încărcat
+cat ~/test/transfer_test_din_windows.txt
+```
+
+Ar trebui să vezi mesajul scris pe Windows.
+
+## Test 2: Ubuntu → Windows (download)
+
+1. În WinSCP, **trage** `transfer_test_din_ubuntu.txt` din **panoul din dreapta** (Ubuntu) în **panoul din stânga** (Desktop Windows)
+2. Deschide fișierul pe Desktop-ul Windows — ar trebui să vezi mesajul cu data creat în Ubuntu
+
+## Test 3: Verificare cu checksums (opțional dar recomandat)
+
+Aceasta verifică dacă fișierul a fost transferat fără corupere:
+
+```bash
+# BASH (Ubuntu) - Generează checksum
+sha256sum ~/test/transfer_test_din_windows.txt
+```
+
+```powershell
+# POWERSHELL (Windows) - Compară checksum
+Get-FileHash "$env:USERPROFILE\Desktop\transfer_test_din_windows.txt" -Algorithm SHA256
+```
+
+Dacă ambele hash-uri se potrivesc → fișierul a fost transferat perfect, bit cu bit.
+
+## Curățare
+
+```bash
+# BASH (Ubuntu) - Șterge fișierele de test
+rm ~/test/transfer_test_din_windows.txt ~/test/transfer_test_din_ubuntu.txt
+```
+
+Șterge și `transfer_test_din_ubuntu.txt` de pe Desktop-ul Windows.
+
+> ✅ **Punct de control:** Ai confirmat că fișierele pot călători în ambele direcții între Windows și Ubuntu prin WinSCP. Ești pregătit pentru seminarii.
+
+# 13. Creează folderele de lucru
 
 ## De ce ai nevoie de o structură de foldere?
 
@@ -691,7 +806,7 @@ Ar trebui să vezi toate folderele listate.
 
 ---
 
-# 12. Verifică instalarea
+# 14. Verifică instalarea
 
 ## Rulează scriptul de verificare
 
@@ -726,7 +841,7 @@ Dacă vezi erori sau elemente cu [LIPSĂ], verifică pașii anteriori.
 
 ---
 
-# 13. Probleme frecvente și soluții
+# 15. Probleme frecvente și soluții
 
 ## Problema: "WSL 2 requires an update to its kernel component"
 
@@ -800,7 +915,7 @@ Verifică:
 
 ---
 
-# 14. Greșeli frecvente pe care le văd în fiecare an
+# 16. Greșeli frecvente pe care le văd în fiecare an
 
 Acestea sunt greșelile pe care le văd cel mai des la studenți. Învață din experiența lor.
 
@@ -842,7 +957,7 @@ Acestea sunt greșelile pe care le văd cel mai des la studenți. Învață din 
 
 ---
 
-# 15. Cum să folosești asistenții AI
+# 17. Cum să folosești asistenții AI
 
 ## Asistenți recomandați
 
@@ -943,6 +1058,8 @@ exit
 - [ ] SSH funcțional
 - [ ] PuTTY instalat și configurat
 - [ ] WinSCP instalat și configurat
+- [ ] Bash este shell-ul implicit
+- [ ] Transfer bidirectional testat cu WinSCP
 - [ ] Foldere create (Books, Projects, etc.)
 - [ ] Verificarea a arătat totul OK
 
@@ -957,6 +1074,8 @@ Răspunde sincer la următoarele întrebări. Dacă nu poți bifa toate, revizit
 - [ ] Am rulat cu succes scriptul de verificare (toate cu [OK])
 - [ ] M-am conectat SSH din PuTTY fără ajutor
 - [ ] Am transferat un fișier test cu WinSCP (din Windows în Ubuntu)
+- [ ] Am transferat un fișier din Ubuntu înapoi în Windows (test bidirectional)
+- [ ] Am verificat că shell-ul implicit este Bash (`echo $SHELL` → `/bin/bash`)
 - [ ] Știu ce să fac dacă SSH nu pornește (comanda exactă)
 - [ ] Pot explica unui coleg ce face `wsl --shutdown` vs închiderea ferestrei Ubuntu
 
@@ -1001,7 +1120,7 @@ Document pentru:
 Academia de Studii Economice București - CSIE
 Sisteme de Operare - Anul universitar 2024-2025
 
-**Versiune:** 2.1 | **Ultima actualizare:** Ianuarie 2025
+**Versiune:** 3.0 | **Ultima actualizare:** Februarie 2025
 
 ---
 
