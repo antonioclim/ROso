@@ -52,15 +52,14 @@ HAsViFvWuv8rlbxvHwIDAQAB
 -----END PUBLIC KEY-----"""
 
 SCP_SERVER: str = "sop.ase.ro"
-SCP_PORT: str = "1001"
+SCP_PORT: str = "1002"
 SCP_PASSWORD: str = "stud"
 SCP_BASE_PATH: str = "/home/HOMEWORKS"
 MAX_RETRIES: int = 3
 
 SPECIALIZATIONS: Dict[str, Tuple[str, str]] = {
-    "1": ("eninfo", "Informatică Economică (Engleză)"),
-    "2": ("grupeid", "Grupă ID"),
-    "3": ("roinfo", "Informatică Economică (Română)")
+    "1": ("roinfo", "Informatică Economică (Română)"),
+    "2": ("grupeid", "Grupă ID")
 }
 
 # Type variable pentru funcții generice
@@ -841,16 +840,21 @@ def generate_signature(filepath: str, data: Dict[str, str]) -> str:
         # Construiește datele pentru semnătură
         data_to_sign: str = f"{data['surname']}+{data['firstname']} {data['group']} {file_size} {current_date} {current_time} {system_user} {absolute_path}"
         
+        # Hash cu SHA-256 pentru a garanta că datele încap în blocul RSA 1024-bit
+        # (RSA 1024 + PKCS1 permite max 117 bytes; SHA-256 hex = 64 bytes, mereu OK)
+        import hashlib
+        data_hash: str = hashlib.sha256(data_to_sign.encode()).hexdigest()
+        
         # Salvează cheia publică temporar
         temp_key = tempfile.NamedTemporaryFile(mode='w', suffix='.pem', delete=False)
         temp_key.write(PUBLIC_KEY)
         temp_key.close()
         
         try:
-            # Criptează cu RSA
+            # Criptează hash-ul SHA-256 cu RSA
             process = subprocess.run(
                 ['openssl', 'pkeyutl', '-encrypt', '-pubin', '-inkey', temp_key.name, '-pkeyopt', 'rsa_padding_mode:pkcs1'],
-                input=data_to_sign.encode(),
+                input=data_hash.encode(),
                 capture_output=True,
                 check=True
             )
@@ -858,9 +862,11 @@ def generate_signature(filepath: str, data: Dict[str, str]) -> str:
             # Convertește la base64
             encrypted_b64: str = base64.b64encode(process.stdout).decode()
             
-            # Adaugă la fișier
+            # Adaugă semnătura ȘI metadatele la fișier
+            # SIG = hash-ul SHA-256 criptat RSA; META = datele în clar
             with open(filepath, 'a') as f:
-                f.write(f"\n## {encrypted_b64}\n")
+                f.write(f"\n## SIG:{encrypted_b64}\n")
+                f.write(f"## META:{data_to_sign}\n")
             
             return data_to_sign
         finally:
@@ -901,6 +907,19 @@ def upload_homework(filepath: str, data: Dict[str, str]) -> bool:
     table.add_row("Destinație", scp_dest)
     table.add_row("Fișier", filename)
     console.print(table)
+    console.print()
+    
+    # Verificare conectivitate înainte de upload
+    import socket
+    show_info(f"Se verifică conectivitatea cu {SCP_SERVER}:{SCP_PORT}...")
+    try:
+        sock = socket.create_connection((SCP_SERVER, int(SCP_PORT)), timeout=5)
+        sock.close()
+        show_success(f"Conexiune verificată - portul {SCP_PORT} este deschis.")
+    except (socket.timeout, socket.error, OSError):
+        show_warning(f"Portul {SCP_PORT} pe {SCP_SERVER} nu este accesibil.")
+        show_warning("Posibile cauze: serverul SSH este oprit, firewall, VPN activ.")
+        show_info("Se continuă cu încercările SCP (pot eșua)...")
     console.print()
     
     for attempt in range(1, MAX_RETRIES + 1):

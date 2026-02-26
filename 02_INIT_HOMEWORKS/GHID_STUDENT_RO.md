@@ -319,9 +319,8 @@ Rulările următoare vor fi instantanee - nu se mai instalează nimic.
 - Folosește săgețile sus/jos pentru a naviga
 - Apasă **ENTER** pentru a selecta
 - Opțiuni:
-  - Informatică Economică (Engleză)
-  - Grupă ID
   - Informatică Economică (Română)
+  - Grupă ID
 
 ### Număr temă
 - Format: 01-07 urmat de o literă
@@ -418,7 +417,7 @@ Fișierul este salvat local și vei vedea un mesaj cu comanda pentru trimitere m
 ║                                                                         ║
 ║   Încearcă mai târziu (când restabilești conexiunea) folosind:          ║
 ║                                                                         ║
-║   scp -P 1001 1029_IONESCU_Andrei_HW03b.cast [utilizator]@[server]:/home...║
+║   scp -P 1002 1029_IONESCU_Andrei_HW03b.cast [utilizator]@[server]:/home...║
 ║                                                                         ║
 ║   ⚠️  NU modifica fișierul .cast înainte de trimitere!                  ║
 ║                                                                         ║
@@ -723,17 +722,17 @@ cat ~/HOMEWORKS/GRUPA_NUME_Prenume_HWxx.cast | head -20
 
 #### 15. "Connection timed out"
 
-**Cauză:** Serverul sop.ase.ro folosește portul 1001 (nu 22 standard). 
+**Cauză:** Serverul sop.ase.ro folosește portul 1002 (nu 22 standard). 
 
 Cauze posibile:
-1. Firewall-ul blochează portul 1001 (frecvent în rețele corporative)
+1. Firewall-ul blochează portul 1002 (frecvent în rețele corporative)
 2. VPN activ care nu routează corect
 3. Serverul temporar indisponibil
 
 **Soluție:**
 ```bash
 # Testează conectivitatea:
-nc -zv sop.ase.ro 1001
+nc -zv sop.ase.ro 1002
 
 # Dacă ești pe VPN, deconectează-te temporar
 # Dacă ești în rețea restricționată, folosește hotspot mobil
@@ -759,9 +758,9 @@ ssh-keygen -R sop.ase.ro
 **Cauză:** Directorul destinație nu există sau nu ai permisiuni.
 
 **Soluție:** Aceasta e problemă de server. Contactează profesorul cu:
-- Specializarea selectată: [eninfo/grupeid/roinfo]
+- Specializarea selectată: [roinfo/grupeid]
 - Mesajul exact de eroare
-- Output-ul comenzii: `sshpass -p stud ssh -p 1001 [utilizator]@[server] "ls -la /home/HOMEWORKS/"`
+- Output-ul comenzii: `sshpass -p stud ssh -p 1002 [utilizator]@[server] "ls -la /home/HOMEWORKS/"`
 
 ---
 

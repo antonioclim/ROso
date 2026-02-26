@@ -32,7 +32,7 @@ HAsViFvWuv8rlbxvHwIDAQAB
 # CONFIGURARE SERVER
 #===============================================================================
 SCP_SERVER="sop.ase.ro"
-SCP_PORT="1001"
+SCP_PORT="1002"
 SCP_PASSWORD="stud"
 SCP_BASE_PATH="/home/HOMEWORKS"
 MAX_RETRIES=3
@@ -260,16 +260,15 @@ collect_student_data() {
     # Specializare
     echo ""
     echo -e "${BOLD}   Selectează specializarea:${NC}"
-    echo "   1) eninfo  - Informatică Economică (Engleză)"
+    echo "   1) roinfo  - Informatică Economică (Română)"
     echo "   2) grupeid - Grupă ID"
-    echo "   3) roinfo  - Informatică Economică (Română)"
     echo ""
     
     while true; do
-        read -p "   Alege opțiunea (1/2/3): " SPEC_CHOICE
+        read -p "   Alege opțiunea (1/2): " SPEC_CHOICE
         case $SPEC_CHOICE in
             1)
-                SPECIALIZATION="eninfo"
+                SPECIALIZATION="roinfo"
                 print_success "Specializare: $SPECIALIZATION"
                 break
                 ;;
@@ -278,13 +277,8 @@ collect_student_data() {
                 print_success "Specializare: $SPECIALIZATION"
                 break
                 ;;
-            3)
-                SPECIALIZATION="roinfo"
-                print_success "Specializare: $SPECIALIZATION"
-                break
-                ;;
             *)
-                print_error "Invalid! Alege 1, 2 sau 3."
+                print_error "Invalid! Alege 1 sau 2."
                 ;;
         esac
     done
@@ -414,8 +408,14 @@ generate_signature() {
     local TEMP_PUBKEY=$(mktemp)
     echo "$PUBLIC_KEY" > "$TEMP_PUBKEY"
     
-    # Criptează cu RSA și convertește la Base64
-    local ENCRYPTED_B64=$(echo -n "$DATA_TO_SIGN" | openssl pkeyutl -encrypt -pubin -inkey "$TEMP_PUBKEY" -pkeyopt rsa_padding_mode:pkcs1 2>/dev/null | base64 -w 0)
+    # Hash cu SHA-256 pentru a garanta că datele încap în blocul RSA 1024-bit
+    # (RSA 1024 + PKCS1 permite max 117 bytes; SHA-256 hex = 64 bytes, mereu OK)
+    local DATA_HASH=$(echo -n "$DATA_TO_SIGN" | sha256sum | cut -d' ' -f1)
+    
+    print_info "SHA-256: ${DATA_HASH}"
+    
+    # Criptează hash-ul cu RSA și convertește la Base64
+    local ENCRYPTED_B64=$(echo -n "$DATA_HASH" | openssl pkeyutl -encrypt -pubin -inkey "$TEMP_PUBKEY" -pkeyopt rsa_padding_mode:pkcs1 2>/dev/null | base64 -w 0)
     
     # Cleanup cheie temporară
     rm -f "$TEMP_PUBKEY"
@@ -425,9 +425,12 @@ generate_signature() {
         exit 1
     fi
     
-    # Append semnătura la fișierul .cast
+    # Append semnătura ȘI metadatele la fișierul .cast
+    # Linia SIG conține hash-ul SHA-256 criptat RSA (verificabil cu cheia privată)
+    # Linia META conține datele în clar (verificabile prin recompunerea hash-ului)
     echo "" >> "$FILEPATH"
-    echo "## ${ENCRYPTED_B64}" >> "$FILEPATH"
+    echo "## SIG:${ENCRYPTED_B64}" >> "$FILEPATH"
+    echo "## META:${DATA_TO_SIGN}" >> "$FILEPATH"
     
     print_success "Semnătură criptografică adăugată!"
     echo ""
@@ -449,6 +452,18 @@ upload_homework() {
     print_info "User: ${SCP_USER}"
     print_info "Destinație: ${SCP_DEST}"
     echo ""
+    
+    # Verificare conectivitate înainte de upload
+    print_info "Se verifică conectivitatea cu ${SCP_SERVER}:${SCP_PORT}..."
+    if ! timeout 5 bash -c "echo >/dev/tcp/${SCP_SERVER}/${SCP_PORT}" 2>/dev/null; then
+        print_warning "Portul ${SCP_PORT} pe ${SCP_SERVER} nu este accesibil."
+        print_warning "Posibile cauze: serverul SSH este oprit, firewall, VPN activ."
+        print_info "Se continuă cu încercările SCP (pot eșua)..."
+        echo ""
+    else
+        print_success "Conexiune verificată - portul ${SCP_PORT} este deschis."
+        echo ""
+    fi
     
     local attempt=1
     local upload_success=false
